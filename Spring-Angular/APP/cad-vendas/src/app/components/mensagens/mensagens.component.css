@@ -1,0 +1,42 @@
+.message {
+    position: fixed;
+    top: 3em;
+    width: 50%;
+    min-height: 50px;
+    margin-left: 50%;
+    left: -25%;
+    z-index: 10;
+    background-color: #FFF;
+    box-shadow: 10px 10px 20px #8056ff1f;
+    padding: 1.5em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message .clear {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.message .clear fa-icon {
+    font-size: 1.5em;
+    color: #8056ff;
+    transition: .2s;
+}
+
+.message .confirm {
+    margin-top: 1em;
+    margin-left: auto;
+}
+
+.message .clear:hover fa-icon {
+    font-size: 1.9em;
+}
+
+.message p {
+    width: 80%;
+    font-size: 1.2em;
+}

@@ -1,0 +1,55 @@
+<form (ngSubmit)="submit()" [formGroup]="vendasForm" #formDir="ngForm">
+  <div class="form-group">
+    <label for="funcionario">Funcionário: </label>
+    <ng-container *ngIf="funcionario == undefined; else comId">
+      <select
+        formControlName="idFuncionario"
+        (change)="selecionarFuncionario($event)"
+        required
+      >
+        <option value="{{ null }}" selected disabled>Selecione</option>
+        <option
+          *ngFor="let funcionario of funcionarios"
+          value="{{ funcionario.id }}"
+        >
+          {{ funcionario.nome }}
+        </option>
+      </select>
+    </ng-container>
+    <ng-template #comId>
+      <input type="text" value="{{ funcionario?.nome }}" readonly />
+      <input type="hidden" formControlName="idFuncionario" readonly />
+    </ng-template>
+    <div
+      *ngIf="idFuncionario.invalid && formDir.submitted"
+      class="validation-error"
+    >
+      <p *ngIf="idFuncionario.errors?.['required']">Escolha um funcionário!</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="valor">Valor da venda: </label>
+    <input
+      type="text"
+      formControlName="valor"
+      value="{{ valorVenda }}"
+      required
+      readonly
+    />
+    <div *ngIf="valor.invalid && formDir.submitted" class="validation-error">
+      <p *ngIf="valor.errors?.['required']">Nenhum produto selecionado!</p>
+    </div>
+      <div class="btn-container" *ngIf="funcionarioSelecionado != null && type == 'create'">
+        <button
+          class="btn-padrao btn-invertido"
+          (click)="limparCarrinho($event)"
+        >
+          Limpar Carrinho
+        </button>
+        <a [routerLink]="['/carrinho-produtos', funcionarioSelecionado]"
+          ><button class="btn-padrao">Editar Carrinho</button></a
+        >
+      </div>
+  </div>
+  <input type="submit" value="{{ btnText }}" />
+</form>

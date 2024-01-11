@@ -1,0 +1,97 @@
+.sobre-container {
+    width: 100%;
+    height: 700px;
+    display: flex;
+    z-index: 1;
+  }
+
+  .cn-decoration {
+    width: 50%;
+    background-color: #8056ff;
+    padding: 10px;
+  }
+
+  .cn-dark {
+    background-color: #333;
+    color: #fff;
+    width: 600px;
+    height: 80%;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.14);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 150px;
+    z-index: 1;
+  }
+
+  .cn-dark h2 {
+    margin: 1em;
+    font-size: 2em;
+    line-height: 45px;
+    font-weight: 200;
+  }
+
+  .cn-dark span {
+    color: #9d1cf3;
+    font-weight: bold;
+  }
+
+  .cn-dark p {
+    padding: 2em;
+    font-size: 1.3em;
+    line-height: 30px;
+    text-align: justify;
+  }
+
+  .area01 {
+    height: 50%;
+    margin-top: 6%;
+  }
+  .area02 {
+    height: 45%;
+    margin-top: 20%;
+  }
+ 
+  @media (max-width: 900px) {
+    .cn-dark {
+      max-width: 500px;
+      height: 80%;
+      transform: translateX(-50%);
+    }
+
+    .cn-dark p {  
+      font-size: 1.1em;
+    }
+
+    .area01 {
+      height: 40%;
+      margin-top: 10%;
+    }
+    .area02 {
+      height: 30%;
+      margin-top: 22%;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .cn-dark {
+      max-width: 450px;
+      height: 70%;
+      transform: translateX(-50%);
+    }
+
+    .cn-dark p {  
+      font-size: 1em;
+    }
+
+
+    .cn-dark h2 {
+      font-size: 1.5em;
+      line-height: 45px;
+      font-weight: 200;
+    }
+
+    .sobre-container {
+      height: 500px;
+    }
+  }

@@ -1,0 +1,28 @@
+.card-funcionalidade {
+    display: flex;
+    width: 150px;
+    padding: 2em 0.5em;
+    background-color: #fdfdfd;
+    color: #000;
+    margin: 1em 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+    transition: .3s;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-funcionalidade:hover {
+    margin: .5em;
+    padding: 2.5em 1em;
+  }
+  
+  .card-funcionalidade fa-icon {
+    color: #8416cd;
+    font-size: 4em;
+  }
+  
+  .card-funcionalidade h3 {
+    font-size: 1.5em;
+  }
