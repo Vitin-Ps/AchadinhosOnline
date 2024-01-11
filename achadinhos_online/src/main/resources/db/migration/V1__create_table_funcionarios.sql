@@ -1,0 +1,6 @@
+CREATE TABLE funcionarios (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    porcentagem INT NOT NULL
+);
