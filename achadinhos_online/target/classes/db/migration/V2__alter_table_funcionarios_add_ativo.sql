@@ -1,1 +1,0 @@
-ALTER TABLE funcionarios ADD COLUMN ativo TINYINT;
