@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 public record DadosCadastraFuncionario(
         @NotBlank(message = "Nome é Obrigatório")
         String nome,
-        @NotBlank(message = "Nome é Obrigatório")
+        @NotBlank(message = "E-mail é Obrigatório")
         @Email
         String email,
-        @NotNull(message = "Nome é Obrigatório")
+        @NotNull(message = "Porcentagem é Obrigatório")
         Integer porcentagem
 ) {
 }
