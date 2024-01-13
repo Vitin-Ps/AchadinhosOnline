@@ -65,8 +65,7 @@ public class FuncionariosController {
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
-        if (funcionario != null) funcionario.deletarLogico();
-        else throw new ValidacaoException("Funcionário não existe ou não está mais na Empresa");
+        if (funcionario == null) throw new ValidacaoException("Funcionário não existe ou não está mais na Empresa");
         return ResponseEntity.ok(new DadosDetalharFuncionario(funcionario));
     }
 }
