@@ -30,7 +30,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").permitAll()
                         .requestMatchers(HttpMethod.POST, "funcionarios").hasAnyRole("ADMIN", "FUNCIONARIO")
-//                        .requestMatchers("/vendas").hasRole("ADMIN") // Bloqueia o acesso à "/home" apenas para ADMIN
+                        .requestMatchers("/vendas").hasRole("ADMIN") // Bloqueia o acesso à "/home" apenas para ADMIN
                         .requestMatchers("/v3/api-docs/**", "*/swagger-ui.html", "swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
