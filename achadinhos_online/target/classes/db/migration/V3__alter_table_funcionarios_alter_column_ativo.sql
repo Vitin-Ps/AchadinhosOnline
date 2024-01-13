@@ -1,0 +1,1 @@
+UPDATE funcionarios SET ativo = 1;
