@@ -22,6 +22,8 @@ import java.util.List;
 public class FuncionariosController {
     @Autowired
     private FuncionarioRepository repository;
+    private String message = "Funcionário não existe ou não está mais na Empresa";
+
 
     @PostMapping
     @Transactional
@@ -51,13 +53,14 @@ public class FuncionariosController {
     public ResponseEntity deletarLogico(@PathVariable Long id) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
         if (funcionario != null) funcionario.deletarLogico();
-        else throw new ValidacaoException("Funcionário não existe ou não está mais na Empresa");
+        else throw new ValidacaoException(message);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity deletarDoDataBase(@PathVariable Long id) {
+        if(!repository.existsByIdAndAtivoTrue(id)) throw new ValidacaoException(message);
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -65,7 +68,7 @@ public class FuncionariosController {
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
-        if (funcionario == null) throw new ValidacaoException("Funcionário não existe ou não está mais na Empresa");
+        if (funcionario == null) throw new ValidacaoException(message);
         return ResponseEntity.ok(new DadosDetalharFuncionario(funcionario));
     }
 }

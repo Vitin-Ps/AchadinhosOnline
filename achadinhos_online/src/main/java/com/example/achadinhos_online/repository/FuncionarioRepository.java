@@ -9,4 +9,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
     Page<Funcionario> findAllByAtivoTrue(Pageable pageable);
 
     Funcionario getReferenceByIdAndAtivoTrue(Long id);
+
+    boolean existsByIdAndAtivoTrue(Long aLong);
 }

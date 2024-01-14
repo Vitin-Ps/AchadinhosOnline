@@ -19,6 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProdutoController {
     @Autowired
     private ProdutoRepository repository;
+
+    private String message = "Produto não existe ou não está mais disponível";
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados, UriComponentsBuilder uriComponentsBuilder) {
@@ -47,12 +49,13 @@ public class ProdutoController {
     public ResponseEntity excluirLogico(@PathVariable Long id) {
         var produto = repository.getReferenceByIdAndAtivoTrue(id);
         if (produto != null) produto.deletarLogico();
-        else throw new ValidacaoException("Produto não existe ou não está mais disponível");
+        else throw new ValidacaoException(message);
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
+        if(!repository.existsByIdAndAtivoTrue(id)) throw new ValidacaoException(message);
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -60,7 +63,7 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
         var produto = repository.getReferenceByIdAndAtivoTrue(id);
-        if (produto == null) throw new ValidacaoException("Produto não existe ou não está mais disponivel");
+        if (produto == null) throw new ValidacaoException(message);
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
 }
