@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,6 +22,10 @@ public class TratadorDeErros {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity tratarErro404() {
         return ResponseEntity.notFound().build();
+
+    }@ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity tratarErroDeLoginNaoCadastrado() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não Existe!");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,7 +46,7 @@ public class TratadorDeErros {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha Incorreta!");
     }
 
     @ExceptionHandler(AuthenticationException.class)
