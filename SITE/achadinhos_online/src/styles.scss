@@ -1,0 +1,357 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto"),
+      url("assets/fontes/Roboto-Regular.ttf") format("truetype");
+  }
+
+  * {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: #fdfdfd;
+    color: #333;
+  }
+
+  /*FORM*/
+
+form {
+  max-width: 450px;
+  margin: 2em auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.form-group label {
+  font-weight: bold;
+  font-size:  .9em;
+  margin-bottom: .4em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: .6em;
+  color: #777;
+  font-size: 0.8em;
+}
+
+.form-group select option {
+  font-size: 1.2em;
+}
+
+input[type="submit"] {
+  background-color: #EFEFEF;
+  border: 2px solid transparent;
+  padding: .6em 1em;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: .4s;
+}
+
+input[type="submit"]:hover {
+  color: #8056ff;
+  border-color: #8056ff;
+  background-color: transparent;
+}
+
+.validation-error p {
+  color: #dc3545;
+  margin-top: .4em;
+  border-left: 3px solid #dc3545;
+  padding-left: .2em;
+}
+
+/* butoes */
+
+.btn-padrao {
+  background-color: #6700ac;
+  color: #fff;
+  padding: 0.5em 1em;
+  margin: 1em;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-invertido {
+  background-color: #FFF;
+  color: #6700ac;
+  border: 1px solid #6700ac;
+}
+
+.btn-acao {
+  background-image: linear-gradient(to bottom right, #d953f7, #c353f7 30%, #6904ce 100%);
+  width: 120px;
+  border-radius: 20px;
+}
+
+.btn-padrao:hover {
+  background-color: #fff;
+  color: #6700ac;
+  border-color: #6700ac;
+  margin: 0.8em;
+  padding: .7em 1.2em;
+}
+
+.btn-invertido:hover {
+  background-color: #6700ac;
+  color: #FFF;
+  border-color: transparent;
+}
+
+.btn-acao:hover {
+  background-image: none;
+  margin: .8em 1em;
+}
+
+
+/* barra de rolagem */
+.scroll-bar {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+
+.scroll-bar::-webkit-scrollbar {
+    width: 15px; /* Largura da barra de rolagem */
+}
+
+.scroll-bar::-webkit-scrollbar-track {
+    background-color: none; /* Cor do fundo da barra de rolagem */
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+    background-color: #8036b2a1; /* Cor do botão de rolagem */
+    border-radius: 3px; /* Borda arredondada do botão de rolagem */
+}
+
+.scroll-bar::-webkit-scrollbar-thumb:hover {
+    background-color: #6700acbb; /* Cor do botão de rolagem ao passar o mouse */
+}
+
+
+/* modelo Container com fundo */
+.container-com-fundo {
+  width: 100%;
+  height: 700px;
+  display: flex;
+  z-index: 1;
+}
+
+.container-com-fundo .cn-decoration {
+  width: 50%;
+  background-color: #8056ff;
+  padding: 10px;
+}
+
+.container-com-fundo .cn-dark {
+  background-color: #FFF;
+  color: #333;
+  padding: 2em;
+  width: 600px;
+  height: 80%;
+  box-shadow: 10px 10px 20px #8056ff20;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 150px;
+  z-index: 1;
+}
+
+.container-com-fundo .cn-dark h2 {
+  margin: 1em;
+  text-align: center;
+  font-size: 2em;
+  line-height: 45px;
+  font-weight: 200;
+}
+
+.container-com-fundo .cn-dark span {
+  color: #9d1cf3;
+  font-weight: bold;
+}
+
+.container-com-fundo .cn-dark > p {
+  padding: 2em;
+  font-size: 1.3em;
+  line-height: 30px;
+  text-align: justify;
+}
+
+.container-com-fundo .area01 {
+  height: 50%;
+  margin-top: 6%;
+}
+.container-com-fundo .area02 {
+  height: 45%;
+  margin-top: 20%;
+}
+
+@media (max-width: 900px) {
+  .container-com-fundo .cn-dark {
+    max-width: 510px;
+    height: 80%;
+    transform: translateX(-50%);
+  }
+
+  .container-com-fundo .cn-dark p {  
+    font-size: 1.1em;
+  }
+
+  .container-com-fundo .area01 {
+    height: 40%;
+    margin-top: 10%;
+  }
+  .container-com-fundo .area02 {
+    height: 30%;
+    margin-top: 22%;
+  }
+}
+
+@media (max-width: 550px) {
+  .container-com-fundo .cn-dark {
+    max-width: 400px;
+    height: 70%;
+    transform: translateX(-50%);
+  }
+
+  .container-com-fundo .cn-dark p {  
+    font-size: 1em;
+  }
+
+
+  .container-com-fundo .cn-dark h2 {
+    font-size: 1.5em;
+    line-height: 45px;
+    font-weight: 200;
+  }
+
+  .container-com-fundo {
+    height: 500px;
+  }
+}
+
+/*------- dados --------*/
+
+.fundo-branco-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-height: 550px;
+}
+
+ .fundo-branco-container .filtro-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+ .fundo-branco-container .filtro-container h2 {
+  font-size: 1.2em;
+  margin: 0 1em;
+}
+
+ .fundo-branco-container .filtro-container input {
+    padding: .5em;
+    width: 200px;
+    border-radius: 5px;
+    border: .5px solid #8056ff97;
+}
+
+ .fundo-branco-container .filtro-container h2 span {
+    color: #8056ff;
+}
+
+.fundo-branco-container .acao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fundo-branco-container .cards-container {
+  display: flex;
+  margin: 2em auto;
+  width: 80%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 1em;
+  max-height: 501px;
+}
+.fundo-branco-container .paginacao-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*------- cards --------*/
+
+.card-item {
+  background-image: linear-gradient(to bottom, #d953f7, #b553f7 30%, #6904ce 80%);
+  margin: 1em;
+  padding: 0 1em;
+  border-radius: 5px;
+  transition: .2s;
+}
+
+.card-item .fundo-branco {
+  background-color: #fff;
+  margin: auto;
+  padding: 1em .5em;
+  display: flex;
+  align-items: center;
+  transition: .2s;
+}
+
+.card-item .fundo-branco img {
+  width: 20%;
+  border-radius: 20%;
+  margin: 0 1em;
+}
+
+.card-item .fundo-branco .conteudo {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-item .fundo-branco .conteudo h3 {
+    margin-bottom: .5em;
+}
+
+.card-item:hover {
+    margin: .5em;
+    padding: 0 1.5em;
+}
+
+.card-item:hover .fundo-branco {
+    padding: 1.5em .5em;
+}
+
+.selecionado {
+    padding: .5em 1em;
+    margin: 1em;
+}
+.selecionado .fundo-branco {
+    padding: .5em 1em;
+    border-radius: 15px;
+}
+
+.selecionado:hover {
+    padding: 1em 1.5em;
+
+}
+
+.selecionado:hover .fundo-branco {
+    padding: .2em 1em;
+}

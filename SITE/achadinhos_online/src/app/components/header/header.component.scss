@@ -1,0 +1,67 @@
+
+header {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 9;
+  }
+
+  header > a {
+    padding: 2em;
+    text-align: center;
+    font-size: 0.5em;
+    text-decoration: none;
+    color: #00c742;
+  }
+
+  header a img {
+    width: 100px;
+  }
+
+  /* menu */
+  .menu {
+    text-align: right;
+    padding: 0.5em;
+  }
+
+  .sub-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 10px 10px 20px #6700ac24;
+    font-size: 1em;
+    color: white;
+    font-weight: bold;
+    padding: 0.9em;
+    z-index: 2;
+    right: 10px;
+  }
+
+  .sub-menu li {
+    list-style: none;
+    margin-bottom: 1em;
+  }
+
+  .sub-menu li a {
+    text-decoration: none;
+    color: #6700ac;
+    border-radius: 5px;
+    padding: 0.3em;
+    transition: 0.3s;
+  }
+  .sub-menu li a:hover {
+    background-color: #8056ff;
+    color: #fff;
+  }
+
+  .menu:hover .sub-menu {
+    display: block;
+  }
+
+  fa-icon {
+    color: #00a637;
+    font-size: 2em;
+    padding: 0.5em 1em;
+  }

@@ -1,0 +1,10 @@
+<div class="message" *ngIf="messageService.message">
+    <p>{{messageService.message}}</p>
+    <ng-container *ngIf="messageService.type == 'alert'">
+        <button class="clear" (click)="messageService.clear()"><fa-icon [icon]="faTimes" /></button>
+    </ng-container>
+    <div *ngIf="messageService.type == 'confirm'" class="confirm">
+        <button (click)="acaoConfirm(true)" class="btn-padrao">Confirmar</button>
+        <button (click)="acaoConfirm(false)" class="btn-padrao btn-invertido">Cancelar</button>
+    </div>
+</div>
