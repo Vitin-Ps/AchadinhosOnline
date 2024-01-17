@@ -1,0 +1,18 @@
+<form (ngSubmit)="sumbit()" [formGroup]="produtoForm" #formDir="ngForm">
+    <input type="hidden" formControlName="id" />
+    <div class="form-group">
+        <label for="nome">Nome: </label>
+        <input type="text" formControlName="nome" placeholder="Digite seu nome..." required />
+        <div class="validation-error" *ngIf="nome.invalid && formDir.submitted">
+            <p *ngIf="nome.errors?.['required']">Nome é Obrigatório!</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="valor">Valor: </label>
+        <input type="number" formControlName="valor" placeholder="Digite a valor..." required />
+        <div class="validation-error" *ngIf="valor.invalid && formDir.submitted">
+            <p *ngIf="valor.errors?.['required']">Valor é Obrigatório!</p>
+        </div>
+    </div>
+    <input type="submit" value="{{btnText}}" />
+</form>

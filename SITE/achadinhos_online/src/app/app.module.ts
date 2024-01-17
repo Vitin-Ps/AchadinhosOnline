@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFuncionarioComponent } from './components/forms/form-funcionario/form-funcionario.component';
 import { MessageComponent } from './components/message/message.component';
+import { FormProdutoComponent } from './components/forms/form-produto/form-produto.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MessageComponent } from './components/message/message.component';
     CadVendaComponent,
     FormFuncionarioComponent,
     MessageComponent,
+    FormProdutoComponent,
   ],
   imports: [
     BrowserModule,

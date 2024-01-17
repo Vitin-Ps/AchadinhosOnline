@@ -22,8 +22,6 @@ export class MessageService {
     this.type = 'confirm';
     this.message = message;
 
-    console.log('entrou no confirm');
-
     setTimeout(() => {
       this.clear();
     }, 10000);

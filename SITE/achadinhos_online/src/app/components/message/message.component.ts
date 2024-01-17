@@ -17,7 +17,6 @@ export class MessageComponent {
   ) {}
 
   acaoConfirm(acao: boolean) {
-    console.log('boolean message: ', acao);
     if (acao) {
       this.comunicacaoService.emitFunction.emit();
       return;

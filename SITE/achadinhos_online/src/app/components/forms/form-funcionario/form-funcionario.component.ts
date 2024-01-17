@@ -25,6 +25,18 @@ export class FormFuncionarioComponent implements OnInit {
       porcentagem: new FormControl('', [Validators.required]),
     });
   }
+
+  get nome(){
+    return this.funcionarioForm.get('nome')!;
+  }
+
+  get email(){
+    return this.funcionarioForm.get('email')!;
+  }
+
+  get porcentagem(){
+    return this.funcionarioForm.get('porcentagem')!;
+  }
   sumbit() {
     if(this.funcionarioForm.invalid) {
       return;
