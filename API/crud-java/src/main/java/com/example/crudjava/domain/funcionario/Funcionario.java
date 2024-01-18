@@ -20,16 +20,18 @@ public class Funcionario {
     private String nome;
     private String email;
     private Integer porcentagem;
+    private String imagem;
     private Boolean ativo;
 
-    public Funcionario(@Valid DadosCadastroFuncionario dados) {
+    public Funcionario(@Valid DadosCadastroFuncionario dados, String imagem) {
         this.nome = dados.nome();
         this.email = dados.email();
         this.porcentagem = dados.porcentagem();
         this.ativo = true;
+        this.imagem = imagem;
     }
 
-    public void atualizarInfo(DadosAtualizaFuncionario dados) {
+    public void atualizarInfo(DadosAtualizaFuncionario dados, String imagem) {
         if(dados.nome() != null) {
             this.nome = dados.nome();
         }
@@ -38,6 +40,9 @@ public class Funcionario {
         }
         if(dados.porcentagem() != null) {
             this.porcentagem = dados.porcentagem();
+        }
+        if(imagem != null) {
+            this.imagem = imagem;
         }
     }
 

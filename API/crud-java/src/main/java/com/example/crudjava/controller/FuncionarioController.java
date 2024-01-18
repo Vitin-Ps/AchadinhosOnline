@@ -1,16 +1,24 @@
 package com.example.crudjava.controller;
 
 import com.example.crudjava.domain.funcionario.*;
+import com.example.crudjava.infra.file.ArquivoService;
 import com.example.crudjava.repository.FuncionarioRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -18,10 +26,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class FuncionarioController {
     @Autowired
     private FuncionarioRepository repository;
+
+    @Autowired
+    private ArquivoService arquivoService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroFuncionario dados, UriComponentsBuilder uriComponentsBuilder) {
-        var funcionario = new Funcionario(dados);
+    public ResponseEntity cadastrar(@RequestPart("arquivo") MultipartFile arquivo, @RequestPart("json") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
+        DadosCadastroFuncionario dados = objectMapper.readValue(dadosString, DadosCadastroFuncionario.class);
+        String imagem = arquivoService.enviarArquivo(arquivo, true);
+        var funcionario = new Funcionario(dados, imagem);
         repository.save(funcionario);
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoFuncionario(funcionario));
@@ -35,9 +51,11 @@ public class FuncionarioController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaFuncionario dados) {
+    public ResponseEntity atualizar(@RequestPart("imagem") MultipartFile arquivo, @RequestPart("json") String dadosString) throws JsonProcessingException {
+        DadosAtualizaFuncionario dados = objectMapper.readValue(dadosString, DadosAtualizaFuncionario.class);
+        String imagem = arquivoService.enviarArquivo(arquivo, false);
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
-        funcionario.atualizarInfo(dados);
+        funcionario.atualizarInfo(dados, imagem);
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 
