@@ -1,6 +1,7 @@
 package com.example.crudjava.controller;
 
 import com.example.crudjava.domain.funcionario.*;
+import com.example.crudjava.infra.FuncionalidadesService;
 import com.example.crudjava.infra.file.ArquivoService;
 import com.example.crudjava.repository.FuncionarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,7 +37,7 @@ public class FuncionarioController {
     @Transactional
     public ResponseEntity cadastrar(@RequestPart("arquivo") MultipartFile arquivo, @RequestPart("json") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         DadosCadastroFuncionario dados = objectMapper.readValue(dadosString, DadosCadastroFuncionario.class);
-        String imagem = arquivoService.enviarArquivo(arquivo, true);
+        String imagem = arquivoService.enviarArquivo(arquivo, null);
         var funcionario = new Funcionario(dados, imagem);
         repository.save(funcionario);
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();
@@ -51,11 +52,12 @@ public class FuncionarioController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestPart("imagem") MultipartFile arquivo, @RequestPart("json") String dadosString) throws JsonProcessingException {
+    public ResponseEntity atualizar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("json") String dadosString) throws JsonProcessingException {
         DadosAtualizaFuncionario dados = objectMapper.readValue(dadosString, DadosAtualizaFuncionario.class);
-        String imagem = arquivoService.enviarArquivo(arquivo, false);
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
-        funcionario.atualizarInfo(dados, imagem);
+        String arquivoUrl = null;
+        if(arquivo != null)  arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem()));
+        funcionario.atualizarInfo(dados, arquivoUrl);
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 
@@ -66,11 +68,14 @@ public class FuncionarioController {
         funcionario.excluirLogico();
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{id}/apagar")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
         repository.deleteById(id);
+        String arquivo = FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem());
+        if(arquivo != null) arquivoService.deletarArquivo(arquivo);
         return ResponseEntity.noContent().build();
     }
 

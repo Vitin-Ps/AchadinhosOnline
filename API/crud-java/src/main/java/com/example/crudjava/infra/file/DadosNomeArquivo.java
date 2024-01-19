@@ -1,4 +1,8 @@
 package com.example.crudjava.infra.file;
 
-public record DadosNomeArquivo(String nomeArquivo) {
+import jakarta.validation.constraints.NotBlank;
+
+public record DadosNomeArquivo(
+        @NotBlank(message = "Nome do arquivo é necessário!")
+        String nomeArquivo) {
 }

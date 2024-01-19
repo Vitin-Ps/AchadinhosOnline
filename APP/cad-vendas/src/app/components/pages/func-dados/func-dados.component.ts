@@ -5,15 +5,18 @@ import { FuncionarioService } from '../../../services/funcionario.service';
 import { MensagensService } from '../../../services/mensagens.service';
 import { ComunicacaoService } from '../../../services/comunicacao.service';
 import { FuncionalidadesExtrasService } from '../../../services/funcionalidades-extras.service';
+import { VendaService } from '../../../services/venda.service';
+import { Venda } from '../../../interfaces/Venda';
 
 @Component({
   selector: 'app-func-dados',
   templateUrl: './func-dados.component.html',
-  styleUrl: './func-dados.component.css'
+  styleUrl: './func-dados.component.css',
 })
 export class FuncDadosComponent {
   allFuncionarios: Funcionario[] = [];
   funcionarios: Funcionario[] = [];
+  vendas!: Venda[];
   shaded: boolean = false;
   funcionario!: Funcionario | null;
   pageNumber: number = 0;
@@ -26,12 +29,14 @@ export class FuncDadosComponent {
   constructor(
     private funcionarioService: FuncionarioService,
     // private funcionalidades: FuncionalidadesExtrasService,
+    private vendaService: VendaService,
     private mensagemService: MensagensService,
     private comunicacaoService: ComunicacaoService
   ) {}
 
   ngOnInit(): void {
     this.listarFuncionarios(0, 9);
+    this.listarVendas();
     setTimeout(() => {
       this.verificarAltura();
     }, 10);
@@ -82,15 +87,16 @@ export class FuncDadosComponent {
   chamarComfirm(funcionario: Funcionario) {
     console.log('cheguei');
     this.mensagemService.confirm(
-      `Tem certeza que quer excluir \n ${
-        funcionario.nome
-      } - ${funcionario.porcentagem}%`);
+      `Tem certeza que quer excluir \n ${funcionario.nome} - ${funcionario.porcentagem}%`
+    );
   }
 
   removerFuncionario() {
-    this.funcionarioService.excluirFuncionarioLogico(this.funcionario!.id!).subscribe(() => {
-      window.location.reload();
-    });
+    this.funcionarioService
+      .excluirFuncionarioLogico(this.funcionario!.id!)
+      .subscribe(() => {
+        window.location.reload();
+      });
   }
 
   listarFuncionarios(page: number, numDados: number) {
@@ -102,12 +108,30 @@ export class FuncDadosComponent {
         this.pageNumber = item.pageable?.pageNumber! + 1;
         this.totalPages = item.totalPages!;
       });
-      this.funcionario = null;
+    this.funcionario = null;
+  }
+
+  listarVendas() {
+    this.vendaService.listarVendas().subscribe((res) => {
+      this.vendas = res.content;
+    });
+  }
+
+  calcularcomissao(id: number): number {
+    console.log(this.vendas)
+    let comissao = 0;
+    if(this.vendas.length !== 0) {
+      this.vendas.forEach((venda) => {
+        if (id === venda.funcionario.id) comissao += venda.comissao!;
+      });
+    }
+    return comissao;
   }
 
   mudarPagina(pageAcao: boolean) {
     if (pageAcao && this.totalPages > this.pageNumber)
       this.listarFuncionarios(this.pageNumber, 9);
-    else if (!pageAcao && this.pageNumber != 1) this.listarFuncionarios(this.pageNumber - 2, 9);
+    else if (!pageAcao && this.pageNumber != 1)
+      this.listarFuncionarios(this.pageNumber - 2, 9);
   }
 }

@@ -1,5 +1,6 @@
 package com.example.crudjava.infra.file;
 
+import com.example.crudjava.infra.FuncionalidadesService;
 import com.example.crudjava.infra.exception.ValidacaoException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,11 +31,13 @@ public class ArquivoService {
                 .toAbsolutePath().normalize();
     }
 
-    public String enviarArquivo(MultipartFile arquivo, Boolean gerarNome) {
-        String nomeArquivo = StringUtils.cleanPath(Objects.requireNonNull(arquivo.getOriginalFilename()));
-        if(gerarNome) {
-            nomeArquivo = gerarNomeArquivoTimestamp(arquivo.getOriginalFilename());
+    public String enviarArquivo(MultipartFile arquivo, String nomeArquivoAtual) {
+        String nomeArquivo = FuncionalidadesService.gerarNomeArquivoTimestamp(arquivo.getOriginalFilename());
+        if(nomeArquivoAtual != null) {
+            if(!arquivoJaExiste(nomeArquivoAtual)) throw new ValidacaoException("Nome do arquivo atual está errado!");
+            nomeArquivo = nomeArquivoAtual;
         }
+        nomeArquivo = FuncionalidadesService.formatarNomeArquivo(nomeArquivo);
         try{
             Path targetLocalizacao = arquivoLocalizacao.resolve(nomeArquivo);
             arquivo.transferTo(targetLocalizacao);
@@ -46,6 +50,11 @@ public class ArquivoService {
         } catch (IOException ex) {
             throw new ValidacaoException("Falha no Upload do arquivo!");
         }
+    }
+
+    private boolean arquivoJaExiste(String nomeArquivo) {
+        Path caminhoArquivo = arquivoLocalizacao.resolve(nomeArquivo);
+        return Files.exists(caminhoArquivo);
     }
 
     public ResponseEntity<Resource> downloadArquivo(String fileName, HttpServletRequest request) throws IOException {
@@ -71,10 +80,15 @@ public class ArquivoService {
         return nomeArquivos.stream().map(DadosNomeArquivo::new).toList();
     }
 
-    private String gerarNomeArquivoTimestamp(String nomeOriginal) {
-        String nomeArquivo = StringUtils.cleanPath(nomeOriginal);
-        String nomeBase = nomeArquivo.substring(0, nomeArquivo.lastIndexOf('.'));
-        String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf('.'));
-        return nomeBase + "_" + System.currentTimeMillis() + extensao;
+    public void deletarArquivo(String nomeArquivo) {
+        if(!arquivoJaExiste(nomeArquivo)) return;
+        System.out.println(arquivoLocalizacao);
+        Path arquivoPath = arquivoLocalizacao.resolve(nomeArquivo);
+        try {
+            Files.delete(arquivoPath);
+        } catch (IOException e) {
+            throw new ValidacaoException("Erro ao excluir arquivo!");
+        }
     }
 }
+

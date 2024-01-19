@@ -28,8 +28,9 @@
       <app-card-func *ngFor="let funcionario of funcionarios"
       [nome]="funcionario.nome"
       [porcentagem]="funcionario.porcentagem"
-      [valor]="12"
+      [valor]="calcularcomissao(funcionario.id!)"
       [selecionado]="funcionario.selecionado!"
+      [imagem]="funcionario.imagem!"
       (click)="selecionarCard(funcionario)"
       />
     </div>

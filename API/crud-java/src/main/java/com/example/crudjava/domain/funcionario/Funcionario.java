@@ -1,5 +1,6 @@
 package com.example.crudjava.domain.funcionario;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -32,16 +33,16 @@ public class Funcionario {
     }
 
     public void atualizarInfo(DadosAtualizaFuncionario dados, String imagem) {
-        if(dados.nome() != null) {
+        if(!StringUtils.isBlank(dados.nome())) {
             this.nome = dados.nome();
         }
-        if(dados.email() != null) {
+        if(!StringUtils.isBlank(dados.email())) {
             this.email = dados.email();
         }
         if(dados.porcentagem() != null) {
             this.porcentagem = dados.porcentagem();
         }
-        if(imagem != null) {
+        if(!StringUtils.isBlank(imagem)) {
             this.imagem = imagem;
         }
     }

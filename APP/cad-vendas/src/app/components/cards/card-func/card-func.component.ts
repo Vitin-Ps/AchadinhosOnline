@@ -11,6 +11,7 @@ export class CardFuncComponent {
   @Input() valor!: number;
   @Input() selecionado: boolean = false;
   @Input() porcentagem!: number;
+  @Input() imagem!: string;
 
   faMoneyBill = faMoneyBill;
   faPercent = faPercent
