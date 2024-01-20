@@ -1,11 +1,16 @@
 package com.example.crudjava.infra;
 
 import com.example.crudjava.infra.exception.ValidacaoException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.springframework.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.Normalizer;
+import java.util.Set;
 
 public abstract class FuncionalidadesService {
     public static String formatarNomeArquivo(String nomeArquivo) {
@@ -44,5 +49,31 @@ public abstract class FuncionalidadesService {
         String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf('.'));
         return nomeBase + "_" + System.currentTimeMillis() + extensao;
     }
+    public static <T> void validarRecord(T record) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<T>> violations = validator.validate(record);
+
+        if (!violations.isEmpty()) {
+            StringBuilder mensagem = new StringBuilder();
+            for (ConstraintViolation<T> violation : violations) {
+//                mensagem.append(String.format("""
+//                        Violations de validação:
+//                         - Propriedade: %s
+//                         - Valor inválido: %s
+//                         - Erro: %s"
+//                        """,
+//                        violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage()));
+//                mensagem.append(" Atributo: ").append(violation.getPropertyPath());
+//                mensagem.append(" - Valor: ").append(violation.getInvalidValue());
+//                mensagem.append(" - Message: ").append(violation.getMessage());
+                mensagem.append(violation.getMessage());
+                mensagem.append("/");
+            }
+            throw new ValidacaoException(mensagem.toString());
+        }
+    }
+
 
 }

@@ -6,11 +6,9 @@ import com.example.crudjava.infra.file.ArquivoService;
 import com.example.crudjava.repository.FuncionarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -35,8 +31,9 @@ public class FuncionarioController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestPart("arquivo") MultipartFile arquivo, @RequestPart("json") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
+    public ResponseEntity cadastrar(@RequestPart("arquivo") MultipartFile arquivo, @RequestPart("dados") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         DadosCadastroFuncionario dados = objectMapper.readValue(dadosString, DadosCadastroFuncionario.class);
+        FuncionalidadesService.validarRecord(dados);
         String imagem = arquivoService.enviarArquivo(arquivo, null);
         var funcionario = new Funcionario(dados, imagem);
         repository.save(funcionario);
@@ -52,11 +49,15 @@ public class FuncionarioController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("json") String dadosString) throws JsonProcessingException {
+    public ResponseEntity atualizar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("dados") String dadosString) throws JsonProcessingException {
         DadosAtualizaFuncionario dados = objectMapper.readValue(dadosString, DadosAtualizaFuncionario.class);
+        FuncionalidadesService.validarRecord(dados);
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
         String arquivoUrl = null;
-        if(arquivo != null)  arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem()));
+        if(arquivo != null)  {
+            if(StringUtils.isBlank(funcionario.getImagem())) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
+            else arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem()));
+        }
         funcionario.atualizarInfo(dados, arquivoUrl);
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
@@ -69,12 +70,13 @@ public class FuncionarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}/apagar")
+    @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
         repository.deleteById(id);
-        String arquivo = FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem());
+        String arquivo = null;
+        if(!StringUtils.isBlank(funcionario.getImagem())) arquivo = FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem());
         if(arquivo != null) arquivoService.deletarArquivo(arquivo);
         return ResponseEntity.noContent().build();
     }
