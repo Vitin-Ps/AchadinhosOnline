@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeaderComponent } from './components/header/header.component';
@@ -35,6 +38,11 @@ import { ManipularDivsDinamicasComponent } from './testes/components/manipular-d
 import { RadioComponent } from './testes/components/radio/radio.component';
 import { EditFuncComponent } from './components/pages/edit-func/edit-func.component';
 import { CicloVidaComponent } from './testes/components/ciclo-vida/ciclo-vida.component';
+import { LoginComponent } from './components/pages/login/login.component';
+import { Interceptor } from './interceptor/Interserptor';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+
+const serviceAutentica = [Interceptor];
 
 @NgModule({
   declarations: [
@@ -68,6 +76,7 @@ import { CicloVidaComponent } from './testes/components/ciclo-vida/ciclo-vida.co
     RadioComponent,
     EditFuncComponent,
     CicloVidaComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,8 +87,12 @@ import { CicloVidaComponent } from './testes/components/ciclo-vida/ciclo-vida.co
     FontAwesomeModule,
   ],
   providers: [
-    provideClientHydration()
+    serviceAutentica,
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+    JwtHelperService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    provideClientHydration(),
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

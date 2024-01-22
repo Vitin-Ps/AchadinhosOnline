@@ -1,17 +1,22 @@
 <header>
-    <a routerLink="/">
-      <img src="../../../assets/imagens/logo.png" alt="logoAchadinhos" />
-      <h1>Achadinhos</h1>
-    </a>
+  <a routerLink="/">
+    <img src="../../../assets/imagens/logo.png" alt="logoAchadinhos" />
+    <h1>Achadinhos</h1>
+  </a>
+  <div class="menu-container">
+    <button class="btn-padrao" (click)="sairSessao()">Sair</button>
     <nav>
       <ul class="menu">
         <fa-icon [icon]="faBars"></fa-icon>
         <ul class="sub-menu">
           <li><a routerLink="/">Home</a></li>
-          <li><a routerLink="/home/area-administrativa">Área Administrativa</a></li>
-          <li><a routerLink="/sobre">Sobre</a></li> 
-          <li><a routerLink="/testes">Testes</a></li>       
+          <li>
+            <a routerLink="/home/area-administrativa">Área Administrativa</a>
+          </li>
+          <li><a routerLink="/sobre">Sobre</a></li>
+          <li><a routerLink="/testes">Testes</a></li>
         </ul>
       </ul>
     </nav>
-  </header>
+  </div>
+</header>

@@ -1,0 +1,5 @@
+<form [formGroup]="loginForm" #formDir="ngForm" (ngSubmit)="submit()">
+    <input type="text" placeholder="login" formControlName="login">
+    <input type="password" placeholder="senha" formControlName="senha">
+    <input type="submit" value="Enviar">
+</form>
