@@ -23,7 +23,7 @@ export class FormProdutoComponent implements OnInit, AfterContentInit {
   prodForm!: FormGroup;
 
   constructor(private mensagensService: MensagensService) {}
-  
+
   ngOnInit(): void {
     this.validaForm();
   }
@@ -42,6 +42,7 @@ export class FormProdutoComponent implements OnInit, AfterContentInit {
       valor: new FormControl(this.prodData ? this.prodData.valor : '', [
         Validators.required,
       ]),
+      imagem: new FormControl(''),
     });
   }
 
@@ -51,6 +52,14 @@ export class FormProdutoComponent implements OnInit, AfterContentInit {
   get valor() {
     return this.prodForm.get('valor')!;
   }
+  get imagem() {
+    return this.prodForm.get('imagem')!;
+  }
+
+  arquivoSelecionado(event: any) {
+    const arquivo: File = event.target.files[0];
+    this.prodForm.patchValue({ imagem: arquivo });
+  }
 
   submit() {
     if (this.prodForm.invalid) {
@@ -59,7 +68,8 @@ export class FormProdutoComponent implements OnInit, AfterContentInit {
     if (
       this.prodData != null &&
       this.prodData!.nome == this.nome.value &&
-      this.prodData!.valor == Number(this.valor.value)
+      this.prodData!.valor == Number(this.valor.value) &&
+      this.imagem.value == ''   
     ) {
       this.mensagensService.alert('Altere ao menos um dado do Produto');
       return;

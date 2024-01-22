@@ -18,13 +18,6 @@
       [ngClass]="{ shaded: shaded }"
       #cardsContainer
     >
-      <!-- <app-card-prod
-        *ngFor="let funcionario of funcionarios"
-        [nome]="funcionario.nome"
-        [valor]="0"
-        (click)="selecionarCard(funcionario)"
-        [selecionado]="funcionario.selecionado!"
-      ></app-card-prod> -->
       <app-card-func *ngFor="let funcionario of funcionarios"
       [nome]="funcionario.nome"
       [porcentagem]="funcionario.porcentagem"

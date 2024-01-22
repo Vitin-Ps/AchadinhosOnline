@@ -30,7 +30,15 @@ export class EditProdComponent implements OnInit {
   }
 
   submit(produto: Produto) {
-    this.prodService.alteraProduto(produto).subscribe((response) => {
+    const formData = new FormData();
+    if(produto.imagem) {
+      formData.append('arquivo', produto.imagem!);
+    }
+    delete produto.imagem
+    const produtoJSON: string = JSON.stringify(produto);
+    formData.append('dados', produtoJSON);
+
+    this.prodService.alteraProduto(formData).subscribe((response) => {
       console.log('Resposta Servidor: ' + response);
       this.mensagensService.alert(
         `Produto ${
@@ -41,7 +49,7 @@ export class EditProdComponent implements OnInit {
           produto.nome
         } - ${FuncionalidadesExtrasService.moedaReal(produto.valor)}`
       );
-    });
       this.router.navigate(['/home/produtos']);
+    });
   }
 }

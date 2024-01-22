@@ -1,6 +1,7 @@
 <div class="card-item" [ngClass]="{ 'selecionado': selecionado }">
   <div class="fundo-branco">
-    <img src="{{imagem}}" />
+    <img src="{{imagem}}" alt="img_perfil" *ngIf="imagem"/>
+    <fa-icon [icon]="faUser" *ngIf="!imagem"/>
     <div class="conteudo">
       <h3><span>Nome: </span>{{ nome }}</h3>
       <h4><fa-icon [icon]="faPercent" /> {{ porcentagem }}</h4>

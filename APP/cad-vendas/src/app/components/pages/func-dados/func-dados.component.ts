@@ -118,9 +118,8 @@ export class FuncDadosComponent {
   }
 
   calcularcomissao(id: number): number {
-    console.log(this.vendas)
     let comissao = 0;
-    if(this.vendas.length !== 0) {
+    if(this.vendas != null && this.vendas.length !== 0) {
       this.vendas.forEach((venda) => {
         if (id === venda.funcionario.id) comissao += venda.comissao!;
       });

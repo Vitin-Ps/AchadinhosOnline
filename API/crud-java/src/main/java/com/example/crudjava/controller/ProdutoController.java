@@ -31,10 +31,11 @@ public class ProdutoController {
     @PostMapping
     @Transactional
 //    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados, UriComponentsBuilder uriComponentsBuilder) {
-    public ResponseEntity cadastrar(@RequestPart("arquivo")MultipartFile arquivo, @RequestPart("dados") String dadosJson, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
+    public ResponseEntity cadastrar(@RequestPart(value = "arquivo", required = false)MultipartFile arquivo, @RequestPart("dados") String dadosJson, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         DadosCadastroProduto dados = objectMapper.readValue(dadosJson, DadosCadastroProduto.class);
         FuncionalidadesService.validarRecord(dados);
-        String arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
+        String arquivoUrl = null;
+        if(arquivo != null) arquivoService.enviarArquivo(arquivo, null);
         var produto = new Produto(dados, arquivoUrl);
         repository.save(produto);
         var uri = uriComponentsBuilder.path("/produtos/{id}").buildAndExpand(produto.getId()).toUri();

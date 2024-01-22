@@ -13,8 +13,8 @@ export class ProdutoService {
   private apiUrl = `${this.baseApiUrl}produtos`;
   constructor(private http: HttpClient) {}
 
-  cadastraProduto(produto: Produto): Observable<Produto> {
-    return this.http.post<Produto>(this.apiUrl, produto);
+  cadastraProduto(produto: FormData): Observable<FormData> {
+    return this.http.post<FormData>(this.apiUrl, produto);
   }
 
   listarProdutosPage(
@@ -27,7 +27,6 @@ export class ProdutoService {
       .set('size', pageSize.toString())
       .set('sort', sort);
 
-    console.log(`${this.apiUrl}?${params}`);
     return this.http.get<Response<Produto[]>>(this.apiUrl, { params });
   }
 
@@ -47,7 +46,7 @@ export class ProdutoService {
     return this.http.get<Produto>(`${this.apiUrl}/${id}`);
   }
 
-  alteraProduto(produto: Produto): Observable<Produto> {
-    return this.http.put<Produto>(this.apiUrl, produto);
+  alteraProduto(produto: FormData): Observable<FormData> {
+    return this.http.put<FormData>(this.apiUrl, produto);
   }
 }

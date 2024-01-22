@@ -31,10 +31,11 @@ public class FuncionarioController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestPart("arquivo") MultipartFile arquivo, @RequestPart("dados") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
+    public ResponseEntity cadastrar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("dados") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         DadosCadastroFuncionario dados = objectMapper.readValue(dadosString, DadosCadastroFuncionario.class);
         FuncionalidadesService.validarRecord(dados);
-        String imagem = arquivoService.enviarArquivo(arquivo, null);
+        String imagem = null;
+        if(arquivo != null) imagem = arquivoService.enviarArquivo(arquivo, null);
         var funcionario = new Funcionario(dados, imagem);
         repository.save(funcionario);
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();

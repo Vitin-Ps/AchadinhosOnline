@@ -19,10 +19,21 @@ export class CadFuncionarioComponent {
   ) {}
 
   async cadastrarFuncionario(funcionario: Funcionario) {
-    this.funcService.registraFuncionario(funcionario).subscribe(
+    const formData = new FormData();
+    if (funcionario.imagem) {
+      formData.append('arquivo', funcionario.imagem);
+    }
+    delete funcionario.imagem;
+    delete funcionario.id;
+    const funcionarioJSON: string = JSON.stringify(funcionario);
+    formData.append('dados', funcionarioJSON);
+
+    this.funcService.registraFuncionario(formData).subscribe(
       (response) => {
         console.log('Resposta do servidor:', response);
-        this.mensagemService.alert(`Funcionário ${funcionario.nome} cadastrado com Sucesso!`);
+        this.mensagemService.alert(
+          `Funcionário ${funcionario.nome} cadastrado com Sucesso!`
+        );
         this.router.navigate(['/']);
       },
       (error) => {
@@ -30,13 +41,16 @@ export class CadFuncionarioComponent {
         console.error('Erro na requisição:', error);
         if (error.status === 0) {
           // Status 0 geralmente indica falha na conexão
-          this.mensagemService.alert("Erro: Não foi possível conectar à API. Verifique se a API está ligada.");
+          this.mensagemService.alert(
+            'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
+          );
         } else {
           // Outros códigos de status
-          this.mensagemService.alert("Erro desconhecido ao cadastrar funcionário.");
+          this.mensagemService.alert(
+            'Erro desconhecido ao cadastrar funcionário.'
+          );
         }
       }
     );
   }
-  
 }

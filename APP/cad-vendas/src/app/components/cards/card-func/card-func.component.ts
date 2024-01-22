@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { faMoneyBill, faPercent } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBill, faPercent, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-card-func',
@@ -13,6 +13,7 @@ export class CardFuncComponent {
   @Input() porcentagem!: number;
   @Input() imagem!: string;
 
+  faUser = faUser
   faMoneyBill = faMoneyBill;
   faPercent = faPercent
 }

@@ -28,7 +28,15 @@ export class EditFuncComponent {
   }
   
   submit(funcionario: Funcionario) {
-    this.funcService.alteraFuncionario(funcionario).subscribe((response) => {
+    const formData = new FormData();
+    if (funcionario.imagem) {
+      formData.append('arquivo', funcionario.imagem);
+    }
+    delete funcionario.imagem;
+    const funcionarioJSON: string = JSON.stringify(funcionario);
+    formData.append('dados', funcionarioJSON);
+
+    this.funcService.alteraFuncionario(formData).subscribe((response) => {
       console.log('Resposta Servidor: ' + response);
       this.mensagensService.alert(
         `Funcionário ${
@@ -37,8 +45,8 @@ export class EditFuncComponent {
           funcionario.nome
         } - ${funcionario.porcentagem}%`
       );
-    });
       this.router.navigate(['/home/funcionarios']);
+    });
   }
 
 }
