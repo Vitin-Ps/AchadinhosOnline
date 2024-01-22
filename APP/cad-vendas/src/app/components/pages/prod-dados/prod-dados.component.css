@@ -1,0 +1,15 @@
+app-card-prod {
+  max-width: 33%;
+}
+
+@media (max-width: 1200px) {
+  app-card-prod {
+    max-width: 49%;
+  }
+}
+
+@media (max-width: 900px) {
+  app-card-prod {
+    max-width: 95%;
+  }
+}

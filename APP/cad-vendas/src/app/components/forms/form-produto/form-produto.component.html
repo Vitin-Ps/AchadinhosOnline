@@ -1,0 +1,29 @@
+<form (ngSubmit)="submit()" [formGroup]="prodForm" #formDir="ngForm">
+    <input type="hidden" formControlName="id"/>
+    <div class="form-group">
+      <label for="nome">Nome: </label>
+      <input
+        type="text"
+        placeholder="Digite seu Nome!"
+        formControlName="nome"
+        required
+      />
+      <div *ngIf="nome.invalid && formDir.submitted" class="validation-error">
+        <p *ngIf="nome.errors?.['required']">O Nome é obrigatório!</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="valor">Valor: </label>
+      <input
+        type="number"
+        placeholder="Digite o valor do Produto"
+        formControlName="valor"
+        required
+      />
+      <div *ngIf="valor.invalid && formDir.submitted" class="validation-error">
+        <p *ngIf="valor.errors?.['required']">Valor do produto é obrigatório!</p>
+      </div>
+    </div>
+    <input type="submit" value="{{ btnText }}" />
+  </form>
+  

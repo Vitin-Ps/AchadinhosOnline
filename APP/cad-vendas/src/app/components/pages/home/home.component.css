@@ -1,0 +1,186 @@
+.sobre-container {
+    width: 100%;
+    height: 700px;
+    display: flex;
+    z-index: 1;
+  }
+
+  .cn-decoration {
+    width: 50%;
+    background-color: #8056ff;
+    padding: 10px;
+  }
+
+  .img-sobre-container {
+    position: absolute;
+    max-width: 900px;
+    min-width: 400px;
+    height: 500px;
+    border-radius: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 350px;
+    z-index: 2;
+  }
+
+  .img-sobre {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.14);
+  }
+
+  .cn-dark {
+    background-color: #333;
+    max-width: 550px;
+    height: 80%;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.14);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-15%);
+    top: 150px;
+    z-index: 1;
+  }
+
+  .cn-dark h2 {
+    color: #fff;
+    margin: 1em;
+    font-size: 2em;
+    line-height: 45px;
+    font-weight: 200;
+  }
+
+  .cn-dark h2 span {
+    color: #9d1cf3;
+    font-weight: bold;
+  }
+
+  .area01 {
+    height: 50%;
+    /* margin-top: 80px; */
+    margin-top: 6%;
+  }
+  .area02 {
+    height: 45%;
+    /* margin-top: 330px; */
+    margin-top: 20%;
+  }
+
+  .btn-sobre {
+    background-color: #6700ac;
+    color: #fff;
+    padding: 1.8em 2em;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-35%);
+    top: 320px;
+    transition: 0.2s;
+    z-index: 3;
+  }
+
+  .btn-sobre:hover {
+    background-color: #fff;
+    color: #6700ac;
+  }
+
+  .opcoes-container {
+    width: 80%;
+    margin: 2em auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card-opcao {
+    background-color: #fff;
+    width: 160px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.06);
+    padding: 2em 0.5em;
+  }
+
+  .card-opcao fa-icon {
+    color: #6700ac;
+    font-size: 3.5em;
+    margin-bottom: 0.3em;
+  }
+
+  .card-opcao h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 0.3em;
+  }
+
+  .card-opcao p {
+    font-size: 0.9em;
+    margin-bottom: 0.8em;
+  }
+
+  .card-opcao button {
+    background-color: #6700ac;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    padding: 0.5em 2.5em;
+    transition: 0.2s;
+  }
+
+  .card-opcao button:hover {
+    background-color: #fff;
+    color: #6700ac;
+    border-color: #6700ac;
+  }
+  
+  @media (max-width: 900px) {
+    .cn-dark {
+      max-width: 350px;
+      height: 65%;
+      transform: translateX(-25%);
+    }
+
+    .area01 {
+      height: 40%;
+      margin-top: 10%;
+    }
+    .area02 {
+      height: 30%;
+      margin-top: 22%;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .cn-dark {
+      max-width: 260px;
+      height: 58%;
+      transform: translateX(-5%);
+    }
+
+    .cn-dark h2 {
+      font-size: 1.5em;
+      line-height: 45px;
+      font-weight: 200;
+    }
+
+    .btn-sobre {
+      padding: 1em 1.5em;
+      transform: translateX(-60%);
+      top: 330px;
+    }
+
+    .img-sobre-container {
+      height: 300px;
+    }
+
+    .sobre-container {
+      height: 500px;
+    }
+  }
