@@ -1,8 +1,9 @@
 <div class="card-item" [ngClass]="{'selecionado': selecionado}">
   <div class="fundo-branco">
-    <img src="./assets/imagens/camisa-branca.jpg" alt="camisa-branca" />
+    <img src="{{imagem}}" alt="produto_img" *ngIf="imagem"/>
+    <fa-icon [icon]="faBox" *ngIf="!imagem"/>
     <div class="conteudo">
-      <h3>Nome: {{ nome }}</h3>
+      <h3>{{ nome }}</h3>
       <h4><fa-icon [icon]="faMoneyBill" /> {{ valor | moedaReal }}</h4>
     </div>
   </div>

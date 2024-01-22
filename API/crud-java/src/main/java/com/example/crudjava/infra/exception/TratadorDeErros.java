@@ -12,4 +12,9 @@ public class TratadorDeErros {
     public ResponseEntity tratarErro404() {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity tratarErroRegraNegocio(ValidacaoException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

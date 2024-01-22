@@ -19,24 +19,33 @@ export class CadProdutoComponent {
   ) {}
 
   async cadastrarProduto(produto: Produto) {
-    this.prodService.cadastraProduto(produto).subscribe(
+    const formData = new FormData();
+    if (produto.imagem) {
+      formData.append('arquivo', produto.imagem!);
+    }
+    delete produto.imagem;
+    delete produto.id;
+    const produtoJSON: string = JSON.stringify(produto);
+    formData.append('dados', produtoJSON);
+
+    this.prodService.cadastraProduto(formData).subscribe(
       (response) => {
         this.mensagemService.alert(`${produto.nome} adicionado com sucesso!`);
         this.router.navigate(['/']);
       },
       (error) => {
-         // Se ocorrer algum erro durante a requisição
-         console.error('Erro na requisição:', error);
-         if (error.status === 0) {
-           // Status 0 geralmente indica falha na conexão
-           this.mensagemService.alert("Erro: Não foi possível conectar à API. Verifique se a API está ligada.");
-         } else {
-           // Outros códigos de status
-           this.mensagemService.alert("Erro desconhecido ao cadastrar Produto.");
-         }
+        // Se ocorrer algum erro durante a requisição
+        console.error('Erro na requisição:', error);
+        if (error.status === 0) {
+          // Status 0 geralmente indica falha na conexão
+          this.mensagemService.alert(
+            'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
+          );
+        } else {
+          // Outros códigos de status
+          this.mensagemService.alert('Erro desconhecido ao cadastrar Produto.');
+        }
       }
     );
   }
-
-
 }

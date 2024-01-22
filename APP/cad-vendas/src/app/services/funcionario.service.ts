@@ -14,9 +14,9 @@ export class FuncionarioService {
 
   constructor(private http: HttpClient) {}
 
-  registraFuncionario(funcionario: Funcionario): Observable<Funcionario> {
+  registraFuncionario(funcionario: FormData): Observable<FormData> {
     console.log(this.apiUrl);
-    return this.http.post<Funcionario>(this.apiUrl, funcionario);
+    return this.http.post<FormData>(this.apiUrl, funcionario);
   }
 
   listarFuncionariosPage(
@@ -28,8 +28,6 @@ export class FuncionarioService {
       .set('page', page.toString())
       .set('size', pageSize.toString())
       .set('sort', sort);
-
-    console.log(`${this.apiUrl}?${params}`);
     return this.http.get<Response<Funcionario[]>>(this.apiUrl, { params });
   }
 
@@ -45,8 +43,8 @@ export class FuncionarioService {
     return this.http.delete(`${this.apiUrl}/${id}/apagar`);
   }
 
-  alteraFuncionario(funcionario: Funcionario): Observable<Funcionario> {
-    return this.http.put<Funcionario>(this.apiUrl, funcionario);
+  alteraFuncionario(funcionario: FormData): Observable<FormData> {
+    return this.http.put<FormData>(this.apiUrl, funcionario);
   }
 
   detalharFuncionario(id: number): Observable<Funcionario> {

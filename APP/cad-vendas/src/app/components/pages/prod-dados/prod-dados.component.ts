@@ -40,14 +40,11 @@ export class ProdDadosComponent implements OnInit {
   
   async ngOnInit(): Promise<void> {
     await this.listarProdutos(0, 9);
-    console.log(`on init:`);
-    console.log(this.produtos);
     setTimeout(() => {
       this.verificarAltura();
     }, 100);
     
     await this.comunicacaoService.emitFunction.subscribe(() => {
-      console.log('chegou no emit2');
       if (this.produto != null) this.removerProduto();
     });
   }

@@ -1,5 +1,6 @@
 package com.example.crudjava.domain.funcionario;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -20,24 +21,29 @@ public class Funcionario {
     private String nome;
     private String email;
     private Integer porcentagem;
+    private String imagem;
     private Boolean ativo;
 
-    public Funcionario(@Valid DadosCadastroFuncionario dados) {
+    public Funcionario(@Valid DadosCadastroFuncionario dados, String imagem) {
         this.nome = dados.nome();
         this.email = dados.email();
         this.porcentagem = dados.porcentagem();
         this.ativo = true;
+        this.imagem = imagem;
     }
 
-    public void atualizarInfo(DadosAtualizaFuncionario dados) {
-        if(dados.nome() != null) {
+    public void atualizarInfo(DadosAtualizaFuncionario dados, String imagem) {
+        if(!StringUtils.isBlank(dados.nome())) {
             this.nome = dados.nome();
         }
-        if(dados.email() != null) {
+        if(!StringUtils.isBlank(dados.email())) {
             this.email = dados.email();
         }
         if(dados.porcentagem() != null) {
             this.porcentagem = dados.porcentagem();
+        }
+        if(!StringUtils.isBlank(imagem)) {
+            this.imagem = imagem;
         }
     }
 

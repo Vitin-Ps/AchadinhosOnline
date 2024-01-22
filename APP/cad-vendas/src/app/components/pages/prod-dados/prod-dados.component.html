@@ -23,6 +23,7 @@
     *ngFor="let produto of produtos"
       [nome]="produto.nome"
       [valor]="produto.valor"
+      [imagem]="produto.imagem!"
       (click)="selecionarCard(produto)"
       [selecionado]="produto.selecionado!"
     ></app-card-prod>
