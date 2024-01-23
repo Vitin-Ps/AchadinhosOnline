@@ -3,4 +3,5 @@ footer {
   color: #fff; /* Cor do texto no rodapé */
   padding: 20px;
   text-align: center;
+  height: 5vh;
 }
