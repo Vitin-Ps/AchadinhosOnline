@@ -1,5 +1,21 @@
-<form [formGroup]="loginForm" #formDir="ngForm" (ngSubmit)="submit()">
-    <input type="text" placeholder="login" formControlName="login">
-    <input type="password" placeholder="senha" formControlName="senha">
-    <input type="submit" value="Enviar">
-</form>
+<div class="fundo-roxo">
+    <div class="imagem-com-overlay">
+        <img src="../../../../assets/imagens/img002.jpg" alt="">
+        <div class="conteudo">
+            <form [formGroup]="loginForm" #formDir="ngForm" (ngSubmit)="submit()">
+                <div class="form-group"><input type="text" placeholder="login" formControlName="login"></div>
+                <div class="form-group"><input type="password" placeholder="senha" formControlName="senha"></div>
+                <div class="opcoes-usuario">
+                    <div>
+                        <input type="checkbox" class="checkbox">
+                        <label for="lembrar">Manter-se Conectado</label>
+                    </div>
+                    <a routerLink="">
+                        Esqueceu sua senha?
+                    </a>
+                </div>
+                <input type="submit" value="Entrar">
+            </form>
+        </div>
+    </div>
+</div>
