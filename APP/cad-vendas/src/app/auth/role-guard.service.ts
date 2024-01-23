@@ -22,7 +22,7 @@ export class RoleGuardService implements CanActivate {
     private messagensService: MensagensService
   ) {}
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const expectedRole = route.data['expectedRole'];
+    const expectedRoles: string[] = route.data['expectedRole'] || [];
   
     // Verifica se está no navegador antes de acessar o sessionStorage
     if (typeof sessionStorage !== 'undefined') {
@@ -30,8 +30,8 @@ export class RoleGuardService implements CanActivate {
   
       if (token !== null) {
         const tokenPayload: MeuJwtPayload = jwtDecode(token);
-  
-        if (!this.auth.isAuthenticated() || tokenPayload.role !== expectedRole) {
+      
+        if (!this.auth.isAuthenticated() || (!expectedRoles.includes(tokenPayload.role) && tokenPayload.role !== 'ADMIN')) {
           this.messagensService.alert(
             'Esse usuário não tem autorização para acessar essa página!'
           );
