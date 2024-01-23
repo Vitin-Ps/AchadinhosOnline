@@ -23,24 +23,30 @@ export class RoleGuardService implements CanActivate {
   ) {}
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const expectedRole = route.data['expectedRole'];
-    let token = null;
-    if (sessionStorage !== undefined)
-      token = sessionStorage.getItem('token')
-        ? sessionStorage.getItem('token')
-        : null;
-    if (token != null) {
-      const tokenPayload: MeuJwtPayload = jwtDecode(token);
-      if (!this.auth.isAuthenticated() || tokenPayload.role != expectedRole) {
-        this.messagensService.alert(
-          'Esse usuário não tem autorização para acessar essa página!'
-        );
-        this.router.navigate(['/']);
+  
+    // Verifica se está no navegador antes de acessar o sessionStorage
+    if (typeof sessionStorage !== 'undefined') {
+      const token = sessionStorage.getItem('token') || null;
+  
+      if (token !== null) {
+        const tokenPayload: MeuJwtPayload = jwtDecode(token);
+  
+        if (!this.auth.isAuthenticated() || tokenPayload.role !== expectedRole) {
+          this.messagensService.alert(
+            'Esse usuário não tem autorização para acessar essa página!'
+          );
+          this.router.navigate(['/']);
+          return false;
+        }
+  
+        return true;
+      } else {
+        this.router.navigate(['login']);
         return false;
       }
-      return true;
-    } else {
-      this.router.navigate(['login']);
-      return false;
     }
+  
+    return false; // Se não estiver no navegador, retorna falso
   }
+  
 }

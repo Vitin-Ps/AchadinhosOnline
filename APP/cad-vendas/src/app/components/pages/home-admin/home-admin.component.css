@@ -7,8 +7,21 @@
 
 .status-lojinha-container {
   width: 60%;
-  min-width: 400px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-lojinha-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 .status-lojinha-container img {
@@ -29,14 +42,8 @@
   color: white;
 }
 
-.status-lojinha-container .filtro {
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 1;
-  box-shadow: 20px 0px 30px rgba(0, 0, 0, 0.2);
-}
-
 .status-lojinha-container .conteudo {
-  z-index: 2;
+  z-index: 1;
 }
 
 .conteudo-container {
@@ -70,7 +77,7 @@
 .conteudo-container aside {
   display: flex;
   width: 80%;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .main-container {
@@ -98,5 +105,27 @@
   .status-lojinha-container,
   .main-container {
     width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .conteudo-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+  
+  .conteudo-container h3 {
+    font-size: 1em;
+    margin-bottom: 1em;
+  }
+  
+  .conteudo-container .card-status {
+    text-align: center;
+    margin: 1em;
+  }
+  
+  .conteudo-container .card-status h4 {
+    font-size: bold;
+    font-size: 1em;
   }
 }
