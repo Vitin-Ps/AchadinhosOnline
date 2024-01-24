@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { TokenService } from '../services/token.service';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
@@ -18,7 +19,7 @@ export class Interceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
 
     let headers: HttpHeaders | undefined = undefined; // Inicializa como undefined para limpá-lo se necessário
-    const token = sessionStorage.getItem('token');
+    const token = TokenService.getToken();
     
     if (token != null) {
       if (req.body instanceof FormData) {
@@ -26,13 +27,13 @@ export class Interceptor implements HttpInterceptor {
         headers = new HttpHeaders({
           contentType: 'false',
           processData: 'false',
-          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+          Authorization: 'Bearer ' + TokenService.getToken(),
         });
       } else {
         headers = new HttpHeaders()
           .append('accept', 'application/json')
           .append('Content-Type', 'application/json')
-          .append('Authorization', 'Bearer ' + sessionStorage.getItem('token'));
+          .append('Authorization', 'Bearer ' + TokenService.getToken());
       }
     }
 

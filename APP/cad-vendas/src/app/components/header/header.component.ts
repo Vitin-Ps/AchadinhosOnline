@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +13,7 @@ export class HeaderComponent {
 
   constructor(private router: Router) {}
   sairSessao() {
-    if (sessionStorage.getItem('token') != null)
-      sessionStorage.removeItem('token');
+    TokenService.removeToken();
     this.router.navigate(['/']);
   }
 }

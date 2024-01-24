@@ -4,6 +4,7 @@ import { LoginService } from '../../../services/login.service';
 import { Login } from '../../../interfaces/Login';
 import { Router } from '@angular/router';
 import { MensagensService } from '../../../services/mensagens.service';
+import { TokenService } from '../../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = new FormGroup({
       login: new FormControl('', [Validators.required]),
       senha: new FormControl('', [Validators.required]),
+      lembrar: new FormControl(false),
     });
   }
 
@@ -31,6 +33,9 @@ export class LoginComponent implements OnInit {
   }
   get senha() {
     return this.loginForm.get('senha')!;
+  }
+  get lembrar() {
+    return this.loginForm.get('lembrar')!;
   }
 
   submit() {
@@ -42,7 +47,9 @@ export class LoginComponent implements OnInit {
 
     this.loginService.loginUser(user).subscribe(
       (token) => {
-        sessionStorage.setItem('token', token.token);
+        TokenService.removeToken();
+        // sessionStorage.setItem('token', token.token);
+        TokenService.setToken(token.token, this.lembrar.value);
         this.router.navigate(['/']);
       },
       (error) => {

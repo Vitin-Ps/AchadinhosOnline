@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { jwtDecode } from 'jwt-decode';
 import { MensagensService } from '../services/mensagens.service';
+import { TokenService } from '../services/token.service';
 
 interface MeuJwtPayload {
   sub: string;
@@ -25,8 +26,7 @@ export class RoleGuardService implements CanActivate {
     const expectedRoles: string[] = route.data['expectedRole'] || [];
   
     // Verifica se está no navegador antes de acessar o sessionStorage
-    if (typeof sessionStorage !== 'undefined') {
-      const token = sessionStorage.getItem('token') || null;
+      const token = TokenService.getToken();
   
       if (token !== null) {
         const tokenPayload: MeuJwtPayload = jwtDecode(token);
@@ -44,9 +44,6 @@ export class RoleGuardService implements CanActivate {
         this.router.navigate(['login']);
         return false;
       }
-    }
-  
-    return false; // Se não estiver no navegador, retorna falso
   }
   
 }
