@@ -35,15 +35,15 @@ export class ProdDadosComponent implements OnInit {
     private produtoService: ProdutoService,
     // private funcionalidades: FuncionalidadesExtrasService,
     private mensagemService: MensagensService,
-    private comunicacaoService: ComunicacaoService
+    private comunicacaoService: ComunicacaoService,
   ) {}
-  
+
   async ngOnInit(): Promise<void> {
     await this.listarProdutos(0, 9);
     setTimeout(() => {
       this.verificarAltura();
     }, 100);
-    
+
     await this.comunicacaoService.emitFunction.subscribe(() => {
       if (this.produto != null) this.removerProduto();
     });
@@ -108,7 +108,7 @@ export class ProdDadosComponent implements OnInit {
       .listarProdutosPage(page, numDados, 'nome')
       .subscribe((item) => {
         this.allProdutos = item.content;
-        this.produtos = item.content;
+        this.produtos = this.allProdutos;
         this.pageNumber = item.pageable?.pageNumber! + 1;
         this.totalPages = item.totalPages!;
       });

@@ -43,7 +43,7 @@
 }
 
 form {
-    text-align: center;
+  text-align: center;
 }
 
 .form-group input {
@@ -80,37 +80,58 @@ input[type="submit"]:hover {
 }
 
 .opcoes-usuario {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    font-size: 1.2em;
-    margin: 1em 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 1.2em;
+  padding: 1em;
+  margin: 1em 0;
 }
 
 .opcoes-usuario a {
-    text-decoration: none;
-    color: #FFF;
-    transition: .2s;
+  text-decoration: none;
+  color: #fff;
+  transition: 0.2s;
 }
 
 .opcoes-usuario label {
-    margin-left: .5em;
+  margin-left: 0.5em;
 }
 
 .opcoes-usuario input {
-    transform: scale(2);
-    background-color: #fff;
-    border-radius: .2px;
-    cursor: pointer;
+  transform: scale(2);
+  background-color: #fff;
+  border-radius: 0.2px;
+  cursor: pointer;
 }
 
 .opcoes-usuario a:hover {
-    color: #9566f9;
+  color: #9566f9;
 }
 
 @media (max-width: 800px) {
   .imagem-com-overlay {
     width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .conteudo {
+    width: 350px;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 350px) {
+  .conteudo {
+    width: 250px;
+  }
+
+  .opcoes-usuario {
+    display: flex;
+    flex-direction: column;
+    font-size: 1em;
+    gap: 1em;
   }
 }

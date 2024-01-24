@@ -87,11 +87,11 @@ const serviceAutentica = [Interceptor];
     FontAwesomeModule,
   ],
   providers: [
-    serviceAutentica,
-    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     provideClientHydration(),
+    serviceAutentica,
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

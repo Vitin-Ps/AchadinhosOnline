@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("arquivos")
+@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200", "http://127.0.0.1:5500/"})
 public class ArquivoController {
 
     @Autowired

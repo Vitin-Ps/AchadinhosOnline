@@ -35,7 +35,7 @@ public class ProdutoController {
         DadosCadastroProduto dados = objectMapper.readValue(dadosJson, DadosCadastroProduto.class);
         FuncionalidadesService.validarRecord(dados);
         String arquivoUrl = null;
-        if(arquivo != null) arquivoService.enviarArquivo(arquivo, null);
+        if(arquivo != null) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
         var produto = new Produto(dados, arquivoUrl);
         repository.save(produto);
         var uri = uriComponentsBuilder.path("/produtos/{id}").buildAndExpand(produto.getId()).toUri();
