@@ -1,17 +1,16 @@
-import { Box, Button, Image, KeyboardAvoidingView, Text } from 'native-base'
+import { Box, Image, KeyboardAvoidingView, Text } from 'native-base'
 import { Temas } from '../estilos/tema'
 import { Platform } from 'react-native'
-import Logo from '../assets/imagens/teste.png'
-import { useEffect, useState } from 'react'
+import Logo from '../assets/imagens/Logo.png'
+import { useState } from 'react'
 import { EntradaTexto } from '../components/EntradaTexto'
 import Botao, { EstadoClick } from '../components/Botao'
 
 export default function Login({ navigation }: any) {
   const [isLoading, setIsLoading] = useState(false)
 
-  function teste() {
+  function login() {
     EstadoClick(setIsLoading)
-    console.log(isLoading)
     navigation.replace('Tabs')
   }
 
@@ -33,7 +32,7 @@ export default function Login({ navigation }: any) {
         <EntradaTexto icon="person" placeholder="Digite seu nome" />
         <EntradaTexto icon="key" placeholder="Digite sua senha" senha />
       </Box>
-      <Botao isLoading={isLoading} onPress={teste}>
+      <Botao isLoading={isLoading} onPress={login}>
         <Text fontSize={20} fontWeight="bold" color="white">
           Entrar
         </Text>

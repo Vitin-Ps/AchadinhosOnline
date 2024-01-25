@@ -5,7 +5,7 @@ import Administrativo from './Administrativo'
 import Sobre from './Sobre'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Box, Image, Text, View } from 'native-base'
-import Logo from '../assets/imagens/teste.png'
+import Logo from '../assets/imagens/Logo.png'
 import Botao from '../components/Botao'
 
 const Tab = createBottomTabNavigator()
@@ -36,7 +36,12 @@ export const mainTabs = [
   },
 ]
 
-function Header() {
+export default function Tabs({navigation}: any) {
+  function sair() {
+    navigation.replace('Login')
+  }
+
+  function Header() {
     return (
         <Box
         w="100%"
@@ -45,9 +50,10 @@ function Header() {
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
+        backgroundColor="white"
       >
         <Image source={Logo} alt="logo achadinhos" w={100} h={100} />
-        <Botao w={70} h={45} mr={5} mt={0}>
+        <Botao w={70} h={45} mr={5} mt={0} onPress={sair}>
           <Text color="white" fontWeight="bold">
             Sair
           </Text>
@@ -55,8 +61,6 @@ function Header() {
       </Box>
     );
   }
-
-export default function Tabs() {
 
   return (
     <Tab.Navigator screenOptions={screenOptions}

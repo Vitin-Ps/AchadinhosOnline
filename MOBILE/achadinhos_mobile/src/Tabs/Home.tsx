@@ -1,6 +1,7 @@
 import { HStack, ScrollView, Text } from 'native-base'
 import { Temas } from '../estilos/tema'
 import { CardCadastro } from '../components/CardCadastro'
+import Titulo from '../components/Titulo'
 
 export default function Home({ navigation }) {
   return (
@@ -13,31 +14,28 @@ export default function Home({ navigation }) {
         alignItems="center"
         justifyContent="center"
       >
-        <Text
-          mt={5}
-          w="100%"
-          fontSize={25}
-          fontWeight="bold"
-          textAlign="center"
-        >
+        <Titulo>
           <Text color={Temas.colors.roxo.escuro}>Achadinhos</Text>
           <Text color={Temas.colors.verde.normal}>Online</Text>
-        </Text>
+        </Titulo>
 
         <CardCadastro
           icon="person"
           titulo="Funcionários"
           descricao="Clique aqui para cadastrar novos Funcionários"
+          onPress={() => navigation.navigate('CadastroFuncionario')}
         />
         <CardCadastro
           icon="cart-outline"
           titulo="Vendas"
           descricao="Registre as vendas feitas por Clientes"
+          onPress={() => navigation.navigate('CadastroVendas')}
         />
         <CardCadastro
           icon="shirt"
           titulo="Produtos"
           descricao="Cadastre novos Produtos"
+          onPress={() => navigation.navigate('CadastroProduto')}
         />
       </HStack>
     </ScrollView>

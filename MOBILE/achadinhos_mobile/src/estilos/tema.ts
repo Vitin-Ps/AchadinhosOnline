@@ -16,7 +16,8 @@ export const Temas = extendTheme (
                 muitoEscuro: '#244A3B'
             },
             cinza: {
-                claro: '#989898'
+                claro: '#989898',
+                escuro: '#3E3E3E'
             }
         },
         estiloFontes: {
