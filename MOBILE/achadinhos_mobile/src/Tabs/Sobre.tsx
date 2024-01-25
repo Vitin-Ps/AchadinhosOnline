@@ -9,12 +9,7 @@ export default function Sobre({ navigation }) {
         <Text color={Temas.colors.roxo.claro}>Achadinhos</Text>
         <Text color={Temas.colors.verde.normal}>Online</Text>
       </Titulo>
-      <Text
-        color="white"
-        fontSize={17}
-        mt={10}
-        lineHeight={30}
-      >
+      <Text color="white" fontSize={17} mt={10} lineHeight={30}>
         O Achadinhos Online visa democratizar a moda, proporcionando uma
         alternativa sustentável e acessível para aqueles que desejam se
         expressar através de seu estilo pessoal. Nosso objetivo é criar uma
@@ -30,8 +25,9 @@ export default function Sobre({ navigation }) {
         mb={20}
         lineHeight={30}
         textAlign="center"
-
-      >&copy; 2024 AchadinhosOnline. Todos os direitos reservados.</Text>
+      >
+        &copy; 2024 AchadinhosOnline. Todos os direitos reservados.
+      </Text>
     </ScrollView>
   )
 }
