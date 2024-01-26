@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './cad-venda.component.scss'
 })
 export class CadVendaComponent {
-
+  btnEnviar = "Registrar"
 }

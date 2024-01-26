@@ -1,0 +1,30 @@
+<form (ngSubmit)="submit()" [formGroup]="vendaForm" #formDir="ngForm">
+    <input type="hidden" formControlName="id">
+    <div class="form-group">
+        <label for="funcionario">Funcionário:</label>
+        <ng-container *ngIf="funcionario == undefined; else comId">
+            <select formControlName="idFuncionario" (change)="selecionarFuncionario($event)">
+                <option value="{{ null }}" selected disabled>Selecione</option>
+                <option *ngFor="let funcionario of funcionarios" value="{{funcionario.id}}">{{funcionario.nome}}</option>
+            </select>
+        </ng-container>
+        <ng-template #comId>
+            <input type="text" formControlName="idFuncionario" readonly>
+        </ng-template>
+       
+        <div *ngIf="idFuncionario.invalid && formDir.submitted" class="validation-error">
+            <p *ngIf="idFuncionario.errors?.['required']">Escolha um funcionário!</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="valor">Valor:</label>
+        <input type="number" formControlName="valor" readonly>
+        <div *ngIf="valor.invalid && formDir.submitted" class="validation-error">
+            <p *ngIf="valor.errors?.['required']">Valor é Obrigatório!</p>
+        </div>
+    </div>
+    <div class="btn-container" *ngIf="idFuncionarioSelecionado != null">
+        <a routerLink="/carrinho/{{idFuncionarioSelecionado}}"><button class="btn-padrao">Editar Carrinho</button></a>
+    </div>
+    <input type="submit" value="{{btnEnviar}}" />
+</form>

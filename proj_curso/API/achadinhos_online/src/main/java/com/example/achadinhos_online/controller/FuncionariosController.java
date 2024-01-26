@@ -1,4 +1,4 @@
-package com.example.achadinhos_online.Controller;
+package com.example.achadinhos_online.controller;
 
 import com.example.achadinhos_online.domain.funcionario.*;
 import com.example.achadinhos_online.infra.exception.ValidacaoException;
@@ -12,10 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -35,7 +31,7 @@ public class FuncionariosController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemFuncionario>> listar(@PageableDefault(size = 10, page = 0, sort = "nome")Pageable pageable) {
+    public ResponseEntity<Page<DadosListagemFuncionario>> listar(Pageable pageable) {
         Page<DadosListagemFuncionario> page = repository.findAllByAtivoTrue(pageable).map(DadosListagemFuncionario::new);
         return ResponseEntity.ok(page);
     }

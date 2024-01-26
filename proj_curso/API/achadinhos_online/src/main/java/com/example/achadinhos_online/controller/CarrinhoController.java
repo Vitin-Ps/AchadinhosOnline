@@ -1,14 +1,10 @@
-package com.example.achadinhos_online.Controller;
+package com.example.achadinhos_online.controller;
 
 import com.example.achadinhos_online.domain.carrinho.CarrinhoService;
 import com.example.achadinhos_online.domain.carrinho.DadosCarrinho;
-import com.example.achadinhos_online.domain.carrinho.DadosListagemCarrinho;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

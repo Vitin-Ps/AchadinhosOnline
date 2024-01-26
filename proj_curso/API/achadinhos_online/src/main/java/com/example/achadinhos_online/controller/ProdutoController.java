@@ -1,4 +1,4 @@
-package com.example.achadinhos_online.Controller;
+package com.example.achadinhos_online.controller;
 
 import com.example.achadinhos_online.domain.produto.*;
 import com.example.achadinhos_online.infra.exception.ValidacaoException;
@@ -31,7 +31,7 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListegemProduto>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
+    public ResponseEntity<Page<DadosListegemProduto>> listar(Pageable pageable) {
         var page = repository.findAllByAtivoTrue(pageable).map(DadosListegemProduto::new);
         return ResponseEntity.ok(page);
     }

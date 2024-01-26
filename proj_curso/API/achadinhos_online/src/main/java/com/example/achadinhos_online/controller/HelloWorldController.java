@@ -1,4 +1,4 @@
-package com.example.achadinhos_online.Controller;
+package com.example.achadinhos_online.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

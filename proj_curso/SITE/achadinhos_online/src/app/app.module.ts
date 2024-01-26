@@ -19,6 +19,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFuncionarioComponent } from './components/forms/form-funcionario/form-funcionario.component';
 import { MessageComponent } from './components/message/message.component';
 import { FormProdutoComponent } from './components/forms/form-produto/form-produto.component';
+import { FormVendaComponent } from './components/forms/form-venda/form-venda.component';
+import { CarrinhoProdutoComponent } from './components/pages/carrinho-produto/carrinho-produto.component';
+import { ConversaoMoedaRealPipe } from './pipes/conversao-moeda-real.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,9 @@ import { FormProdutoComponent } from './components/forms/form-produto/form-produ
     FormFuncionarioComponent,
     MessageComponent,
     FormProdutoComponent,
+    FormVendaComponent,
+    CarrinhoProdutoComponent,
+    ConversaoMoedaRealPipe,
   ],
   imports: [
     BrowserModule,
