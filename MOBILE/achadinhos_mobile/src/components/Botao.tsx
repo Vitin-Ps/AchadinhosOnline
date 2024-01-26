@@ -1,4 +1,4 @@
-import { Button, ITextProps, Spinner, Text } from 'native-base'
+import { Button, ITextProps} from 'native-base'
 import { Temas } from '../estilos/tema'
 
 interface TextoProps extends ITextProps {
