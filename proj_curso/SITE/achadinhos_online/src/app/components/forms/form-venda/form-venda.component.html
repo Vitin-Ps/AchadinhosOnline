@@ -5,13 +5,15 @@
         <ng-container *ngIf="funcionario == undefined; else comId">
             <select formControlName="idFuncionario" (change)="selecionarFuncionario($event)">
                 <option value="{{ null }}" selected disabled>Selecione</option>
-                <option *ngFor="let funcionario of funcionarios" value="{{funcionario.id}}">{{funcionario.nome}}</option>
+                <option *ngFor="let funcionario of funcionarios" value="{{funcionario.id}}">{{funcionario.nome}}
+                </option>
             </select>
         </ng-container>
         <ng-template #comId>
-            <input type="text" formControlName="idFuncionario" readonly>
+            <input type="text" value="{{funcionario!.nome}}" readonly>
+            <input type="hidden" formControlName="idFuncionario" value="{{funcionario!.nome}}" readonly>
         </ng-template>
-       
+
         <div *ngIf="idFuncionario.invalid && formDir.submitted" class="validation-error">
             <p *ngIf="idFuncionario.errors?.['required']">Escolha um funcionário!</p>
         </div>
@@ -24,6 +26,7 @@
         </div>
     </div>
     <div class="btn-container" *ngIf="idFuncionarioSelecionado != null">
+        <button class="btn-padrao btn-invertido" (click)="limparCarrinho($event)">Limpar Carrinho</button>
         <a routerLink="/carrinho/{{idFuncionarioSelecionado}}"><button class="btn-padrao">Editar Carrinho</button></a>
     </div>
     <input type="submit" value="{{btnEnviar}}" />

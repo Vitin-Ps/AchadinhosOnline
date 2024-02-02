@@ -29,6 +29,7 @@ export class CarrinhoProdutoComponent implements OnInit {
     private carrinhoService: CarrinhoService,
     private router: Router
   ) {}
+
   ngOnInit(): void {
     this.idFuncionario = Number(this.route.snapshot.paramMap.get('id'));
     this.produtoService.listarAll().subscribe((item) => {

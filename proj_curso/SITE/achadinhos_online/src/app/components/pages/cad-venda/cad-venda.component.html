@@ -5,6 +5,7 @@
         <h2>Registre sua <span>Venda</span></h2>
         <app-form-venda
             [btnEnviar]="btnEnviar"
+            (onSubmit)="registrarVenda($event)"
         />
     </div>
 </div>

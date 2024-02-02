@@ -1,26 +1,62 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterContentChecked,
+  Component,
+  DoCheck,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { VendaDTO } from '../../../interfaces/VendaDTO';
 import { Funcionario } from '../../../interfaces/Funcionario';
 import { FuncionarioService } from '../../../services/funcionario.service';
+import { ActivatedRoute } from '@angular/router';
+import { CarrinhoService } from '../../../services/carrinho.service';
+import { Carrinho } from '../../../interfaces/Carrinho';
+import { MessageService } from '../../../services/message.service';
 
 @Component({
   selector: 'app-form-venda',
   templateUrl: './form-venda.component.html',
   styleUrl: './form-venda.component.scss',
 })
-export class FormVendaComponent implements OnInit {
+export class FormVendaComponent implements OnInit, AfterContentChecked {
   @Output() onSubmit = new EventEmitter<VendaDTO>();
-  vendaForm!: FormGroup;
   @Input() btnEnviar: string = '';
   funcionarios: Funcionario[] = [];
   funcionario?: Funcionario;
+  itensCarrinho: Carrinho[] = [];
   idFuncionarioSelecionado: number | null = null;
 
-  constructor(private funcionarioService: FuncionarioService) {}
+  vendaForm!: FormGroup;
+
+  constructor(
+    private funcionarioService: FuncionarioService,
+    private carrinhoService: CarrinhoService,
+    private mensagemService: MessageService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngAfterContentChecked(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.funcionario = this.funcionarios.find(
+        (funcionario) => funcionario.id === this.idFuncionarioSelecionado
+      );
+      this.validaForm();
+    }
+  }
+
   ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     this.listarFuncionarios();
     this.validaForm();
+    if (id) {
+      this.idFuncionarioSelecionado = id;
+      this.listarCarrinho(id);
+      console.log('está chegando');
+    }
   }
 
   listarFuncionarios() {
@@ -29,11 +65,35 @@ export class FormVendaComponent implements OnInit {
     });
   }
 
+  listarCarrinho(id: number) {
+    this.carrinhoService.listarItensPorFuncionarioId(id).subscribe((itens) => {
+      this.itensCarrinho = itens;
+      let valorTotal: number = 0;
+      if (this.itensCarrinho) {
+        this.itensCarrinho.forEach((item) => {
+          valorTotal += item.valor!;
+        });
+      }
+      if(valorTotal != 0) this.valor.setValue(valorTotal);
+    });
+  }
+
   validaForm() {
+    let valorTotal: number = 0;
+    if (this.itensCarrinho) {
+      this.itensCarrinho.forEach((item) => {
+        valorTotal += item.valor!;
+      });
+    }
     this.vendaForm = new FormGroup({
-      id: new FormControl(''),
-      idFuncionario: new FormControl('', [Validators.required]),
-      valor: new FormControl('', [Validators.required]),
+      id: new FormControl(this.funcionario ? this.funcionario.id : ''),
+      idFuncionario: new FormControl(
+        this.funcionario ? this.funcionario.id : '',
+        [Validators.required]
+      ),
+      valor: new FormControl(valorTotal != 0 ? valorTotal : '', [
+        Validators.required,
+      ]),
     });
   }
 
@@ -52,7 +112,22 @@ export class FormVendaComponent implements OnInit {
 
   selecionarFuncionario(e: Event) {
     const target = e.target as HTMLInputElement;
-    const value = target.value
-    this.idFuncionarioSelecionado = Number(value)
+    const value = target.value;
+    this.idFuncionarioSelecionado = Number(value);
+      this.listarCarrinho(this.idFuncionarioSelecionado!);
+  }
+
+  limparCarrinho(e: Event) {
+    e.preventDefault();
+    this.carrinhoService
+      .limparCarrinho(this.idFuncionarioSelecionado!)
+      .subscribe(
+        (res) => {
+          window.location.reload();
+        },
+        (error) => {
+          this.mensagemService.alert('Carrinho já está vazio.');
+        }
+      );
   }
 }
