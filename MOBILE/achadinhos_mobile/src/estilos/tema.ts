@@ -16,6 +16,7 @@ export const Temas = extendTheme (
                 muitoEscuro: '#244A3B'
             },
             cinza: {
+                muitoClaro: '#d8d8d8',
                 claro: '#989898',
                 escuro: '#3E3E3E'
             }
