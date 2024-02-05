@@ -1,6 +1,7 @@
-import { Image, ScrollView, Text, VStack } from 'native-base'
-import { Temas } from '../estilos/tema'
-import Titulo from '../components/Titulo'
+import { ScrollView, Text } from "native-base";
+import { Temas } from "../estilos/tema";
+import Titulo from "../components/Titulo";
+
 
 export default function Sobre({ navigation }) {
   return (
