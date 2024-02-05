@@ -77,7 +77,8 @@ export function EntradaArquivo({ onImagemSelecionada }) {
       </Box>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <Modal.Content maxWidth="400px">
+        <Modal.Content maxWidth="400px"
+        backgroundColor={Temas.colors.branco.brancoTransparent}>
           <Modal.CloseButton />
           <Modal.Body>
             <Box alignItems="center">

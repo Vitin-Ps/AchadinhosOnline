@@ -3,6 +3,9 @@ import { extendTheme } from "native-base";
 export const Temas = extendTheme (
     {
         colors: {
+            branco: {
+                brancoTransparent: '#ffffffe7',
+            },
             roxo: {
                 claro:'#8801D1',
                 normal: '#6904CE',
