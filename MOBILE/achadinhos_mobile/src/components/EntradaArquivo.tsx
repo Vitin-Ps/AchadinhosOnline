@@ -7,6 +7,7 @@ import {
   launchImageLibraryAsync,
 } from 'expo-image-picker'
 import { Temas } from '../estilos/tema'
+import { converterImagem } from '../services/ArquivoConvert'
 
 export function EntradaArquivo({ onImagemSelecionada }) {
   const [showModal, setShowModal] = useState(false)
@@ -31,7 +32,8 @@ export function EntradaArquivo({ onImagemSelecionada }) {
     }
     if (result !== null && !result.canceled) {
       setImage(result.assets[0].uri)
-      onImagemSelecionada(result.assets[0].uri)
+      const arquivo = converterImagem(result)
+      onImagemSelecionada(arquivo)
     }
 
     setShowModal(false)
@@ -63,22 +65,21 @@ export function EntradaArquivo({ onImagemSelecionada }) {
           </Box>
         ) : (
           <Image
-            source={{
-              uri: image,
-            }}
-            accessibilityLabel="Teste"
+            source={{uri: image}}
+            alt="teste"
             w={150}
             h={150}
             m={5}
             borderRadius={10}
-            shadow={3}
           />
         )}
       </Box>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <Modal.Content maxWidth="400px"
-        backgroundColor={Temas.colors.branco.brancoTransparent}>
+        <Modal.Content
+          maxWidth="400px"
+          backgroundColor={Temas.colors.branco.brancoTransparent}
+        >
           <Modal.CloseButton />
           <Modal.Body>
             <Box alignItems="center">

@@ -4,15 +4,24 @@ import { Temas } from '../../estilos/tema'
 import { EntradaTexto } from '../../components/EntradaTexto'
 import Botao from '../../components/Botao'
 import { EntradaArquivo } from '../../components/EntradaArquivo'
+import { useState } from 'react'
+import { Produto } from '../../interfaces/Produto'
+import { cadastrarProduto } from '../../services/ProdutoService'
 
 export default function CadastroFuncionario({ navigation }) {
+  const [dados, setDados] = useState({} as Produto)
+
   const handleSelecionarImagem = (imagemSelecionada) => {
-    console.log('Imagem selecionada:', imagemSelecionada)
+   setDados({...dados, imagem: imagemSelecionada});
   }
 
-  function cadastrarProduto() {
+  async function cadastrar() {
     console.log('chegou')
-    navigation.replace('Tabs')
+    console.log('dados:', dados)
+
+    const res = await cadastrarProduto(dados)
+    if (!res) console.log('Erro:', res)
+    else navigation.replace('Tabs')
   }
 
   return (
@@ -29,15 +38,16 @@ export default function CadastroFuncionario({ navigation }) {
           <Text color={Temas.colors.black}>Cadastre seu </Text>
           <Text color={Temas.colors.roxo.normal}>Produto</Text>
         </Titulo>
-        <EntradaTexto icon="shirt" placeholder="Digite seu nome" />
-        <EntradaTexto icon="pricetag" placeholder="Digite o valor" />
+        <EntradaTexto icon="shirt" placeholder="Digite seu nome" onChangeText={(text) => setDados({...dados, nome: text})}/>
+        <EntradaTexto icon="pricetag" placeholder="Digite o valor" 
+        onChangeText={(text) => setDados({...dados, valor: Number(text)})}/>
         <EntradaArquivo onImagemSelecionada={handleSelecionarImagem} />
         <Botao>
           <Text
             fontWeight="bold"
             color={Temas.colors.white}
             fontSize={20}
-            onPress={() => cadastrarProduto()}
+            onPress={() => cadastrar()}
           >
             Cadastrar
           </Text>

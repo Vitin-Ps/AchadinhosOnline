@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/teste")
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200", "exp://192.168.100.46:8081"})
 public class TesteControler {
     @GetMapping
     public String pagHello() {
