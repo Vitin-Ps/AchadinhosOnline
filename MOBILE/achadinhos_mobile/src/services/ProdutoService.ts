@@ -1,5 +1,5 @@
 import { Produto } from '../interfaces/Produto'
-import api from './API'
+import api from './api'
 
 export async function cadastrarProduto(produto: Produto) {
   if (!produto) {
@@ -18,7 +18,7 @@ export async function cadastrarProduto(produto: Produto) {
 
   console.log('formdata', formData)
   try {
-    const res = await api.get('/teste')
+    const res = await api.post('produtos', formData)
     console.log(res.data)
     return res.data
   } catch (error) {

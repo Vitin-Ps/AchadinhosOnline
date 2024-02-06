@@ -26,6 +26,7 @@ public class SecurityConfigurations {
         return http.csrf(crst -> crst.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").permitAll()

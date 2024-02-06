@@ -1,3 +1,5 @@
 npm install --save @auth0/angular-jwt
 
 npm install --save jwt-decode
+
+obs: api de cep: https://viacep.com.br/ws/72115515/json/
