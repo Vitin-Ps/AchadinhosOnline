@@ -18,7 +18,7 @@ export async function cadastrarProduto(produto: Produto) {
 
   console.log('formdata', formData)
   try {
-    const res = await api.post('produtos', formData)
+    const res = await api.delete('produtos')
     console.log(res.data)
     return res.data
   } catch (error) {

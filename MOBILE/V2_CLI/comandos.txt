@@ -1,0 +1,25 @@
+npx react-native@latest init achadinhos_online --template react-native-template-typescript
+
+npm run start
+
+npm run android
+
+
+npm install --save-dev prettier@^3.0.0
+
+npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-prettier eslint-plugin-import eslint-plugin-prettier eslint-plugin-react eslint-plugin-simple-import-sort pre-commit prettier --legacy-peer-deps
+
+
+npm install styled-components
+
+npm install @types/styled-components-react-native -D
+
+npm install native-base
+npm install react-native-svg@12.1.1
+npm install react-native-safe-area-context@3.3.2
+
+npm install @react-navigation/native
+npm install @react-navigation/native-stack
+
+npm install react-native-vector-icons
+npm i --save-dev @types/react-native-vector-icons
