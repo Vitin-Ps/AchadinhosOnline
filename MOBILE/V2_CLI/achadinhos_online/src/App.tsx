@@ -9,7 +9,7 @@ export default function App() {
       <StatusBar backgroundColor={Temas.colors.roxo.normal} />
       <SafeAreaView>
         {/* <Text mt={10}>Teste</Text> */}
-        <Rotas />
+        {/* <Rotas /> */}
       </SafeAreaView>
     </NativeBaseProvider>
   );

@@ -1,5 +1,4 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { mainTabs } from '../Tabs'
 import { RouteProp } from '@react-navigation/native'
 
 export type ListaTabelas = {
@@ -7,9 +6,9 @@ export type ListaTabelas = {
   Home: undefined
   Administrativo: undefined
   Sobre: undefined
-  Tabs: {
-    screen: keyof typeof mainTabs
-  }
+  // Tabs: {
+  //   screen: keyof typeof mainTabs
+  // }
 }
 
 export type NavigationProps<T extends keyof ListaTabelas> = {

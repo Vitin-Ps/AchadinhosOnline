@@ -14,6 +14,7 @@ npm install react-native-svg@12.1.1
 npm install react-native-safe-area-context@3.3.2
 
 npm install @react-navigation/native
+npm install react-native-screens react-native-safe-area-context
 npm install @react-navigation/native-stack
 
 npm install react-native-vector-icons
