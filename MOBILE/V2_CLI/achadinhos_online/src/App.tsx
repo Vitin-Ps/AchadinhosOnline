@@ -1,15 +1,16 @@
-import { NativeBaseProvider, StatusBar, Text } from "native-base";
-import { Temas } from "./estilos/tema";
-import { SafeAreaView } from "react-native";
+import {NativeBaseProvider, StatusBar, Text} from 'native-base';
+import {Temas} from './estilos/tema';
+import {SafeAreaView} from 'react-native';
+import Rotas from './Rotas';
 
 export default function App() {
-  return(
+  return (
     <NativeBaseProvider theme={Temas}>
-      <StatusBar backgroundColor={Temas.colors.roxo.normal}/>
+      <StatusBar backgroundColor={Temas.colors.roxo.normal} />
       <SafeAreaView>
-      <Text mt={10}>Teste</Text>
-
+        {/* <Text mt={10}>Teste</Text> */}
+        <Rotas />
       </SafeAreaView>
     </NativeBaseProvider>
-  )
+  );
 }

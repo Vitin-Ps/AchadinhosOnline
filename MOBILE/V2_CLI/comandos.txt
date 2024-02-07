@@ -18,3 +18,8 @@ npm install @react-navigation/native-stack
 
 npm install react-native-vector-icons
 npm i --save-dev @types/react-native-vector-icons
+
+npm install @react-navigation/bottom-tabs
+npm install axios
+
+npm add react-native-image-picker
