@@ -5,3 +5,9 @@ export interface Produto {
     imagem?: string;
     selecionado?: boolean
 }
+
+export interface ProdutoDTO {
+    nome: string;
+    valor: number;
+    imagem?: File;
+}

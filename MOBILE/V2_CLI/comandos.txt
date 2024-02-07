@@ -18,9 +18,9 @@ npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/react-native-fontawesome
 
 npm add react-native-image-picker
-Definir newArchEnabled para true dentro de android/gradle.properties
+
+npm install axios
 
 npm install styled-components
 npm install @types/styled-components-react-native -D
 
-npm install axios
