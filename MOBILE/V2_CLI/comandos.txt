@@ -1,33 +1,26 @@
 npx react-native@latest init achadinhos_online --template react-native-template-typescript
 
 npm run start
-
 npm run android
 
 
-npm install styled-components
-
-npm install @types/styled-components-react-native -D
 
 npm install native-base react-native-svg@12.1.1 react-native-safe-area-context@3.3.2
 
 npm install @react-navigation/native
 npm install react-native-screens react-native-safe-area-context
 npm install @react-navigation/native-stack
-
-npm install react-native-vector-icons
-npm i --save-dev @types/react-native-vector-icons
-
 npm install @react-navigation/bottom-tabs
-npm install axios
-
-npm add react-native-image-picker
-Definir newArchEnabled para true dentro de android/gradle.properties
-
 
 npm i @fortawesome/react-native-fontawesome
 npm i --save @fortawesome/fontawesome-svg-core
 npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/react-native-fontawesome
 
-npm install @react-navigation/bottom-tabs
+npm add react-native-image-picker
+Definir newArchEnabled para true dentro de android/gradle.properties
+
+npm install styled-components
+npm install @types/styled-components-react-native -D
+
+npm install axios
