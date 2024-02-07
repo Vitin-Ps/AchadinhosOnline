@@ -19,6 +19,7 @@
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.73.4",
+    "react-native-image-picker": "^7.1.0",
     "react-native-safe-area-context": "^3.4.1",
     "react-native-screens": "^3.29.0",
     "react-native-svg": "^12.1.1"
