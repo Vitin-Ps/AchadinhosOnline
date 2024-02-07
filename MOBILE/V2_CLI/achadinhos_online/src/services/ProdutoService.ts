@@ -17,7 +17,7 @@ export async function cadastrarProduto(produto: ProdutoDTO) {
 
   console.log('formdata', formData);
   try {
-    const res = await api.post('produtos', formData);
+    const res = await api.post('produtos', formData, { headers: { "Content-Type": "multipart/form-data" }});
     console.log(res.data);
     return res.data;
   } catch (error) {
