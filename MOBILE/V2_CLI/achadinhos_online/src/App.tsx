@@ -7,10 +7,8 @@ export default function App() {
   return (
     <NativeBaseProvider theme={Temas}>
       <StatusBar backgroundColor={Temas.colors.roxo.normal} />
-      <SafeAreaView>
         {/* <Text mt={10}>Teste</Text> */}
-        {/* <Rotas /> */}
-      </SafeAreaView>
+        <Rotas />
     </NativeBaseProvider>
   );
 }
