@@ -9,9 +9,7 @@ npm install styled-components
 
 npm install @types/styled-components-react-native -D
 
-npm install native-base
-npm install react-native-svg@12.1.1
-npm install react-native-safe-area-context@3.3.2
+npm install native-base react-native-svg@12.1.1 react-native-safe-area-context@3.3.2
 
 npm install @react-navigation/native
 npm install react-native-screens react-native-safe-area-context
