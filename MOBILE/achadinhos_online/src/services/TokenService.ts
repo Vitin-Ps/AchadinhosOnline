@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
-
+import { decode } from "base-64";
+global.atob = decode;
 
 export interface MeuJwtPayload {
   sub: string;
@@ -31,14 +32,13 @@ export function validadeToken(token: string): boolean {
   return expiraEmSegundos > dataAtualEmSegundos;
 }
 
-
 export function infoToken(token: string): MeuJwtPayload | null {
   try {
     const infoToken: MeuJwtPayload = jwtDecode(token);
+    console.log(infoToken)
     return infoToken;
   } catch (error) {
     console.error("Erro ao decodificar o token:", error);
     return null;
   }
-  
 }

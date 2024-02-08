@@ -25,7 +25,9 @@ npm install axios
 npm i @react-native-async-storage/async-storage
 
 npm i jwt-decode
-npm install core-js@latest
+npm install base-64
+criar um aquivo base-64.d.ts no @types e colocar declare module 'base-64';
+
 
 
 npm install styled-components
