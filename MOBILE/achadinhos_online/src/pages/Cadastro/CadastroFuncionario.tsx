@@ -1,30 +1,44 @@
-import { HStack, ScrollView, Text } from 'native-base'
-import Titulo from '../../components/Titulo'
-import { Temas } from '../../estilos/tema'
-import { EntradaTexto } from '../../components/EntradaTexto'
-import Botao from '../../components/Botao'
-import { useState } from 'react'
-import { Produto, ProdutoDTO } from '../../interfaces/Produto'
-import { faMoneyBill, faShirt } from '@fortawesome/free-solid-svg-icons'
-import { EntradaArquivo } from './EntradaArquivo'
-import { cadastrarProduto } from '../../services/ProdutoService'
-import { FileUpload } from '../../interfaces/FileUpload'
+import {HStack, ScrollView, Text, useToast} from 'native-base';
+import Titulo from '../../components/Titulo';
+import {Temas} from '../../estilos/tema';
+import {EntradaTexto} from '../../components/EntradaTexto';
+import Botao from '../../components/Botao';
+import {useState} from 'react';
+import {
+  faEnvelope,
+  faPercent,
+  faShirt,
+} from '@fortawesome/free-solid-svg-icons';
+import {EntradaArquivo} from '../../components/EntradaArquivo';
+import {cadastrarProduto} from '../../services/ProdutoService';
+import {FileUpload} from '../../interfaces/FileUpload';
+import {EntradaNumber} from '../../components/EntradaNumber';
+import {Funcionario} from '../../interfaces/Funcionario';
+import { cadastrarFuncionario } from '../../services/FuncionarioService';
 
-export default function CadastroFuncionario({ navigation }: any) {
-  const [dados, setDados] = useState({} as Produto)
-  const [image, setImage] = useState<FileUpload>()
+export default function CadastrarFuncionario({navigation}: any) {
+  const [dados, setDados] = useState({} as Funcionario);
+  const [image, setImage] = useState<FileUpload>();
+  const toast = useToast();
 
   const handleSelecionarImagem = (imagemSelecionada: FileUpload) => {
-    if(imagemSelecionada !== null) setImage(imagemSelecionada)
-  }
+    if (imagemSelecionada !== null) setImage(imagemSelecionada);
+  };
 
   async function cadastrar() {
-    const res = await cadastrarProduto(dados, image!)
-    if (!res) {
-      console.log('Erro:', res)
+    if (!dados.nome || !dados.email || !dados.porcentagem) {
+      toast.show({
+        title: 'Erro ao Cadastrar Funcionário',
+        description: 'Preeencha todos os Campos',
+        backgroundColor: 'red.500',
+      });
       return;
     }
-    else navigation.replace('Tabs')
+    const res = await cadastrarFuncionario(dados, image!);
+    if (!res) {
+      console.log('Erro:', res);
+      return;
+    } else navigation.replace('Tabs');
   }
 
   return (
@@ -35,27 +49,40 @@ export default function CadastroFuncionario({ navigation }: any) {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
-      >
+        justifyContent="center">
         <Titulo>
-          <Text color={Temas.colors.black}>Cadastre seu </Text>
-          <Text color={Temas.colors.roxo.normal}>Produto</Text>
+          <Text color={Temas.colors.black}>Cadastre o </Text>
+          <Text color={Temas.colors.roxo.normal}>Funcionário</Text>
         </Titulo>
-        <EntradaTexto label='nome' icon={faShirt} placeholder="Digite seu nome" onChangeText={(text) => setDados({...dados, nome: text})}/>
-        <EntradaTexto label='valor' icon={faMoneyBill} placeholder="Digite o valor" 
-        onChangeText={(text) => setDados({...dados, valor: Number(text)})}/>
+        <EntradaTexto
+          label="nome"
+          icon={faShirt}
+          placeholder="Digite seu nome"
+          onChangeText={text => setDados({...dados, nome: text})}
+        />
+        <EntradaTexto
+          label="email"
+          icon={faEnvelope}
+          placeholder="Digite seu E-mail"
+          onChangeText={text => setDados({...dados, email: text})}
+        />
+        <EntradaNumber
+          label="porcentagem"
+          icon={faPercent}
+          placeholder="Digite a Porcentagem"
+          onChangeText={text => setDados({...dados, porcentagem: Number(text)})}
+        />
         <EntradaArquivo onImagemSelecionada={handleSelecionarImagem} />
         <Botao>
           <Text
             fontWeight="bold"
             color={Temas.colors.white}
             fontSize={20}
-            onPress={() => cadastrar()}
-          >
+            onPress={() => cadastrar()}>
             Cadastrar
           </Text>
         </Botao>
       </HStack>
     </ScrollView>
-  )
+  );
 }

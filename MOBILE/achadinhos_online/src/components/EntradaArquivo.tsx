@@ -1,20 +1,24 @@
-import { Box, Image, Modal, Text } from 'native-base'
-import { useState } from 'react'
-import { ImageLibraryOptions, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import Botao from '../../components/Botao'
-import { Temas } from '../../estilos/tema'
-import { FileUpload } from '../../interfaces/FileUpload'
+import {Box, Image, Modal, Text} from 'native-base';
+import {useState} from 'react';
+import {
+  ImageLibraryOptions,
+  ImagePickerResponse,
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
+import Botao from './Botao';
+import {Temas} from '../estilos/tema';
+import {FileUpload} from '../interfaces/FileUpload';
 
+export function EntradaArquivo({onImagemSelecionada}: any) {
+  const [showModal, setShowModal] = useState(false);
 
-export function EntradaArquivo({ onImagemSelecionada }: any) {
-  const [showModal, setShowModal] = useState(false)
-
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState('');
 
   async function selecionarImagem(camera: boolean) {
-    setShowModal(false)
+    setShowModal(false);
 
-    let result: ImagePickerResponse | null = null
+    let result: ImagePickerResponse | null = null;
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
       quality: 1,
@@ -23,19 +27,19 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
     };
 
     if (camera) {
-      result = await launchCamera(options)
+      result = await launchCamera(options);
     } else {
-      result = await launchImageLibrary(options)
+      result = await launchImageLibrary(options);
     }
     if (result !== null && !result.didCancel) {
-      const arquivo = result.assets![0]
-      setImage(result.assets![0].uri!)
+      const arquivo = result.assets![0];
+      setImage(result.assets![0].uri!);
       const file: FileUpload = {
         uri: arquivo.uri!,
         type: arquivo.type!,
-        name: arquivo.fileName!
-      }
-      onImagemSelecionada(file)
+        name: arquivo.fileName!,
+      };
+      onImagemSelecionada(file);
     }
   }
 
@@ -49,8 +53,7 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
         alignItems="center"
         justifyContent="space-around"
         p={1}
-        m={2}
-      >
+        m={2}>
         <Botao w="30%" onPress={() => setShowModal(true)}>
           Selecione
         </Botao>
@@ -59,8 +62,7 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
             backgroundColor={Temas.colors.cinza.muitoClaro}
             p={5}
             borderRadius={10}
-            shadow={3}
-          >
+            shadow={3}>
             <Text>Escolha a Imagem</Text>
           </Box>
         ) : (
@@ -78,8 +80,7 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content
           maxWidth="400px"
-          backgroundColor={Temas.colors.branco.brancoTransparent}
-        >
+          backgroundColor={Temas.colors.branco.brancoTransparent}>
           <Modal.CloseButton />
           <Modal.Body>
             <Box alignItems="center">
@@ -87,17 +88,15 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
                 w="80%"
                 m={0}
                 onPress={() => {
-                  selecionarImagem(true)
-                }}
-              >
+                  selecionarImagem(true);
+                }}>
                 <Text color="white">Câmera</Text>
               </Botao>
               <Botao
                 w="80%"
                 onPress={() => {
-                  selecionarImagem(false)
-                }}
-              >
+                  selecionarImagem(false);
+                }}>
                 <Text color="white">Galeria</Text>
               </Botao>
             </Box>
@@ -105,5 +104,5 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
         </Modal.Content>
       </Modal>
     </>
-  )
+  );
 }
