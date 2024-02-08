@@ -19,6 +19,7 @@ interface InputProps {
   mt?: string;
   senha?: boolean;
   value?: string;
+  editable?: boolean;
   onChangeText?: (text: string) => void;
 }
 
@@ -31,20 +32,21 @@ export function EntradaTexto(inputProps: InputProps): JSX.Element {
 
   return (
     <Input
+      editable={inputProps.editable}
+      placeholder={inputProps.placeholder}
+      value={inputProps.value}
+      onChangeText={inputProps.onChangeText}
+      type="text"
+      secureTextEntry={show}
       mt={inputProps.mt ? inputProps.mt : 5}
       fontSize="20px"
       fontWeight="bold"
       width="100%"
-      secureTextEntry={show}
       color={Temas.colors.roxo.claro}
       borderColor={Temas.colors.roxo.escuro}
       borderRadius={15}
       p={4}
       // shadow={3}
-      placeholder={inputProps.placeholder}
-      value={inputProps.value}
-      onChangeText={inputProps.onChangeText}
-      type='text'
       InputLeftElement={
         <Box ml={2}>
           <FontAwesomeIcon

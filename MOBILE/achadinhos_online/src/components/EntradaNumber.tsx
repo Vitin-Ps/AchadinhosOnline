@@ -10,11 +10,13 @@ interface InputProps {
   icon: IconDefinition;
   color?: string;
   placeholder?: string;
+  editable?: boolean;
+  value?: string;
   onChangeText?: (text: string) => void;
 }
 
 export function EntradaNumber(inputProps: InputProps): JSX.Element {
-  const [valor, setValor] = useState('');
+  const [valor, setValor] = useState(inputProps.value ? inputProps.value : '');
 
   const validaInputNumber = (text: string) => {
     // Remove caracteres não numéricos
@@ -42,6 +44,7 @@ export function EntradaNumber(inputProps: InputProps): JSX.Element {
         onChangeText={validaInputNumber}
         placeholder={inputProps.placeholder}
         placeholderTextColor={Temas.colors.cinza.claro}
+        editable={inputProps.editable}
       />
     </View>
   );
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     borderColor: Temas.colors.roxo.escuro,
     borderWidth: 1,
     borderRadius: 15,
-    marginTop: 25
+    marginTop: 25,
   },
   icon: {
     marginRight: 10,
