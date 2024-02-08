@@ -1,6 +1,7 @@
 npx react-native@latest init achadinhos_online --template react-native-template-typescript
 
 npm run start
+npm start -- --reset-cache
 npm run android
 
 
@@ -24,7 +25,15 @@ npm install axios
 npm i @react-native-async-storage/async-storage
 
 npm i jwt-decode
+npm install core-js@latest
+
 
 npm install styled-components
 npm install @types/styled-components-react-native -D
+
+
+
+portas no windows 
+
+netstat -ano | findstr :8081
 

@@ -40,6 +40,8 @@ public class ProdutoController {
         repository.save(produto);
         var uri = uriComponentsBuilder.path("/produtos/{id}").buildAndExpand(produto.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoProduto(produto));
+//        System.out.println(arquivo);
+//        return null;
     }
 
     @GetMapping

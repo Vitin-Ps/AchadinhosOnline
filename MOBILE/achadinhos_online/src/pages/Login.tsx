@@ -8,7 +8,7 @@ import Botao, {EstadoClick} from '../components/Botao';
 import {faKey, faUser} from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fazerLogin} from '../services/AutenticacaoServico';
-import {jwtDecode} from 'jwt-decode';
+import { MeuJwtPayload, infoToken, validadeToken } from '../services/TokenService';
 
 export default function Login({navigation}: any) {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,13 +20,14 @@ export default function Login({navigation}: any) {
   useEffect(() => {
     async function verificarLogin() {
       const token = await AsyncStorage.getItem('token');
-      if (token) {
+      if (token && validadeToken(token)) {
         navigation.replace('Tabs');
       }
       setCarregando(false);
     }
     verificarLogin();
   }, []);
+  
 
   async function efetuarLogin() {
     EstadoClick(setIsLoading);

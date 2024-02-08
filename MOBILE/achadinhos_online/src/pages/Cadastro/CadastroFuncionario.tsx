@@ -8,23 +8,23 @@ import { Produto, ProdutoDTO } from '../../interfaces/Produto'
 import { faMoneyBill, faShirt } from '@fortawesome/free-solid-svg-icons'
 import { EntradaArquivo } from './EntradaArquivo'
 import { cadastrarProduto } from '../../services/ProdutoService'
+import { FileUpload } from '../../interfaces/FileUpload'
 
 export default function CadastroFuncionario({ navigation }: any) {
   const [dados, setDados] = useState({} as Produto)
-  const [image, setImage] = useState<File>()
+  const [image, setImage] = useState<FileUpload>()
 
-  const handleSelecionarImagem = (imagemSelecionada: File | null) => {
+  const handleSelecionarImagem = (imagemSelecionada: FileUpload) => {
     if(imagemSelecionada !== null) setImage(imagemSelecionada)
   }
 
   async function cadastrar() {
-    console.log('chegou')
-    console.log('dados:', dados)
-    console.log('img:', image)
-
     const res = await cadastrarProduto(dados, image!)
-    // if (!res) console.log('Erro:', res)
-    // else navigation.replace('Tabs')
+    if (!res) {
+      console.log('Erro:', res)
+      return;
+    }
+    else navigation.replace('Tabs')
   }
 
   return (

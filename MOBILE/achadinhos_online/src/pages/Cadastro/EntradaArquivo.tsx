@@ -1,9 +1,9 @@
 import { Box, Image, Modal, Text } from 'native-base'
 import { useState } from 'react'
 import { ImageLibraryOptions, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { converterImagem } from '../../services/ArquivoConvert'
 import Botao from '../../components/Botao'
 import { Temas } from '../../estilos/tema'
+import { FileUpload } from '../../interfaces/FileUpload'
 
 
 export function EntradaArquivo({ onImagemSelecionada }: any) {
@@ -28,9 +28,14 @@ export function EntradaArquivo({ onImagemSelecionada }: any) {
       result = await launchImageLibrary(options)
     }
     if (result !== null && !result.didCancel) {
+      const arquivo = result.assets![0]
       setImage(result.assets![0].uri!)
-      const arquivo = converterImagem(result)
-      onImagemSelecionada(arquivo)
+      const file: FileUpload = {
+        uri: arquivo.uri!,
+        type: arquivo.type!,
+        name: arquivo.fileName!
+      }
+      onImagemSelecionada(file)
     }
   }
 
