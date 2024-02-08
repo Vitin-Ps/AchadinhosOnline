@@ -9,6 +9,7 @@ import {faKey, faUser} from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fazerLogin} from '../services/AutenticacaoServico';
 import {validadeToken} from '../services/TokenService';
+import Titulo from '../components/Titulo';
 
 export default function Login({navigation}: any) {
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +71,10 @@ export default function Login({navigation}: any) {
       }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Image source={Logo} alt="Logo Lojinha" w={150} h={150} />
+      <Titulo mb={3}>
+        <Text color={Temas.colors.verde.normal}>Achadinhos</Text>
+        <Text color={Temas.colors.roxo.normal}>Online</Text>
+      </Titulo>
       <Box>
         <EntradaTexto
           icon={faUser}
