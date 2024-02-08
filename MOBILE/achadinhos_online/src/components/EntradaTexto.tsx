@@ -1,11 +1,18 @@
 import {Box, Icon, Input} from 'native-base';
 import {Temas} from '../estilos/tema';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Pressable} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {IconDefinition, faEye, faEyeDropper, faEyeSlash, faUser} from '@fortawesome/free-solid-svg-icons';
+import {
+  IconDefinition,
+  faEye,
+  faEyeDropper,
+  faEyeSlash,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 
 interface InputProps {
+  label: string;
   icon: IconDefinition;
   color?: string;
   placeholder?: string;
@@ -17,12 +24,18 @@ interface InputProps {
 
 export function EntradaTexto(inputProps: InputProps): JSX.Element {
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (inputProps.senha) setShow(true);
+  }, []);
+
   return (
     <Input
       mt={inputProps.mt ? inputProps.mt : 5}
       fontSize="20px"
       fontWeight="bold"
       width="100%"
+      secureTextEntry={show}
       color={Temas.colors.roxo.claro}
       borderColor={Temas.colors.roxo.escuro}
       borderRadius={15}
@@ -31,7 +44,7 @@ export function EntradaTexto(inputProps: InputProps): JSX.Element {
       placeholder={inputProps.placeholder}
       value={inputProps.value}
       onChangeText={inputProps.onChangeText}
-      type={inputProps.senha ? (show ? 'text' : 'password') : 'text'}
+      type='text'
       InputLeftElement={
         <Box ml={2}>
           <FontAwesomeIcon

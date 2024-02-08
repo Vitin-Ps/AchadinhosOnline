@@ -8,6 +8,7 @@ import {Temas} from '../../estilos/tema';
 import Botao from '../../components/Botao';
 import {faBook, faHome, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 const screenOptions = {
@@ -39,6 +40,7 @@ export const mainTabs = [
 
 export default function Tabs({navigation}: any) {
   function sair() {
+    AsyncStorage.removeItem('token');
     navigation.replace('Login');
   }
 

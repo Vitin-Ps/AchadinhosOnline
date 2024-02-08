@@ -1,6 +1,6 @@
 {
     "configurations": [
-        {"name":"Run Android Hermes","request":"launch","type":"reactnativedirect","cwd":"${workspaceFolder}/MOBILE/V2_CLI/achadinhos_online/","enableDebug":true,"platform":"android"},
+        {"name":"Run Android Hermes","request":"launch","type":"reactnativedirect","cwd":"${workspaceFolder}/MOBILE/achadinhos_online/","enableDebug":true,"platform":"android"},
 
     {
         "name": "Aplication Angular",

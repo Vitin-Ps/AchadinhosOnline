@@ -21,6 +21,10 @@ npm add react-native-image-picker
 
 npm install axios
 
+npm i @react-native-async-storage/async-storage
+
+npm i jwt-decode
+
 npm install styled-components
 npm install @types/styled-components-react-native -D
 

@@ -3,6 +3,10 @@ import { extendTheme } from "native-base";
 export const Temas = extendTheme (
     {
         colors: {
+            padrao: {
+                corFundo: '#FFF',
+                corAlerta: '#6904CE'
+            },
             branco: {
                 brancoTransparent: '#ffffffe7',
             },
