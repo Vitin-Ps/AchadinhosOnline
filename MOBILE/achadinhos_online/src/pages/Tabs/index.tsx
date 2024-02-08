@@ -48,7 +48,6 @@ export default function Tabs({navigation}: any) {
     return (
       <Box
         w="100%"
-        mt={5}
         display="flex"
         flexDirection="row"
         alignItems="center"
