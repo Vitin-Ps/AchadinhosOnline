@@ -6,6 +6,8 @@ import Tabs from "./pages/Tabs";
 import CadastroProduto from "./pages/Cadastro/CadastroProduto";
 import CadastroFuncionario from "./pages/Cadastro/CadastroFuncionario";
 import CadastroVendas from "./pages/Cadastro/CadastroVendas";
+import CarrinhoProdutos from "./pages/CarrinhoProdutos";
+import React from "react";
 
 
 const Stack = createNativeStackNavigator();
@@ -45,6 +47,11 @@ export default function Rotas() {
         <Stack.Screen
           name="CadastroVendas"
           component={CadastroVendas as React.FC}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="CarrinhoProdutos"
+          component={CarrinhoProdutos as React.FC}
           options={{headerShown: true}}
         />
       </Stack.Navigator>

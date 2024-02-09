@@ -1,20 +1,10 @@
 import {Box, HStack, ScrollView, Text, useToast} from 'native-base';
 import Titulo from '../../components/Titulo';
 import {Temas} from '../../estilos/tema';
-import {EntradaTexto} from '../../components/EntradaTexto';
 import Botao from '../../components/Botao';
 import {useEffect, useState} from 'react';
 import {Produto} from '../../interfaces/Produto';
-import {
-  faCartShopping,
-  faEdit,
-  faMoneyBill,
-  faShirt,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-import {EntradaArquivo} from '../../components/EntradaArquivo';
-import {cadastrarProduto} from '../../services/ProdutoService';
-import {FileUpload} from '../../interfaces/FileUpload';
+import {faCartShopping, faMoneyBill} from '@fortawesome/free-solid-svg-icons';
 import {EntradaNumber} from '../../components/EntradaNumber';
 import ComboBox from '../../components/ComboBox';
 import {Funcionario} from '../../interfaces/Funcionario';
@@ -116,7 +106,7 @@ export default function CadastroVendas({navigation}: any) {
                 fontWeight="bold"
                 color={Temas.colors.white}
                 fontSize={20}
-                onPress={() => cadastrar()}>
+                onPress={() => navigation.navigate("CarrinhoProdutos")}>
                 <FontAwesomeIcon
                   icon={faCartShopping}
                   color={Temas.colors.white}
