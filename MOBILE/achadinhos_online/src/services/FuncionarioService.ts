@@ -1,14 +1,18 @@
-import { FileUpload } from '../interfaces/FileUpload';
-import { Funcionario } from '../interfaces/Funcionario';
+import {FileUpload} from '../interfaces/FileUpload';
+import {Funcionario} from '../interfaces/Funcionario';
+import { Response } from '../interfaces/Response';
 import api from './api.';
 
-export async function cadastrarFuncionario(funcionario: Funcionario, image: FileUpload) {
+export async function cadastrarFuncionario(
+  funcionario: Funcionario,
+  image: FileUpload,
+) {
   if (!funcionario) {
     return null;
   }
 
   const formData = new FormData();
-  console.log("image", image)
+  console.log('image', image);
 
   if (image) formData.append('arquivo', image);
 
@@ -18,10 +22,36 @@ export async function cadastrarFuncionario(funcionario: Funcionario, image: File
   const funcionarioJSON: string = JSON.stringify(funcionario);
   formData.append('dados', funcionarioJSON);
 
-  console.log("form", formData)
+  console.log('form', formData);
 
   try {
-    const res = await api.post('funcionarios', formData, { headers: { "Content-Type": "multipart/form-data" }});
+    const res = await api.post('funcionarios', formData, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    });
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function listarFuncionariosPage(
+  page: number,
+  pageSize: number,
+  sort: string,
+) {
+  try {
+    const res = await api.get(`funcionarios?page=${page}&size=${pageSize}&sort=${sort}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function listarFuncionariosAll(): Promise<Response<Funcionario[]> | null> {
+  try {
+    const res = await api.get('funcionarios');
     return res.data;
   } catch (error) {
     console.log('erro: ', error);

@@ -25,6 +25,7 @@ export default function Login({navigation}: any) {
       if (token && validadeToken(token)) {
         navigation.replace('Tabs');
       }
+      if(!validadeToken(token!)) AsyncStorage.removeItem('token')
       setCarregando(true);
     }
     verificarLogin();

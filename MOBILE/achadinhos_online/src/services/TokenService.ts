@@ -35,7 +35,6 @@ export function validadeToken(token: string): boolean {
 export function infoToken(token: string): MeuJwtPayload | null {
   try {
     const infoToken: MeuJwtPayload = jwtDecode(token);
-    console.log(infoToken)
     return infoToken;
   } catch (error) {
     console.error("Erro ao decodificar o token:", error);

@@ -1,19 +1,28 @@
-import {Box, CheckIcon, Select} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {Select} from 'native-base';
 import {Temas} from '../estilos/tema';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { Funcionario } from '../interfaces/Funcionario';
+import {Funcionario} from '../interfaces/Funcionario';
 
 interface ComboProps {
-    label: string;
-    placeholder?: string;
-    items: Funcionario[],
-    onChangeText?: (text: string) => void;
-  }
+  label: string;
+  placeholder?: string;
+  items: Funcionario[]; // Ajuste o tipo da propriedade 'items'
+  onChangeText?: (itemValue: Funcionario) => void; // Adicione a função de retorno de chamada
+}
 
 export default function ComboBox(comboProps: ComboProps) {
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    undefined,
+  );
+
   const handleChange = (itemValue: string) => {
-    console.log('Novo valor selecionado:', itemValue);
-    // Adicione aqui a lógica para lidar com a mudança de valor
+    setSelectedValue(itemValue); // Atualiza o valor selecionado
+    console.log(itemValue);
+    if (comboProps.onChangeText) {
+      comboProps.items.forEach(item => {
+        if (item.id === Number(itemValue)) comboProps.onChangeText!(item);
+      });
+    }
   };
 
   return (
@@ -29,7 +38,8 @@ export default function ComboBox(comboProps: ComboProps) {
       placeholderTextColor={Temas.colors.cinza.claro}
       color={Temas.colors.roxo.normal}
       borderRadius={15}
-      >
+      selectedValue={selectedValue}
+      onValueChange={itemValue => handleChange(itemValue)}>
       {comboProps.items.map(item => (
         <Select.Item key={item.id} label={item.nome} value={String(item.id)} />
       ))}
