@@ -31,7 +31,7 @@ public class CarrinhoController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Page<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id ,@PageableDefault(size = 10, page = 0) Pageable pageable) {
+    public ResponseEntity<Page<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id ,Pageable pageable) {
         var dto = service.listarCarrinho(id, pageable);
         return ResponseEntity.ok(dto);
     }
