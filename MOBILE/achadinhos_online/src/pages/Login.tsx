@@ -23,7 +23,7 @@ export default function Login({navigation}: any) {
       setCarregando(false);
       const token = await AsyncStorage.getItem('token');
       if (token && validadeToken(token)) {
-        navigation.replace('CarrinhoProdutos');
+        navigation.replace('Tabs');
       }
       if(!validadeToken(token!)) AsyncStorage.removeItem('token')
       setCarregando(true);

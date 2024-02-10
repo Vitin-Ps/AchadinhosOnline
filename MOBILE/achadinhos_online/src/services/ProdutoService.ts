@@ -1,5 +1,6 @@
 import { FileUpload } from '../interfaces/FileUpload';
 import {Produto} from '../interfaces/Produto';
+import { Response } from '../interfaces/Response';
 import api from './api.';
 
 export async function cadastrarProduto(produto: Produto, image: FileUpload) {
@@ -28,3 +29,28 @@ export async function cadastrarProduto(produto: Produto, image: FileUpload) {
     return null;
   }
 }
+
+export async function listarProdutosPage(
+  page: number,
+  pageSize: number,
+  sort: string,
+) {
+  try {
+    const res = await api.get(`produtos?page=${page}&size=${pageSize}&sort=${sort}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function listarProdutosAll(): Promise<Response<Produto[]> | null> {
+  try {
+    const res = await api.get('produtos');
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+

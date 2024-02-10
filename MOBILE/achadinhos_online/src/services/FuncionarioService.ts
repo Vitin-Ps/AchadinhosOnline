@@ -58,3 +58,13 @@ export async function listarFuncionariosAll(): Promise<Response<Funcionario[]> |
     return null;
   }
 }
+
+export async function detalharFuncionario(id: number) {
+  try {
+    const res = await api.get(`funcionarios/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    return null;
+  }
+}
