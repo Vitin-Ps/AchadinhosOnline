@@ -160,8 +160,8 @@ export default function CadastroVendas({navigation}: any) {
         alignItems="center"
         justifyContent="center">
         <Titulo>
-          <Text color={Temas.colors.black}>Cadastre seu </Text>
-          <Text color={Temas.colors.roxo.normal}>Produto</Text>
+          <Text color={Temas.colors.black}>Registre sua </Text>
+          <Text color={Temas.colors.roxo.normal}>Venda</Text>
         </Titulo>
         {funcionario ? (
           <EntradaTexto
@@ -237,7 +237,7 @@ export default function CadastroVendas({navigation}: any) {
             color={Temas.colors.white}
             fontSize={20}
             onPress={() => cadastrar()}>
-            Cadastrar
+            Registrar
           </Text>
         </Botao>
       </HStack>
