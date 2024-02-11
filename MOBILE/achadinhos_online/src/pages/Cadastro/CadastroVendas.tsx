@@ -19,11 +19,15 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useRoute} from '@react-navigation/native';
 import {EntradaTexto} from '../../components/EntradaTexto';
-import {limparCarrinho, listarItensCarrinhoPorFuncionarioId} from '../../services/CarrinhoService';
+import {
+  limparCarrinho,
+  listarItensCarrinhoPorFuncionarioId,
+} from '../../services/CarrinhoService';
 import {converterMoedaReal} from '../../services/FuncionalidadesService';
 import InputLoading from '../../components/InputLoading';
-import { VendaDTO } from '../../interfaces/Venda';
-import { registraVenda } from '../../services/VendaService';
+import {VendaDTO} from '../../interfaces/Venda';
+import {registraVenda} from '../../services/VendaService';
+import {Loading} from '../../components/Loading';
 
 interface ParamsType {
   id?: number;
@@ -44,27 +48,27 @@ export default function CadastroVendas({navigation}: any) {
   const id = routeParams?.id;
 
   useEffect(() => {
-    console.log('id: ', id);
     setLoading(false);
     async function carregaInfo() {
       if (id !== undefined) {
         // await detalharFuncionario(id);
-        await Promise.all([
-          detalharFuncionario(id).then((res) => {
-            const func = res
-            setDados({...dados, idFuncionario: res.id})
-            setFuncionario(func);
-          }),
-          listarItensCarrinhoPorFuncionarioId(id).then(res => {
-            let valor: number = 0;
-            res?.content.forEach(item => {
-              valor += item.produto.valor;
-            });
-            setDados({...dados, valor: valor});
-            const valorConvertido = converterMoedaReal(valor);
-            setValorTotal(valorConvertido);
-          }),
-        ]);
+        const func = await detalharFuncionario(id);
+        const itens = await listarItensCarrinhoPorFuncionarioId(id);
+        const valorTotalItens = itens?.content.reduce(
+          (acc, item) => acc + item.produto.valor,
+          0,
+        );
+
+        setDados(prevState => ({
+          ...prevState,
+          idFuncionario: func.id,
+          valor: valorTotalItens !== undefined ? valorTotalItens : 0,
+        }));
+        console.log('res: ', func.id);
+        setFuncionario(func);
+
+        const valorConvertido = converterMoedaReal(valorTotalItens!);
+        setValorTotal(valorConvertido);
       } else {
         await Promise.all([
           listarFuncionariosAll().then(res => {
@@ -78,25 +82,24 @@ export default function CadastroVendas({navigation}: any) {
   }, []);
 
   const handleValorSelecionado = async (itemValue: Funcionario) => {
-    setDados({...dados, idFuncionario: itemValue.id!})
-    setFuncionarioId(itemValue.id);
     setLoadValor(false);
-
-
-    await listarItensCarrinhoPorFuncionarioId(itemValue.id!).then(res => {
-      let valor: number = 0;
-      res?.content.forEach(item => {
-        valor += item.produto.valor;
-      });
-      setDados({...dados, valor: valor});
-      const valorConvertido = converterMoedaReal(valor);
-      setValorTotal(valorConvertido);
-      setLoadValor(true);
-    });
+    const itens = await listarItensCarrinhoPorFuncionarioId(itemValue.id!);
+    const valorTotalItens = itens?.content.reduce(
+      (acc, item) => acc + item.produto.valor,
+      0,
+    );
+    setDados(prevState => ({
+      ...prevState,
+      idFuncionario: itemValue.id!,
+      valor: valorTotalItens !== undefined ? valorTotalItens : 0,
+    }));
+    setValorTotal(converterMoedaReal(valorTotalItens!))
+    setFuncionarioId(itemValue.id);
+    setLoadValor(true);
   };
 
   async function cadastrar() {
-    console.log("dados: ", dados)
+    console.log('dados: ', dados);
     if (!dados.idFuncionario || !dados.valor) {
       toast.show({
         title: 'Erro ao Cadastrar Produto',
@@ -113,21 +116,38 @@ export default function CadastroVendas({navigation}: any) {
       await limparCarrinho(dados.idFuncionario);
       navigation.replace('Tabs', {id: id});
       toast.show({
-        description: ' Venda registrada com sucesso',
+        description: 'Venda registrada com sucesso',
         backgroundColor: 'green.400',
       });
     }
   }
 
-async function limparCarrinhoFuncionario() {
-  console.log("chrgou")
-  if(funcionarioId) await limparCarrinho(funcionarioId)
-  if(funcionario) await limparCarrinho(funcionario.id!)
-}
-
+  async function limparCarrinhoFuncionario() {
+    setLoadValor(false);
+    console.log('chrgou');
+    let res;
+    res = await limparCarrinho(
+      funcionarioId ? funcionarioId : funcionario!.id!,
+    ).then(res => {
+      if (res === null) {
+        toast.show({
+          title: 'Error',
+          description: 'Carrinho já está vazio',
+          backgroundColor: 'red.400',
+        });
+      } else {
+        setValorTotal(converterMoedaReal(0));
+        toast.show({
+          description: 'Carrinho limpo',
+          backgroundColor: 'green.400',
+        });
+      }
+      setLoadValor(true);
+    });
+  }
 
   if (!loading) {
-    return <Text>Carregando..... </Text>;
+    return <Loading h="650px" />;
   }
 
   return (
@@ -197,7 +217,9 @@ async function limparCarrinhoFuncionario() {
                 color={Temas.colors.white}
                 fontSize={20}
                 onPress={() =>
-                  navigation.navigate('CarrinhoProdutos', {id: funcionarioId ? funcionarioId : funcionario!.id})
+                  navigation.navigate('CarrinhoProdutos', {
+                    id: funcionarioId ? funcionarioId : funcionario!.id,
+                  })
                 }>
                 <FontAwesomeIcon
                   icon={faCartShopping}

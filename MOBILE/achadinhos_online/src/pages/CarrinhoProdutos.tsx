@@ -23,7 +23,6 @@ export default function CarrinhoProdutos({navigation}: any) {
   const {id} = route.params as {id: number};
 
   useEffect(() => {
-    console.log(id);
     async function caregarDados() {
       setLoading(false);
       const produtosPageble = await listarProdutosAll();
@@ -75,7 +74,6 @@ export default function CarrinhoProdutos({navigation}: any) {
         produtoId: produto.id!,
       });
     });
-    console.log('carrinho: ', carrinho);
     const res = await addItemCarrinho(carrinho);
     if (res === undefined || res === null) {
       console.log('Erro:', res);
@@ -90,7 +88,6 @@ export default function CarrinhoProdutos({navigation}: any) {
   }
 
   function pesquisa(text: string) {
-    console.log('chegou: ', text);
     text = removerAcentuacoes(text);
     setProdutos(
       allProdutos.filter(produto => {
