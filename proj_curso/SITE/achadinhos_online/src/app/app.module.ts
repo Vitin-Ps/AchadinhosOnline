@@ -22,6 +22,8 @@ import { FormProdutoComponent } from './components/forms/form-produto/form-produ
 import { FormVendaComponent } from './components/forms/form-venda/form-venda.component';
 import { CarrinhoProdutoComponent } from './components/pages/carrinho-produto/carrinho-produto.component';
 import { ConversaoMoedaRealPipe } from './pipes/conversao-moeda-real.pipe';
+import { LoadingComponent } from './components/loading/loading.component';
+import { HomeAdminComponent } from './components/pages/home-admin/home-admin.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { ConversaoMoedaRealPipe } from './pipes/conversao-moeda-real.pipe';
     FormVendaComponent,
     CarrinhoProdutoComponent,
     ConversaoMoedaRealPipe,
+    LoadingComponent,
+    HomeAdminComponent,
   ],
   imports: [
     BrowserModule,

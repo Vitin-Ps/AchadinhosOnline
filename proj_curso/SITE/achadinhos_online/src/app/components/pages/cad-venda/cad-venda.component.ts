@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { VendaDTO } from '../../../interfaces/VendaDTO';
 import { VendaService } from '../../../services/venda.service';
 import { MessageService } from '../../../services/message.service';
-import { ConversaoMoedaRealPipe } from '../../../pipes/conversao-moeda-real.pipe';
 import { Router } from '@angular/router';
 import { CarrinhoService } from '../../../services/carrinho.service';
+import { FuncionalidadesService } from '../../../services/funcionalidades.service';
 
 @Component({
   selector: 'app-cad-venda',
@@ -26,9 +26,8 @@ export class CadVendaComponent {
     this.vendaService.registrar(venda).subscribe(
       (res) => {
         this.carrinhoServie.limparCarrinho(venda.idFuncionario).subscribe();
-        this.messageService.alert(`Venda no valor de R$${venda.valor}realizada com sucesso!`);
+        this.messageService.alert(`Venda no valor de ${FuncionalidadesService.converterMoedaReal(venda.valor)} realizada com sucesso!`);
         this.router.navigate(['/'])
-
       },
       (error) => {
         this.messageService.alert("Falha ao registrar Venda");

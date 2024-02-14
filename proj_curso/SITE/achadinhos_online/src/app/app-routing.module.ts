@@ -6,6 +6,7 @@ import { CadFuncionarioComponent } from './components/pages/cad-funcionario/cad-
 import { CadVendaComponent } from './components/pages/cad-venda/cad-venda.component';
 import { CadProdutoComponent } from './components/pages/cad-produto/cad-produto.component';
 import { CarrinhoProdutoComponent } from './components/pages/carrinho-produto/carrinho-produto.component';
+import { HomeAdminComponent } from './components/pages/home-admin/home-admin.component';
 
 const routes: Routes = [
   {path:'', component:HomeComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:'vendas', component:CadVendaComponent},
   {path:'vendas/:id', component:CadVendaComponent},
   {path:'carrinho/:id', component:CarrinhoProdutoComponent},
+  {path:'home-admin', component:HomeAdminComponent},
 ];
 
 @NgModule({

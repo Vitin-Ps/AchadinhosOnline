@@ -21,13 +21,14 @@ import { MessageService } from '../../../services/message.service';
   templateUrl: './form-venda.component.html',
   styleUrl: './form-venda.component.scss',
 })
-export class FormVendaComponent implements OnInit, AfterContentChecked {
+export class FormVendaComponent implements OnInit {
   @Output() onSubmit = new EventEmitter<VendaDTO>();
   @Input() btnEnviar: string = '';
   funcionarios: Funcionario[] = [];
   funcionario?: Funcionario;
   itensCarrinho: Carrinho[] = [];
   idFuncionarioSelecionado: number | null = null;
+  loading: boolean = false;
 
   vendaForm!: FormGroup;
 
@@ -38,25 +39,21 @@ export class FormVendaComponent implements OnInit, AfterContentChecked {
     private route: ActivatedRoute
   ) {}
 
-  ngAfterContentChecked(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.funcionario = this.funcionarios.find(
-        (funcionario) => funcionario.id === this.idFuncionarioSelecionado
-      );
-      this.validaForm();
-    }
-  }
-
   ngOnInit(): void {
+    this.loading = false;
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.listarFuncionarios();
     this.validaForm();
     if (id) {
       this.idFuncionarioSelecionado = id;
       this.listarCarrinho(id);
+      this.funcionario = this.funcionarios.find(
+        (funcionario) => funcionario.id === this.idFuncionarioSelecionado
+      );
+      this.idFuncionario.setValue(id)
       console.log('está chegando');
     }
+    this.loading = true;
   }
 
   listarFuncionarios() {
@@ -74,7 +71,7 @@ export class FormVendaComponent implements OnInit, AfterContentChecked {
           valorTotal += item.valor!;
         });
       }
-      if(valorTotal != 0) this.valor.setValue(valorTotal);
+      this.valor.setValue(valorTotal);
     });
   }
 
@@ -114,7 +111,7 @@ export class FormVendaComponent implements OnInit, AfterContentChecked {
     const target = e.target as HTMLInputElement;
     const value = target.value;
     this.idFuncionarioSelecionado = Number(value);
-      this.listarCarrinho(this.idFuncionarioSelecionado!);
+    this.listarCarrinho(this.idFuncionarioSelecionado!);
   }
 
   limparCarrinho(e: Event) {
