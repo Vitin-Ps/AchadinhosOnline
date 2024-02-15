@@ -20,7 +20,7 @@ export function EntradaNumber(inputProps: InputProps): JSX.Element {
 
   const validaInputNumber = (text: string) => {
     // Remove caracteres não numéricos
-    const numberFormatado = text.replace(/[^0-9]/g, '');
+    const numberFormatado = text.replace(/[^\d.,]/g, '').replace(',', '.');
     setValor(numberFormatado);
     if (inputProps.onChangeText) {
       inputProps.onChangeText(numberFormatado);

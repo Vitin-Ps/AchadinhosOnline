@@ -6,7 +6,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 interface Card {
   icon: IconProp;
   titulo: string;
-  descricao: string;
+  descricao?: string;
   onPress?: () => void;
 }
 

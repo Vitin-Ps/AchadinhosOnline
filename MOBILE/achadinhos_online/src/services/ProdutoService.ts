@@ -54,3 +54,49 @@ export async function listarProdutosAll(): Promise<Response<Produto[]> | null> {
   }
 }
 
+export async function detalharProduto(id: number) {
+  try {
+    const res = await api.get(`produtos/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    return null;
+  }
+}
+
+export async function deletarProduto(id: number) {
+  try {
+    const res = await api.delete(`produtos/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function alterarProduto(produto: Produto, image: FileUpload) {
+  if (!produto) {
+    return null;
+  }
+
+  const formData = new FormData();
+  console.log("image", image)
+
+  if (image) formData.append('arquivo', image);
+
+  delete produto.imagem;
+
+  const produtoJSON: string = JSON.stringify(produto);
+  formData.append('dados', produtoJSON);
+
+  console.log("form", formData)
+
+  try {
+    const res = await api.put('produtos', formData, { headers: { "Content-Type": "multipart/form-data" }});
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+

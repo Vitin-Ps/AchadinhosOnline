@@ -34,7 +34,7 @@ interface ParamsType {
   // Outras propriedades, se houver
 }
 
-export default function CadastroVendas({navigation}: any) {
+export default function EditVenda({navigation}: any) {
   const [dados, setDados] = useState<VendaDTO>({} as VendaDTO);
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [funcionarioId, setFuncionarioId] = useState<number>();

@@ -15,7 +15,7 @@ import {EntradaNumber} from '../../components/EntradaNumber';
 import {Funcionario} from '../../interfaces/Funcionario';
 import { cadastrarFuncionario } from '../../services/FuncionarioService';
 
-export default function CadastrarFuncionario({navigation}: any) {
+export default function EditFuncionario({navigation}: any) {
   const [dados, setDados] = useState({} as Funcionario);
   const [image, setImage] = useState<FileUpload>();
   const toast = useToast();

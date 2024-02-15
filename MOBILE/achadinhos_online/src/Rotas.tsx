@@ -8,6 +8,10 @@ import CadastroFuncionario from "./pages/Cadastro/CadastroFuncionario";
 import CadastroVendas from "./pages/Cadastro/CadastroVendas";
 import CarrinhoProdutos from "./pages/CarrinhoProdutos";
 import React from "react";
+import DadosProduto from "./pages/Dados/DadosProduto";
+import EditProduto from "./pages/Edit/EditProduto";
+import EditFuncionario from "./pages/Edit/EditFuncionario";
+import EditVenda from "./pages/Edit/EditVenda";
 
 
 const Stack = createNativeStackNavigator();
@@ -52,6 +56,26 @@ export default function Rotas() {
         <Stack.Screen
           name="CarrinhoProdutos"
           component={CarrinhoProdutos as React.FC}
+          options={{headerShown: true}}
+        />
+          <Stack.Screen
+          name="DadosProduto"
+          component={DadosProduto as React.FC}
+          options={{headerShown: true}}
+        />
+         <Stack.Screen
+          name="EditProduto"
+          component={EditProduto as React.FC}
+          options={{headerShown: true}}
+        />
+         <Stack.Screen
+          name="EditFuncionario"
+          component={EditFuncionario as React.FC}
+          options={{headerShown: true}}
+        />
+         <Stack.Screen
+          name="EditVenda"
+          component={EditVenda as React.FC}
           options={{headerShown: true}}
         />
       </Stack.Navigator>

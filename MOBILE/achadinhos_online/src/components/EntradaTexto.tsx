@@ -24,18 +24,24 @@ interface InputProps {
 }
 
 export function EntradaTexto(inputProps: InputProps): JSX.Element {
+  const [value, setValue] = useState(inputProps.value)
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (inputProps.senha) setShow(true);
   }, []);
 
+  function onChangeText(text: string): void {
+    if(inputProps.onChangeText) inputProps.onChangeText(text)
+    setValue(text);
+  }
+
   return (
     <Input
       editable={inputProps.editable}
       placeholder={inputProps.placeholder}
-      value={inputProps.value}
-      onChangeText={inputProps.onChangeText}
+      value={value}
+      onChangeText={onChangeText}
       type="text"
       secureTextEntry={show}
       mt={inputProps.mt ? inputProps.mt : 5}

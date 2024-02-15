@@ -11,10 +11,9 @@ const Botao = ({isLoading, ...rest}: any) => {
   return (
     <Button
       w="40%"
-      h={60}
       p={2}
       bg={fundoBotao}
-      mt={10}
+      mt={5}
       borderRadius={10}
       isLoadingText="Verificando"
       isLoading={isLoading}
