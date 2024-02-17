@@ -5,7 +5,6 @@ import {EntradaTexto} from '../../components/EntradaTexto';
 import {removerAcentuacoes} from '../../services/FuncionalidadesService';
 import {useEffect, useState} from 'react';
 import {Produto} from '../../interfaces/Produto';
-import {useRoute} from '@react-navigation/native';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Loading} from '../../components/Loading';
 import {CardProduto} from '../../components/CardProduto';
@@ -44,7 +43,6 @@ export default function DadosProduto({navigation}: any) {
         if (produto.selecionado) {
           setShowAcoes(true);
           setIdProdutoSelecionado(idProduto);
-          console.log('Esta chegando: ', idProdutoSelecionado);
         } else setShowAcoes(false);
       } else {
         produto.selecionado = false;
@@ -77,7 +75,6 @@ export default function DadosProduto({navigation}: any) {
     }
     let idProduto = produtosSelecionados[0].id;
     const res = await deletarProduto(idProduto!);
-    console.log('res: ', res);
     if (res === undefined || res === null) {
       console.log('Erro:', res);
       toast.show({
@@ -107,10 +104,6 @@ export default function DadosProduto({navigation}: any) {
       alignItems="center"
       justifyContent="center">
       <ScrollView flex={1} p={2} w="100%">
-      <Image
-          source={{ uri: 'http://192.168.100.46:8080/arquivos/1000000033_1707970683340.jpg' }}
-          style={{ width: 200, height: 200 }}
-        />
         <Titulo mb={1}>
           <Text color={Temas.colors.verde.normal}>Achadinhos</Text>
           <Text color={Temas.colors.roxo.normal}>Online</Text>
@@ -138,7 +131,7 @@ export default function DadosProduto({navigation}: any) {
                   key={produto.id}
                   nome={produto.nome}
                   valor={produto.valor}
-                  imagem={produto.imagem}
+                  imagem={`http://192.168.100.46:8080${produto.imagem}`}
                   selecionado={produto.selecionado}
                   onPress={() => selecionarProduto(produto.id!)}
                 />
@@ -164,7 +157,7 @@ export default function DadosProduto({navigation}: any) {
             borderColor={Temas.colors.roxo.normal}
             w=""
             onPress={() =>
-              navigation.navigate('EditProduto', {
+              navigation.replace('EditProduto', {
                 id: idProdutoSelecionado,
               })
             }>

@@ -14,6 +14,8 @@ interface cardProps{
 }
 
 export function CardProduto(cardProps: cardProps) {
+  const timestamp = new Date().getTime(); // Obtém o timestamp atual
+const uri = `${cardProps.imagem}?timestamp=${timestamp}`;
     const valor: string = converterMoedaReal(cardProps.valor);
     const styles = StyleSheet.create({
         card: {
@@ -33,7 +35,7 @@ export function CardProduto(cardProps: cardProps) {
        <TouchableOpacity style={styles.card} onPress={cardProps.onPress}>
        
        {cardProps.imagem ? ( <Image
-          source={{uri: cardProps.imagem}}
+          source={{uri: uri}}
           alt={"img_produto_" + cardProps.nome}
           w="130px"
           h="80px"

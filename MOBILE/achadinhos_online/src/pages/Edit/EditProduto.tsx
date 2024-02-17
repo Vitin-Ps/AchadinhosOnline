@@ -25,7 +25,6 @@ export default function EditProduto({navigation}: any) {
   const toast = useToast();
 
   useEffect(() => {
-    console.log(id)
     setLoading(false)
     async function carregarDados() {
       if(id) {
@@ -78,7 +77,8 @@ export default function EditProduto({navigation}: any) {
     } else {
       toast.show({
         description: `${dados.nome} no valor de ${converterMoedaReal(dados.valor)}  alterado com sucesso alterado com sucesso`,
-        backgroundColor: 'red.500',
+        backgroundColor: 'green.500',
+        width: 350
       });
       navigation.replace('DadosProduto');
     }
