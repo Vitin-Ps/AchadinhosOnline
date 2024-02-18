@@ -4,16 +4,12 @@ import {Temas} from '../../estilos/tema';
 import {EntradaTexto} from '../../components/EntradaTexto';
 import Botao from '../../components/Botao';
 import {useState} from 'react';
-import {
-  faEnvelope,
-  faPercent,
-  faShirt,
-} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faPercent, faUser} from '@fortawesome/free-solid-svg-icons';
 import {EntradaArquivo} from '../../components/EntradaArquivo';
 import {FileUpload} from '../../interfaces/FileUpload';
 import {EntradaNumber} from '../../components/EntradaNumber';
 import {Funcionario} from '../../interfaces/Funcionario';
-import { cadastrarFuncionario } from '../../services/FuncionarioService';
+import {cadastrarFuncionario} from '../../services/FuncionarioService';
 
 export default function CadastrarFuncionario({navigation}: any) {
   const [dados, setDados] = useState({} as Funcionario);
@@ -55,7 +51,7 @@ export default function CadastrarFuncionario({navigation}: any) {
         </Titulo>
         <EntradaTexto
           label="nome"
-          icon={faShirt}
+          icon={faUser}
           placeholder="Digite seu nome"
           onChangeText={text => setDados({...dados, nome: text})}
         />

@@ -12,7 +12,6 @@ export async function cadastrarFuncionario(
   }
 
   const formData = new FormData();
-  console.log('image', image);
 
   if (image) formData.append('arquivo', image);
 
@@ -21,8 +20,6 @@ export async function cadastrarFuncionario(
 
   const funcionarioJSON: string = JSON.stringify(funcionario);
   formData.append('dados', funcionarioJSON);
-
-  console.log('form', formData);
 
   try {
     const res = await api.post('funcionarios', formData, {
@@ -65,6 +62,38 @@ export async function detalharFuncionario(id: number) {
     return res.data;
   } catch (error) {
     console.log("Error: ", error);
+    return null;
+  }
+}
+
+export async function deletarFuncionario(id: number) {
+  try {
+    const res = await api.delete(`funcionarios/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function alterarFuncionario(funcionario: Funcionario, image: FileUpload) {
+  if (!funcionario) {
+    return null;
+  }
+
+  const formData = new FormData();
+
+  if (image) formData.append('arquivo', image);
+
+  delete funcionario.imagem;
+
+  const produtoJSON: string = JSON.stringify(funcionario);
+  formData.append('dados', produtoJSON);
+  try {
+    const res = await api.put('funcionarios', formData, { headers: { "Content-Type": "multipart/form-data" }});
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
     return null;
   }
 }

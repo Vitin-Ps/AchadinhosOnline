@@ -6,8 +6,19 @@ import {
   faShirt,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import {useEffect, useState} from 'react';
+import {statusLojinha} from '../../services/VendaService';
+import {StatusLojinha} from '../../interfaces/Venda';
 
 export default function Administrativo({navigation}: any) {
+  const [status, setStatus] = useState<StatusLojinha>();
+  useEffect(() => {
+    async function carregaDados() {
+      const statusRes = await statusLojinha();
+      setStatus(statusRes);
+    }
+    carregaDados();
+  }, []);
   return (
     <VStack>
       <Box position="relative" height="20%">
@@ -31,7 +42,7 @@ export default function Administrativo({navigation}: any) {
               Funcionários
             </Text>
             <Text fontSize={20} color={Temas.colors.white}>
-              4
+              {status?.funcionarios}
             </Text>
           </Box>
           <Box display="flex" alignItems="center" p={1}>
@@ -39,7 +50,7 @@ export default function Administrativo({navigation}: any) {
               Vendas
             </Text>
             <Text fontSize={20} color={Temas.colors.white}>
-              385
+              {status?.vendas}
             </Text>
           </Box>
           <Box display="flex" alignItems="center" p={1}>
@@ -47,7 +58,7 @@ export default function Administrativo({navigation}: any) {
               Produtos
             </Text>
             <Text fontSize={20} color={Temas.colors.white}>
-              15
+              {status?.produtos}
             </Text>
           </Box>
         </Box>
@@ -57,7 +68,7 @@ export default function Administrativo({navigation}: any) {
           <CardCadastro
             icon={faUser}
             titulo="Funcionários"
-            onPress={() => navigation.navigate('CadastroFuncionario')}
+            onPress={() => navigation.navigate('DadosFuncionario')}
           />
           <CardCadastro
             icon={faCartShopping}

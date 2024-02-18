@@ -12,3 +12,8 @@ export interface CarrinhoEnvio {
     funcionarioId: number;
     produtoId: number
 }
+
+export interface Comissao {
+    idFuncionario: number;
+    comissao: number;
+}

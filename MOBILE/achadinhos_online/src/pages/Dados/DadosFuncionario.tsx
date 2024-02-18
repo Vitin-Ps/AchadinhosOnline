@@ -4,18 +4,25 @@ import Titulo from '../../components/Titulo';
 import {EntradaTexto} from '../../components/EntradaTexto';
 import {removerAcentuacoes} from '../../services/FuncionalidadesService';
 import {useEffect, useState} from 'react';
-import {Produto} from '../../interfaces/Produto';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Loading} from '../../components/Loading';
-import {CardProduto} from '../../components/CardProduto';
 import Botao from '../../components/Botao';
-import {deletarProduto, listarProdutosAll} from '../../services/ProdutoService';
 import {Confirm} from '../../components/Comfirm';
+import {Funcionario} from '../../interfaces/Funcionario';
+import {
+  deletarFuncionario,
+  listarFuncionariosAll,
+} from '../../services/FuncionarioService';
+import {CardFuncionario} from '../../components/CardFuncionario';
+import {listarComissoes} from '../../services/VendaService';
+import {Comissao} from '../../interfaces/Carrinho';
 
-export default function DadosProduto({navigation}: any) {
-  const [allProdutos, setAllProdutos] = useState<Produto[]>([]);
-  const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [idProdutoSelecionado, setIdProdutoSelecionado] = useState<number>();
+export default function DadosFuncionario({navigation}: any) {
+  const [allFuncionarios, setAllFuncionarios] = useState<Funcionario[]>([]);
+  const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
+  const [comissoes, setComissoes] = useState<Comissao[]>([]);
+  const [idFuncionarioSelecionado, setIdFuncionarioSelecionado] =
+    useState<number>();
   const [loading, setLoading] = useState(false);
   const [showAcoes, setShowAcoes] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -25,73 +32,73 @@ export default function DadosProduto({navigation}: any) {
   useEffect(() => {
     async function caregarDados() {
       setLoading(false);
-      const produtosPageble = await listarProdutosAll();
-      setAllProdutos(produtosPageble?.content!);
-      setProdutos(produtosPageble?.content!);
+      const funcionariosPageble = await listarFuncionariosAll();
+      const vendasPageble = await listarComissoes();
+      setComissoes(vendasPageble);
+      setAllFuncionarios(funcionariosPageble?.content!);
+      setFuncionarios(funcionariosPageble?.content!);
       setLoading(true);
     }
     caregarDados();
   }, []);
 
-  const selecionarProduto = (idProduto: number) => {
-    const listaProdutos = [...produtos];
+  const selecionarFuncionario = (idFuncionario: number) => {
+    const listaFuncionarios = [...funcionarios];
 
-    listaProdutos.forEach(produto => {
-      if (produto.id === idProduto) {
-        produto.selecionado = !produto.selecionado;
-        if (produto.selecionado) {
+    listaFuncionarios.forEach(funcionario => {
+      if (funcionario.id === idFuncionario) {
+        funcionario.selecionado = !funcionario.selecionado;
+        if (funcionario.selecionado) {
           setShowAcoes(true);
-          setIdProdutoSelecionado(idProduto);
+          setIdFuncionarioSelecionado(idFuncionario);
         } else setShowAcoes(false);
       } else {
-        produto.selecionado = false;
+        funcionario.selecionado = false;
       }
     });
-
-    setProdutos(listaProdutos);
+    setFuncionarios(listaFuncionarios);
   };
 
   function pesquisa(text: string) {
     text = removerAcentuacoes(text);
-    setProdutos(
-      allProdutos.filter(produto => {
-        const nome = removerAcentuacoes(produto.nome);
+    setFuncionarios(
+      allFuncionarios.filter(funcionario => {
+        const nome = removerAcentuacoes(funcionario.nome);
         return nome.includes(text);
       }),
     );
   }
-  async function apagarProduto() {
-    const produtosSelecionados = produtos.filter(
-      produto => produto.selecionado,
+  async function apagarFuncionario() {
+    const funcionariosSelecionados = funcionarios.filter(
+      funcionario => funcionario.selecionado,
     );
-    if (produtosSelecionados.length === 0) {
+    if (funcionariosSelecionados.length === 0) {
       toast.show({
         title: 'Erro',
-        description: 'Selecione ao menos um Produto',
+        description: 'Selecione ao menos um Funcionário',
         backgroundColor: 'red.400',
       });
       return;
     }
-    let idProduto = produtosSelecionados[0].id;
-    const res = await deletarProduto(idProduto!);
+    let idFuncionario = funcionariosSelecionados[0].id;
+    const res = await deletarFuncionario(idFuncionario!);
     if (res === undefined || res === null) {
       console.log('Erro:', res);
       toast.show({
         title: 'Erro',
-        description: 'Produto não existe',
+        description: 'Funcionário não existe',
         backgroundColor: 'red.400',
       });
       return;
     } else {
       toast.show({
-        description: 'Produtos excluido',
+        description: 'Funcionário excluido',
         backgroundColor: 'green.400',
       });
-      navigation.replace('DadosProduto');
+      navigation.replace('DadosFuncionario');
     }
   }
 
-  
   return (
     <View
       backgroundColor={Temas.colors.padrao.corFundo}
@@ -110,7 +117,7 @@ export default function DadosProduto({navigation}: any) {
         <EntradaTexto
           label="search"
           icon={faSearch}
-          placeholder="Busque seu produto"
+          placeholder="Busque pelo Funcionário"
           onChangeText={pesquisa}
         />
         {!loading ? (
@@ -124,20 +131,22 @@ export default function DadosProduto({navigation}: any) {
             flexWrap="wrap"
             justifyContent="space-between"
             mt={5}>
-            {produtos !== undefined && produtos.length > 0 ? (
-              produtos.map(produto => (
-                <CardProduto
-                  key={produto.id}
-                  nome={produto.nome}
-                  valor={produto.valor}
-                  imagem={`http://192.168.100.46:8080${produto.imagem}`}
-                  selecionado={produto.selecionado}
-                  onPress={() => selecionarProduto(produto.id!)}
+            {funcionarios !== undefined && funcionarios.length > 0 ? (
+              funcionarios.map(funcionario => (
+                <CardFuncionario
+                  key={funcionario.id}
+                  id={funcionario.id!}
+                  nome={funcionario.nome}
+                  porcentagem={funcionario.porcentagem}
+                  comissao={comissoes}
+                  imagem={`http://192.168.100.46:8080${funcionario.imagem}`}
+                  selecionado={funcionario.selecionado}
+                  onPress={() => selecionarFuncionario(funcionario.id!)}
                 />
               ))
             ) : (
               <Text m={5} fontSize={20} fontWeight="bold">
-                Nenhum produto encontrado...
+                Nenhum funcionário encontrado...
               </Text>
             )}
           </Box>
@@ -156,8 +165,8 @@ export default function DadosProduto({navigation}: any) {
             borderColor={Temas.colors.roxo.normal}
             w=""
             onPress={() =>
-              navigation.replace('EditProduto', {
-                id: idProdutoSelecionado,
+              navigation.replace('EditFuncionario', {
+                id: idFuncionarioSelecionado,
               })
             }>
             <Text
@@ -179,10 +188,10 @@ export default function DadosProduto({navigation}: any) {
         </Box>
       )}
       <Confirm
-        message="Tem certeza que quer excluir esse Produto?"
+        message="Tem certeza que quer excluir esse Funcionário?"
         showModal={showModal}
         setShowModal={setShowModal}
-        onPress={apagarProduto}
+        onPress={apagarFuncionario}
       />
     </View>
   );
