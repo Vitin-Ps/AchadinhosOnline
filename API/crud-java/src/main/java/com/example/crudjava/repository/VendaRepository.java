@@ -15,8 +15,8 @@ public interface VendaRepository extends JpaRepository<Venda, Long> {
 
     @Query(nativeQuery = true, value = """
             SELECT
-              (SELECT COUNT(*) FROM funcionarios),
-              (SELECT COUNT(*) FROM produtos),
+              (SELECT COUNT(*) FROM funcionarios WHERE ativo = 1),
+              (SELECT COUNT(*) FROM produtos WHERE ativo = 1),
               (SELECT COUNT(*) FROM vendas);
             """)
     List<Object[]> recuperarStatusLojinha();

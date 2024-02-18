@@ -25,7 +25,7 @@ public class VendaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemVenda>> listarVendas(@PageableDefault(size = 10, page = 0, sort = {"funcionario_id"})Pageable pageable) {
+    public ResponseEntity<Page<DadosListagemVenda>> listarVendas(Pageable pageable) {
         var page = service.listarVendas(pageable);
         return ResponseEntity.ok(page);
     }
@@ -59,6 +59,13 @@ public class VendaController {
     public ResponseEntity statusLojinha() {
         var dto = service.statusLojinha();
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/comissao")
+    public ResponseEntity getComissoes() {
+        System.out.println("chegou");
+        var comissoes = service.getComissoes();
+        return ResponseEntity.ok(comissoes);
     }
 
 }

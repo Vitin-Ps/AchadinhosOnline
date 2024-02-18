@@ -32,15 +32,10 @@ public abstract class FuncionalidadesService {
 
     public static String extrairNomeArquivo(String linkArquivo) {
         if(linkArquivo == null) return null;
-        try {
-            URL url = new URL(linkArquivo);
-            String path = url.getPath();
-            String[] linkPartido = path.split("/");
-            String nomeArquivo = linkPartido[linkPartido.length - 1];
-            return nomeArquivo;
-        } catch (MalformedURLException e) {
-            throw new ValidacaoException("URL de arquivo Inválida!");
-        }
+
+        String[] linkPartido = linkArquivo.split("/");
+        String nomeArquivo = linkPartido[linkPartido.length - 1];
+        return nomeArquivo;
     }
 
     public static String gerarNomeArquivoTimestamp(String nomeOriginal) {

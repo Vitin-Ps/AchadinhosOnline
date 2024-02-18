@@ -1,5 +1,7 @@
 package com.example.crudjava.domain.venda;
 
+import com.example.crudjava.domain.funcionario.DadosComissaoFuncionario;
+import com.example.crudjava.domain.funcionario.Funcionario;
 import com.example.crudjava.infra.exception.ValidacaoException;
 import com.example.crudjava.repository.FuncionarioRepository;
 import com.example.crudjava.repository.VendaRepository;
@@ -8,7 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
@@ -66,5 +72,21 @@ public class VendaService {
         }
     }
 
+    public List<DadosComissaoFuncionario> getComissoes() {
+        List<Venda> listaDeVendas = vendaRepository.findAll();
+
+        // Agrupar as vendas pelo funcionário e calcular a soma dos valores e comissões para cada funcionário
+        Map<Funcionario, BigDecimal> somaValoresPorFuncionario = listaDeVendas.stream()
+                .collect(Collectors.groupingBy(Venda::getFuncionario,
+                        Collectors.reducing(BigDecimal.ZERO, Venda::getValor, BigDecimal::add)));
+
+        Map<Funcionario, BigDecimal> somaComissoesPorFuncionario = listaDeVendas.stream()
+                .collect(Collectors.groupingBy(Venda::getFuncionario,
+                        Collectors.reducing(BigDecimal.ZERO, Venda::getComissao, BigDecimal::add)));
+
+        return somaValoresPorFuncionario.entrySet().stream()
+                .map(entry -> new DadosComissaoFuncionario(entry.getKey().getId(), somaComissoesPorFuncionario.get(entry.getKey())))
+                .collect(Collectors.toList());
+    }
 
 }

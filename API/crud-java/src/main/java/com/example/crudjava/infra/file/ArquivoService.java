@@ -42,11 +42,11 @@ public class ArquivoService {
             Path targetLocalizacao = arquivoLocalizacao.resolve(nomeArquivo);
             arquivo.transferTo(targetLocalizacao);
 
-            String uriArquivoDownload = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(  "/arquivos/")
-                    .path(nomeArquivo)
-                    .toUriString();
-            return uriArquivoDownload;
+//            String uriArquivoDownload = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                    .path(  "/arquivos/")
+//                    .path(nomeArquivo)
+//                    .toUriString();
+            return "/arquivos/" + nomeArquivo;
         } catch (IOException ex) {
             throw new ValidacaoException("Falha no Upload do arquivo!");
         }
