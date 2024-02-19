@@ -33,6 +33,8 @@ criar um aquivo base-64.d.ts no @types e colocar declare module 'base-64';
 npm install styled-components
 npm install @types/styled-components-react-native -D
 
+npm install react-native-linear-gradient
+
 
 
 portas no windows 
