@@ -13,6 +13,7 @@ import EditProduto from './pages/Edit/EditProduto';
 import EditFuncionario from './pages/Edit/EditFuncionario';
 import EditVenda from './pages/Edit/EditVenda';
 import DadosFuncionario from './pages/Dados/DadosFuncionario';
+import DadosVendas from './pages/Dados/DadosVendas';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,11 @@ export default function Rotas() {
         <Stack.Screen
           name="DadosFuncionario"
           component={DadosFuncionario as React.FC}
+          options={{headerShown: true}}
+        />
+         <Stack.Screen
+          name="DadosVendas"
+          component={DadosVendas as React.FC}
           options={{headerShown: true}}
         />
         <Stack.Screen

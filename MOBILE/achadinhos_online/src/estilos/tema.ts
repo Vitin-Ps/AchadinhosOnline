@@ -11,7 +11,8 @@ export const Temas = extendTheme({
     },
     roxo: {
       transparente: '#45009396',
-      claro: '#8801D1',
+      muitoClaro: '#B553F7',
+      claro: '#9531E6',
       normal: '#6904CE',
       escuro: '#5F229C',
       muitoEscuro: '#4A2C69',

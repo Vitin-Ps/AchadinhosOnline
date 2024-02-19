@@ -5,6 +5,7 @@ export interface Venda {
     funcionario: Funcionario,
     venda: number,
     comissao?: number
+    selecionado?: boolean;
 }
 
 export interface VendaDTO  {

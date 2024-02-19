@@ -45,3 +45,13 @@ export async function listarComissoes() {
     return null;
   }
 }
+
+export async function deletarVenda(id: number) {
+  try {
+    const res = await api.delete(`vendas/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}

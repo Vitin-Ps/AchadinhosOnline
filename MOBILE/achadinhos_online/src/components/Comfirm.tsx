@@ -19,7 +19,7 @@ export function Confirm(props: ConfirmProps) {
   }
 
   return (
-    <Modal isOpen={props.showModal}>
+    <Modal isOpen={props.showModal} onClose={props.setShowModal(false)}>
       <Modal.Content
         maxWidth="400px"
         backgroundColor={Temas.colors.branco.brancoTransparent}>

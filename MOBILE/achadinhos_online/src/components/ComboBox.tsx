@@ -17,7 +17,6 @@ export default function ComboBox(comboProps: ComboProps) {
 
   const handleChange = (itemValue: string) => {
     setSelectedValue(itemValue); // Atualiza o valor selecionado
-    console.log(itemValue);
     if (comboProps.onChangeText) {
       comboProps.items.forEach(item => {
         if (item.id === Number(itemValue)) comboProps.onChangeText!(item);

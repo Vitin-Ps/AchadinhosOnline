@@ -73,7 +73,7 @@ export default function Administrativo({navigation}: any) {
           <CardCadastro
             icon={faCartShopping}
             titulo="Vendas"
-            onPress={() => navigation.navigate('CadastroVendas')}
+            onPress={() => navigation.navigate('DadosVendas')}
           />
           <CardCadastro
             icon={faShirt}
