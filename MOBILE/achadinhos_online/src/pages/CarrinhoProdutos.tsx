@@ -135,7 +135,7 @@ export default function CarrinhoProdutos({navigation}: any) {
                   key={produto.id}
                   nome={produto.nome}
                   valor={produto.valor}
-                  imagem={produto.imagem}
+                  imagem={`http://192.168.100.46:8080${produto.imagem}`}
                   selecionado={produto.selecionado}
                   onPress={() => selecionarProduto(produto.id!)}
                 />

@@ -9,7 +9,7 @@ import {CardVenda} from '../../components/CardVenda';
 import ComboBox from '../../components/ComboBox';
 import {Funcionario} from '../../interfaces/Funcionario';
 import {listarFuncionariosAll} from '../../services/FuncionarioService';
-import {Venda} from '../../interfaces/Venda';
+import {TotalVenda, Venda} from '../../interfaces/Venda';
 import {deletarVenda, listarVendasAll} from '../../services/VendaService';
 import CardVendasInfo from '../../components/CardVendasInfo';
 
@@ -17,6 +17,7 @@ export default function DadosVendas({navigation}: any) {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [allVendas, setAllVendas] = useState<Venda[]>([]);
   const [vendas, setVendas] = useState<Venda[]>([]);
+  const [totalVenda, setTotalVenda] = useState<TotalVenda>();
   const [idVendaSelecionada, setIdVendaSelecionada] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [showAcoes, setShowAcoes] = useState(false);
@@ -28,10 +29,26 @@ export default function DadosVendas({navigation}: any) {
     async function caregarDados() {
       setLoading(false);
       const vendasPageble = await listarVendasAll();
-      const funcionariosPageble = await listarFuncionariosAll();
-      setFuncionarios(funcionariosPageble?.content!);
       setAllVendas(vendasPageble?.content!);
       setVendas(vendasPageble?.content!);
+      let listaFuncionarios: Funcionario[] = [];
+      let totalVenda = 0;
+      let valorTotal = 0;
+      vendasPageble?.content!.forEach((venda: Venda) => {
+        const funcionarioExistente = listaFuncionarios.find(
+          funcionario => funcionario.id === venda.funcionario.id,
+        );
+        if (!funcionarioExistente) {
+          listaFuncionarios.push(venda.funcionario);
+        }
+        totalVenda++;
+        valorTotal += venda.venda;
+      });
+      setFuncionarios(listaFuncionarios);
+      setTotalVenda({
+        totalVenda: totalVenda,
+        valorTotal: valorTotal,
+      });
       setLoading(true);
     }
     caregarDados();
@@ -80,16 +97,45 @@ export default function DadosVendas({navigation}: any) {
         description: 'Venda excluida',
         backgroundColor: 'green.400',
       });
-      navigation.replace('DadosVenda');
+      navigation.replace('DadosVendas');
     }
   }
 
-  const handleValorSelecionado = async (itemValue: Funcionario) => {
+  const handleValorSelecionado = async (itemValue: string) => {
     setLoading(false);
     const vendasPorFuncionario = allVendas.filter(
-      venda => venda.funcionario.id === itemValue.id,
-    );
-    setVendas(vendasPorFuncionario);
+      venda => {
+        if (itemValue === 'Todos') {
+          return venda
+        } else {
+          return venda.funcionario.id === Number(itemValue)
+        }
+      }
+      );
+      setVendas(vendasPorFuncionario);
+
+      let totalVenda = 0;
+      let valorTotal = 0;
+      let comissaoTotal = 0;
+      if (itemValue === 'Todos') {
+        vendasPorFuncionario.forEach((venda: Venda) => {
+          totalVenda++;
+          valorTotal += venda.venda;
+        });
+      } else {
+        vendasPorFuncionario.forEach((venda: Venda) => {
+          if (venda.funcionario.id === Number(itemValue)) {
+            totalVenda++;
+            valorTotal += venda.venda;
+            comissaoTotal += venda.comissao!;
+          }
+        });
+      }
+    setTotalVenda({
+      totalVenda: totalVenda,
+      valorTotal: valorTotal,
+      comissaoTotal: comissaoTotal,
+    });
     setLoading(true);
   };
 
@@ -103,7 +149,15 @@ export default function DadosVendas({navigation}: any) {
       flexDirection="column"
       alignItems="center"
       justifyContent="center">
-      <CardVendasInfo />
+      {!loading ? (
+        <Loading height="80px" />
+      ) : (
+        <CardVendasInfo
+          totalVendas={totalVenda?.totalVenda!}
+          valorTotal={totalVenda?.valorTotal!}
+          comissaoTotal={totalVenda?.comissaoTotal}
+        />
+      )}
       <ScrollView flex={1} p={2} w="100%">
         <Titulo mb={1}>
           <Text color={Temas.colors.verde.normal}>Achadinhos</Text>
@@ -111,6 +165,7 @@ export default function DadosVendas({navigation}: any) {
         </Titulo>
         <ComboBox
           label="funcionarioId"
+          default="Todos"
           items={funcionarios}
           placeholder="Selecione o Funcionário"
           onChangeText={handleValorSelecionado}
@@ -140,7 +195,7 @@ export default function DadosVendas({navigation}: any) {
               ))
             ) : (
               <Text m={5} fontSize={20} fontWeight="bold">
-                Nenhum produto encontrado...
+                Nenhuma venda encontrada...
               </Text>
             )}
           </Box>
@@ -182,7 +237,7 @@ export default function DadosVendas({navigation}: any) {
         </Box>
       )}
       <Confirm
-        message="Tem certeza que quer excluir esse Produto?"
+        message="Tem certeza que quer excluir essa Venda?"
         showModal={showModal}
         setShowModal={setShowModal}
         onPress={apagarVenda}

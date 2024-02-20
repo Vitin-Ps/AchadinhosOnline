@@ -81,20 +81,20 @@ export default function CadastroVendas({navigation}: any) {
     carregaInfo();
   }, []);
 
-  const handleValorSelecionado = async (itemValue: Funcionario) => {
+  const handleValorSelecionado = async (itemValue: string) => {
     setLoadValor(false);
-    const itens = await listarItensCarrinhoPorFuncionarioId(itemValue.id!);
+    const itens = await listarItensCarrinhoPorFuncionarioId(Number(itemValue));
     const valorTotalItens = itens?.content.reduce(
       (acc, item) => acc + item.produto.valor,
       0,
     );
     setDados(prevState => ({
       ...prevState,
-      idFuncionario: itemValue.id!,
+      idFuncionario: Number(itemValue),
       valor: valorTotalItens !== undefined ? valorTotalItens : 0,
     }));
     setValorTotal(converterMoedaReal(valorTotalItens!));
-    setFuncionarioId(itemValue.id);
+    setFuncionarioId(Number(itemValue));
     setLoadValor(true);
   };
 

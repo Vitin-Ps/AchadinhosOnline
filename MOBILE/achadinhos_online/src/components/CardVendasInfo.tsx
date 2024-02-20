@@ -1,9 +1,20 @@
 import {Box, Text} from 'native-base';
 import {Temas} from '../estilos/tema';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {converterMoedaReal} from '../services/FuncionalidadesService';
 
-export default function CardVendasInfo() {
+interface Props {
+  totalVendas: number;
+  valorTotal: number;
+  comissaoTotal?: number;
+}
+
+export default function CardVendasInfo(props: Props) {
+  const valorTotal = converterMoedaReal(props.valorTotal);
+  const comissaoTotal: string | undefined = converterMoedaReal(
+    props.comissaoTotal,
+  );
   return (
     <Box>
       <LinearGradient
@@ -25,16 +36,18 @@ export default function CardVendasInfo() {
           justifyContent="space-around">
           <Box display="flex" alignItems="center">
             <Text fontWeight="bold">Total Vendas</Text>
-            <Text>10</Text>
+            <Text>{props.totalVendas}</Text>
           </Box>
           <Box display="flex" alignItems="center">
             <Text fontWeight="bold">Valor</Text>
-            <Text>10</Text>
+            <Text>{valorTotal}</Text>
           </Box>
-          <Box display="flex" alignItems="center">
-            <Text fontWeight="bold">Comissão</Text>
-            <Text>10</Text>
-          </Box>
+          {comissaoTotal && (
+            <Box display="flex" alignItems="center">
+              <Text fontWeight="bold">Comissão</Text>
+              <Text>{comissaoTotal}</Text>
+            </Box>
+          )}
         </Box>
       </LinearGradient>
     </Box>

@@ -6,8 +6,9 @@ import {Funcionario} from '../interfaces/Funcionario';
 interface ComboProps {
   label: string;
   placeholder?: string;
+  default?: string;
   items: Funcionario[]; // Ajuste o tipo da propriedade 'items'
-  onChangeText?: (itemValue: Funcionario) => void; // Adicione a função de retorno de chamada
+  onChangeText?: (itemValue: string) => void; // Adicione a função de retorno de chamada
 }
 
 export default function ComboBox(comboProps: ComboProps) {
@@ -18,9 +19,7 @@ export default function ComboBox(comboProps: ComboProps) {
   const handleChange = (itemValue: string) => {
     setSelectedValue(itemValue); // Atualiza o valor selecionado
     if (comboProps.onChangeText) {
-      comboProps.items.forEach(item => {
-        if (item.id === Number(itemValue)) comboProps.onChangeText!(item);
-      });
+      comboProps.onChangeText(itemValue);
     }
   };
 
@@ -39,6 +38,9 @@ export default function ComboBox(comboProps: ComboProps) {
       borderRadius={15}
       selectedValue={selectedValue}
       onValueChange={itemValue => handleChange(itemValue)}>
+      {comboProps.default && (
+        <Select.Item label={comboProps.default} value={comboProps.default} />
+      )}
       {comboProps.items.map(item => (
         <Select.Item key={item.id} label={item.nome} value={String(item.id)} />
       ))}

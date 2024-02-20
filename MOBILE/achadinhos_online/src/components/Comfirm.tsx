@@ -11,19 +11,23 @@ interface ConfirmProps {
 
 export function Confirm(props: ConfirmProps) {
   function confirmar() {
-    if(props.onPress) {
+    if (props.onPress) {
       props.onPress();
     }
-    
+
     // props.setShowModal(false);
   }
 
   return (
-    <Modal isOpen={props.showModal} onClose={props.setShowModal(false)}>
+    <Modal
+      isOpen={props.showModal}
+      onClose={setTimeout(() => {
+        props.setShowModal(false);
+      }, 10000)}>
       <Modal.Content
         maxWidth="400px"
         backgroundColor={Temas.colors.branco.brancoTransparent}>
-        <Modal.CloseButton />
+        <Modal.CloseButton onPress={() => props.setShowModal(false)} />
         <Modal.Body>
           <Text p={5} w="100%" textAlign="center" fontSize={16}>
             {props.message}

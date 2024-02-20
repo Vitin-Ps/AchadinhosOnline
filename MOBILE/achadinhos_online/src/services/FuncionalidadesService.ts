@@ -1,9 +1,11 @@
-export function converterMoedaReal(number: number): string {
-  return new Intl.NumberFormat('pt-BR', {
+export function converterMoedaReal(number: number | undefined): string | undefined{
+  if(number) return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
     minimumFractionDigits: 2,
   }).format(number);
+  else return undefined
+  
 }
 
 export function removerAcentuacoes(text: string): string {
