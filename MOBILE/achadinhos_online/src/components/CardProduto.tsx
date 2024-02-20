@@ -16,7 +16,7 @@ interface cardProps{
 export function CardProduto(cardProps: cardProps) {
   const timestamp = new Date().getTime(); // Obtém o timestamp atual
 const uri = `${cardProps.imagem}?timestamp=${timestamp}`;
-    const valor: string = converterMoedaReal(cardProps.valor);
+    const valor: string = converterMoedaReal(cardProps.valor)!;
     const styles = StyleSheet.create({
         card: {
           backgroundColor: cardProps.selecionado ? Temas.colors.roxo.transparente : Temas.colors.white,

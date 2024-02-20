@@ -1,4 +1,4 @@
-import {VendaDTO} from '../interfaces/Venda';
+import {Venda, VendaDTO} from '../interfaces/Venda';
 import api from './api.';
 
 export async function registraVenda(venda: VendaDTO) {
@@ -34,7 +34,7 @@ export async function statusLojinha() {
     console.log('erro: ', error);
     return null;
   }
-} 
+}
 
 export async function listarComissoes() {
   try {
@@ -49,6 +49,30 @@ export async function listarComissoes() {
 export async function deletarVenda(id: number) {
   try {
     const res = await api.delete(`vendas/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function detalharVenda(id: number) {
+  try {
+    const res = await api.get(`vendas/${id}/detalhar`);
+    return res.data;
+  } catch (error) {
+    console.log('erro: ', error);
+    return null;
+  }
+}
+
+export async function alterarVenda(venda: Venda) {
+  try {
+    const res = await api.put(`vendas`, {
+      id: venda.id,
+      idFuncionario: venda.funcionario.id,
+      valor: venda.venda
+    });
     return res.data;
   } catch (error) {
     console.log('erro: ', error);

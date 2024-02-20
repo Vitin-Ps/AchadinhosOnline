@@ -8,7 +8,6 @@ import {Confirm} from '../../components/Comfirm';
 import {CardVenda} from '../../components/CardVenda';
 import ComboBox from '../../components/ComboBox';
 import {Funcionario} from '../../interfaces/Funcionario';
-import {listarFuncionariosAll} from '../../services/FuncionarioService';
 import {TotalVenda, Venda} from '../../interfaces/Venda';
 import {deletarVenda, listarVendasAll} from '../../services/VendaService';
 import CardVendasInfo from '../../components/CardVendasInfo';
@@ -214,7 +213,7 @@ export default function DadosVendas({navigation}: any) {
             borderColor={Temas.colors.roxo.normal}
             w=""
             onPress={() =>
-              navigation.replace('EditProduto', {
+              navigation.replace('EditVenda', {
                 id: idVendaSelecionada,
               })
             }>

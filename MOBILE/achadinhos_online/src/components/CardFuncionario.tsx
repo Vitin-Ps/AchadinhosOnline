@@ -19,7 +19,7 @@ interface cardProps {
 export function CardFuncionario(cardProps: cardProps) {
   const timestamp = new Date().getTime(); // Obtém o timestamp atual
   const uri = `${cardProps.imagem}?timestamp=${timestamp}`;
-  const comissao: string = converterMoedaReal(cardProps.comissao.find((comissao) => comissao.idFuncionario === cardProps.id)?.comissao!);
+  const comissao: string = converterMoedaReal(cardProps.comissao.find((comissao) => comissao.idFuncionario === cardProps.id)?.comissao!)!;
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardProps.selecionado

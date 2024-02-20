@@ -19,8 +19,8 @@ interface cardProps {
 }
 
 export function CardVenda(cardProps: cardProps) {
-  const valorVenda: string = converterMoedaReal(cardProps.valorVenda);
-  const comissao: string = converterMoedaReal(cardProps.comissao);
+  const valorVenda: string = converterMoedaReal(cardProps.valorVenda)!;
+  const comissao: string = converterMoedaReal(cardProps.comissao)!;
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardProps.selecionado

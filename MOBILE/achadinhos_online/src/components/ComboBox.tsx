@@ -7,13 +7,18 @@ interface ComboProps {
   label: string;
   placeholder?: string;
   default?: string;
+  defaultValue?: string;
   items: Funcionario[]; // Ajuste o tipo da propriedade 'items'
   onChangeText?: (itemValue: string) => void; // Adicione a função de retorno de chamada
 }
 
 export default function ComboBox(comboProps: ComboProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
-    undefined,
+    comboProps.defaultValue
+      ? comboProps.defaultValue
+      : comboProps.default
+      ? comboProps.default
+      : undefined,
   );
 
   const handleChange = (itemValue: string) => {
@@ -39,7 +44,14 @@ export default function ComboBox(comboProps: ComboProps) {
       selectedValue={selectedValue}
       onValueChange={itemValue => handleChange(itemValue)}>
       {comboProps.default && (
-        <Select.Item label={comboProps.default} value={comboProps.default} />
+        <Select.Item
+          label={comboProps.default}
+          value={
+            comboProps.defaultValue
+              ? comboProps.defaultValue
+              : comboProps.default
+          }
+        />
       )}
       {comboProps.items.map(item => (
         <Select.Item key={item.id} label={item.nome} value={String(item.id)} />
