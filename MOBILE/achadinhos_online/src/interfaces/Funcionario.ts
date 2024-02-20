@@ -3,6 +3,7 @@ export interface Funcionario {
   nome: string;
   email: string;
   porcentagem: number;
+  senha?: string;
   imagem?: string,
   selecionado?: boolean;
 }

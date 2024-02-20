@@ -99,7 +99,7 @@ export function CardFuncionario(cardProps: cardProps) {
             cardProps.selecionado ? Temas.colors.white : Temas.colors.black
           }
           ml={2}>
-          {comissao}
+          {comissao ? comissao : "R$ 0,00"}
         </Text>
       </Box>
     </TouchableOpacity>

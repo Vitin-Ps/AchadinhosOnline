@@ -4,7 +4,7 @@ import {Temas} from '../../estilos/tema';
 import {EntradaTexto} from '../../components/EntradaTexto';
 import Botao from '../../components/Botao';
 import {useState} from 'react';
-import {faEnvelope, faPercent, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faKey, faPercent, faUser} from '@fortawesome/free-solid-svg-icons';
 import {EntradaArquivo} from '../../components/EntradaArquivo';
 import {FileUpload} from '../../interfaces/FileUpload';
 import {EntradaNumber} from '../../components/EntradaNumber';
@@ -21,7 +21,7 @@ export default function CadastrarFuncionario({navigation}: any) {
   };
 
   async function cadastrar() {
-    if (!dados.nome || !dados.email || !dados.porcentagem) {
+    if (!dados.nome || !dados.email || !dados.porcentagem || !dados.senha) {
       toast.show({
         title: 'Erro ao Cadastrar Funcionário',
         description: 'Preeencha todos os Campos',
@@ -52,13 +52,13 @@ export default function CadastrarFuncionario({navigation}: any) {
         <EntradaTexto
           label="nome"
           icon={faUser}
-          placeholder="Digite seu nome"
+          placeholder="Digite o Nome"
           onChangeText={text => setDados({...dados, nome: text})}
         />
         <EntradaTexto
           label="email"
           icon={faEnvelope}
-          placeholder="Digite seu E-mail"
+          placeholder="Digite o E-mail"
           onChangeText={text => setDados({...dados, email: text})}
         />
         <EntradaNumber
@@ -66,6 +66,13 @@ export default function CadastrarFuncionario({navigation}: any) {
           icon={faPercent}
           placeholder="Digite a Porcentagem"
           onChangeText={text => setDados({...dados, porcentagem: Number(text)})}
+        />
+        <EntradaTexto
+          label="senha"
+          icon={faKey}
+          placeholder="Digite a Senha"
+          senha={true}
+          onChangeText={text => setDados({...dados, senha: text})}
         />
         <EntradaArquivo onImagemSelecionada={handleSelecionarImagem} />
         <Botao>

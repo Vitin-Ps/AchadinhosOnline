@@ -1,5 +1,6 @@
 package com.example.crudjava.domain.usuario;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -70,5 +71,14 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void atualizarInfo(String email, String senhaCodificada) {
+        if(!StringUtils.isBlank(email)) {
+            this.login = email;
+        }
+        if(!StringUtils.isBlank(senhaCodificada)) {
+            this.senha = senhaCodificada;
+        }
     }
 }

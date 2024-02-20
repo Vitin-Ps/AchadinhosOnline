@@ -1,6 +1,6 @@
 import {FileUpload} from '../interfaces/FileUpload';
 import {Funcionario} from '../interfaces/Funcionario';
-import { Response } from '../interfaces/Response';
+import {Response} from '../interfaces/Response';
 import api from './api.';
 
 export async function cadastrarFuncionario(
@@ -38,7 +38,9 @@ export async function listarFuncionariosPage(
   sort: string,
 ) {
   try {
-    const res = await api.get(`funcionarios?page=${page}&size=${pageSize}&sort=${sort}`);
+    const res = await api.get(
+      `funcionarios?page=${page}&size=${pageSize}&sort=${sort}`,
+    );
     return res.data;
   } catch (error) {
     console.log('erro: ', error);
@@ -46,7 +48,9 @@ export async function listarFuncionariosPage(
   }
 }
 
-export async function listarFuncionariosAll(): Promise<Response<Funcionario[]> | null> {
+export async function listarFuncionariosAll(): Promise<Response<
+  Funcionario[]
+> | null> {
   try {
     const res = await api.get('funcionarios');
     return res.data;
@@ -61,7 +65,7 @@ export async function detalharFuncionario(id: number) {
     const res = await api.get(`funcionarios/${id}`);
     return res.data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.log('Error: ', error);
     return null;
   }
 }
@@ -76,7 +80,10 @@ export async function deletarFuncionario(id: number) {
   }
 }
 
-export async function alterarFuncionario(funcionario: Funcionario, image: FileUpload) {
+export async function alterarFuncionario(
+  funcionario: Funcionario,
+  image: FileUpload,
+) {
   if (!funcionario) {
     return null;
   }
@@ -85,12 +92,15 @@ export async function alterarFuncionario(funcionario: Funcionario, image: FileUp
 
   if (image) formData.append('arquivo', image);
 
+  if (!funcionario.senha) delete funcionario.senha;
   delete funcionario.imagem;
-
   const produtoJSON: string = JSON.stringify(funcionario);
+
   formData.append('dados', produtoJSON);
   try {
-    const res = await api.put('funcionarios', formData, { headers: { "Content-Type": "multipart/form-data" }});
+    const res = await api.put('funcionarios', formData, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    });
     return res.data;
   } catch (error) {
     console.log('erro: ', error);

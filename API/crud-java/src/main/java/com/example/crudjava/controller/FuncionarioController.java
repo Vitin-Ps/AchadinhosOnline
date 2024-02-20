@@ -1,9 +1,12 @@
 package com.example.crudjava.controller;
 
 import com.example.crudjava.domain.funcionario.*;
+import com.example.crudjava.domain.usuario.TipoUsuario;
+import com.example.crudjava.domain.usuario.Usuario;
 import com.example.crudjava.infra.FuncionalidadesService;
 import com.example.crudjava.infra.file.ArquivoService;
 import com.example.crudjava.repository.FuncionarioRepository;
+import com.example.crudjava.repository.UsuarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.common.util.StringUtils;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,6 +27,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class FuncionarioController {
     @Autowired
     private FuncionarioRepository repository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ArquivoService arquivoService;
@@ -38,6 +45,11 @@ public class FuncionarioController {
         if(arquivo != null) imagem = arquivoService.enviarArquivo(arquivo, null);
         var funcionario = new Funcionario(dados, imagem);
         repository.save(funcionario);
+
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
+        Usuario usuario = new Usuario(dados.email(), senhaCodificada, TipoUsuario.FUNCIONARIO);
+        usuarioRepository.save(usuario);
+
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoFuncionario(funcionario));
     }
@@ -54,12 +66,18 @@ public class FuncionarioController {
         DadosAtualizaFuncionario dados = objectMapper.readValue(dadosString, DadosAtualizaFuncionario.class);
         FuncionalidadesService.validarRecord(dados);
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
+        var usuario = usuarioRepository.getReferenceByLogin(funcionario.getEmail());
         String arquivoUrl = null;
         if(arquivo != null)  {
             if(StringUtils.isBlank(funcionario.getImagem())) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
             else arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem()));
         }
         funcionario.atualizarInfo(dados, arquivoUrl);
+        
+        String senhaCodificada = null;
+        if(dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
+        usuario.atualizarInfo(dados.email(), senhaCodificada);
+
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 

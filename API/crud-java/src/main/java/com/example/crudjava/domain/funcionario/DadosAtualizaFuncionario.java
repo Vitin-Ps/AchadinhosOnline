@@ -7,6 +7,7 @@ public record DadosAtualizaFuncionario(
         Long id,
         String nome,
         String email,
-        Integer porcentagem
+        Integer porcentagem,
+        String senha
 ) {
 }

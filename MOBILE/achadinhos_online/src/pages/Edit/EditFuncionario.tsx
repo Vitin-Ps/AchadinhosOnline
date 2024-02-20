@@ -4,7 +4,12 @@ import {Temas} from '../../estilos/tema';
 import {EntradaTexto} from '../../components/EntradaTexto';
 import Botao from '../../components/Botao';
 import {useEffect, useState} from 'react';
-import {faEnvelope, faPercent, faUser} from '@fortawesome/free-solid-svg-icons';
+import {
+  faEnvelope,
+  faKey,
+  faPercent,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import {EntradaArquivo} from '../../components/EntradaArquivo';
 import {FileUpload} from '../../interfaces/FileUpload';
 import {EntradaNumber} from '../../components/EntradaNumber';
@@ -62,7 +67,8 @@ export default function EditFuncionario({navigation}: any) {
       if (
         dados.nome === funcionario!.nome &&
         dados.email === funcionario!.email &&
-        dados.porcentagem === funcionario!.porcentagem
+        dados.porcentagem === funcionario!.porcentagem &&
+        !dados.senha
       ) {
         toast.show({
           title: 'Erro ao Editar Funcionário',
@@ -110,14 +116,14 @@ export default function EditFuncionario({navigation}: any) {
           label="nome"
           value={funcionario?.nome}
           icon={faUser}
-          placeholder="Digite seu nome"
+          placeholder="Digite o nome"
           onChangeText={text => setDados({...dados, nome: text})}
         />
         <EntradaTexto
           label="email"
           value={funcionario?.email}
           icon={faEnvelope}
-          placeholder="Digite seu E-mail"
+          placeholder="Digite o E-mail"
           onChangeText={text => setDados({...dados, email: text})}
         />
         <EntradaNumber
@@ -126,6 +132,13 @@ export default function EditFuncionario({navigation}: any) {
           icon={faPercent}
           placeholder="Digite a Porcentagem"
           onChangeText={text => setDados({...dados, porcentagem: Number(text)})}
+        />
+        <EntradaTexto
+          label="senha"
+          icon={faKey}
+          placeholder="Digite a senha"
+          senha={true}
+          onChangeText={text => setDados({...dados, senha: text})}
         />
         <EntradaArquivo onImagemSelecionada={handleSelecionarImagem} />
         <Botao>

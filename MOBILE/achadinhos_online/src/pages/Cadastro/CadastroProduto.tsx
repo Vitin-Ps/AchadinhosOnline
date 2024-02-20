@@ -52,7 +52,7 @@ export default function CadastroProduto({navigation}: any) {
         <EntradaTexto
           label="nome"
           icon={faShirt}
-          placeholder="Digite seu nome"
+          placeholder="Digite o nome do Produto"
           onChangeText={text => setDados({...dados, nome: text})}
         />
         <EntradaNumber

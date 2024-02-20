@@ -11,6 +11,8 @@ public record DadosCadastroFuncionario(
         @Email
         String email,
         @NotNull(message = "Porcentagem é obrigatória!")
-        Integer porcentagem
+        Integer porcentagem,
+        @NotBlank
+        String senha
 ) {
 }

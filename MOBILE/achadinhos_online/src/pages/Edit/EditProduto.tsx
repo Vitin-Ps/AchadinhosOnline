@@ -105,7 +105,7 @@ export default function EditProduto({navigation}: any) {
           label="nome"
           value={produto?.nome}
           icon={faShirt}
-          placeholder="Digite seu nome"
+          placeholder="Digite o nome do Produto"
           onChangeText={text => setDados({...dados, nome: text})}
         />
         <EntradaNumber
