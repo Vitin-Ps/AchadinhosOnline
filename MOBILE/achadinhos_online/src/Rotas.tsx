@@ -7,17 +7,39 @@ import CadastroProduto from './pages/Cadastro/CadastroProduto';
 import CadastroFuncionario from './pages/Cadastro/CadastroFuncionario';
 import CadastroVendas from './pages/Cadastro/CadastroVendas';
 import CarrinhoProdutos from './pages/CarrinhoProdutos';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import DadosProduto from './pages/Dados/DadosProduto';
 import EditProduto from './pages/Edit/EditProduto';
 import EditFuncionario from './pages/Edit/EditFuncionario';
 import DadosFuncionario from './pages/Dados/DadosFuncionario';
 import DadosVendas from './pages/Dados/DadosVendas';
 import EditVenda from './pages/Edit/EditVenda';
+import UnauthorizedScreen from './pages/UnauthorizedScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {isAdmin, isFuncionario} from './services/AuthService';
 
 const Stack = createNativeStackNavigator();
 
 export default function Rotas() {
+  const [token, setToken] = useState<string>();
+
+  useEffect(() => {
+    async function recuperarToken() {
+      const getToken = await AsyncStorage.getItem('token');
+      if (getToken) {
+        setToken(getToken);
+      }
+    }
+    recuperarToken();
+  }, []);
+
+  const roleAutorizacao = async () => {
+    const newToken = await AsyncStorage.getItem('token');
+    if (newToken) {
+      setToken(newToken);
+    }
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -31,8 +53,9 @@ export default function Rotas() {
         }}>
         <Stack.Screen
           name="Login"
-          component={Login as React.FC}
+          component={Login}
           options={{headerShown: false}}
+          initialParams={{roleAutorizacao}}
         />
         <Stack.Screen
           name="Tabs"
@@ -41,17 +64,35 @@ export default function Rotas() {
         />
         <Stack.Screen
           name="CadastroProduto"
-          component={CadastroProduto as React.FC}
+          component={
+            token
+              ? isFuncionario(token!)
+                ? (CadastroProduto as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="CadastroFuncionario"
-          component={CadastroFuncionario as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (CadastroFuncionario as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="CadastroVendas"
-          component={CadastroVendas as React.FC}
+          component={
+            token
+              ? isFuncionario(token!)
+                ? (CadastroVendas as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
@@ -61,32 +102,68 @@ export default function Rotas() {
         />
         <Stack.Screen
           name="DadosProduto"
-          component={DadosProduto as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (DadosProduto as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="DadosFuncionario"
-          component={DadosFuncionario as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (DadosFuncionario as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="DadosVendas"
-          component={DadosVendas as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (DadosVendas as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="EditProduto"
-          component={EditProduto as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (EditProduto as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="EditFuncionario"
-          component={EditFuncionario as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (EditFuncionario as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
         <Stack.Screen
           name="EditVenda"
-          component={EditVenda as React.FC}
+          component={
+            token
+              ? isAdmin(token!)
+                ? (EditVenda as React.FC)
+                : UnauthorizedScreen
+              : UnauthorizedScreen
+          }
           options={{headerShown: true}}
         />
       </Stack.Navigator>

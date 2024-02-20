@@ -11,12 +11,13 @@ import {fazerLogin} from '../services/AutenticacaoServico';
 import {validadeToken} from '../services/TokenService';
 import Titulo from '../components/Titulo';
 
-export default function Login({navigation}: any) {
+export default function Login({navigation, route}: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const toast = useToast();
+  const { roleAutorizacao } = route.params;
 
   useEffect(() => {
     async function verificarLogin() {
@@ -45,6 +46,7 @@ export default function Login({navigation}: any) {
       console.log('voltou');
       const {token}: any = resultado;
       AsyncStorage.setItem('token', token);
+      roleAutorizacao()
       navigation.replace('Tabs');
     } else {
       toast.show({
