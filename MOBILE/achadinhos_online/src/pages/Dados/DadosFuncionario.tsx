@@ -16,6 +16,7 @@ import {
 import {CardFuncionario} from '../../components/CardFuncionario';
 import {listarComissoes} from '../../services/VendaService';
 import {Comissao} from '../../interfaces/Carrinho';
+import {getBaseUrl} from '../../services/api.';
 
 export default function DadosFuncionario({navigation}: any) {
   const [allFuncionarios, setAllFuncionarios] = useState<Funcionario[]>([]);
@@ -139,7 +140,7 @@ export default function DadosFuncionario({navigation}: any) {
                   nome={funcionario.nome}
                   porcentagem={funcionario.porcentagem}
                   comissao={comissoes}
-                  imagem={`http://192.168.100.46:8080${funcionario.imagem}`}
+                  imagem={funcionario.imagem}
                   selecionado={funcionario.selecionado}
                   onPress={() => selecionarFuncionario(funcionario.id!)}
                 />

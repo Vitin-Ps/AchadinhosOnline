@@ -5,6 +5,7 @@ import {faBox, faMoneyBill, faPercent} from '@fortawesome/free-solid-svg-icons';
 import {converterMoedaReal} from '../services/FuncionalidadesService';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import { Comissao } from '../interfaces/Carrinho';
+import { getBaseUrl } from '../services/api.';
 
 interface cardProps {
   id: number;
@@ -18,7 +19,7 @@ interface cardProps {
 
 export function CardFuncionario(cardProps: cardProps) {
   const timestamp = new Date().getTime(); // Obtém o timestamp atual
-  const uri = `${cardProps.imagem}?timestamp=${timestamp}`;
+  const uri = `${getBaseUrl()}${cardProps.imagem}?timestamp=${timestamp}`;
   const comissao: string = converterMoedaReal(cardProps.comissao.find((comissao) => comissao.idFuncionario === cardProps.id)?.comissao!)!;
   const styles = StyleSheet.create({
     card: {

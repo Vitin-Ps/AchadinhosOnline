@@ -46,7 +46,7 @@ public class ArquivoService {
 //                    .path(  "/arquivos/")
 //                    .path(nomeArquivo)
 //                    .toUriString();
-            return "/arquivos/" + nomeArquivo;
+            return "arquivos/" + nomeArquivo;
         } catch (IOException ex) {
             throw new ValidacaoException("Falha no Upload do arquivo!");
         }

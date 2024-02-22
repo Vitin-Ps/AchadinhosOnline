@@ -11,6 +11,7 @@ import {CardProduto} from '../../components/CardProduto';
 import Botao from '../../components/Botao';
 import {deletarProduto, listarProdutosAll} from '../../services/ProdutoService';
 import {Confirm} from '../../components/Comfirm';
+import { getBaseUrl } from '../../services/api.';
 
 export default function DadosProduto({navigation}: any) {
   const [allProdutos, setAllProdutos] = useState<Produto[]>([]);
@@ -130,7 +131,7 @@ export default function DadosProduto({navigation}: any) {
                   key={produto.id}
                   nome={produto.nome}
                   valor={produto.valor}
-                  imagem={`http://192.168.100.46:8080${produto.imagem}`}
+                  imagem={produto.imagem}
                   selecionado={produto.selecionado}
                   onPress={() => selecionarProduto(produto.id!)}
                 />

@@ -1,8 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export function getBaseUrl() {
+  return 'http://10.41.114.26:8080/';
+}
+
 const api = axios.create({
-  baseURL: 'http://192.168.100.46:8080/',
+  baseURL: getBaseUrl(),
 });
 
 api.interceptors.request.use(
