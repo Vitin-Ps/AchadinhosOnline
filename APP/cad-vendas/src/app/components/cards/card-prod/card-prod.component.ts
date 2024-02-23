@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { faBox, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-card-prod',
@@ -14,4 +15,5 @@ export class CardProdComponent {
 
   faMoneyBill = faMoneyBill;
   faBox = faBox;
+  apiUrl = environment.baseApiUrl
 }

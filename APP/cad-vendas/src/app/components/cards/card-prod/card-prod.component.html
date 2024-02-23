@@ -1,6 +1,6 @@
 <div class="card-item" [ngClass]="{'selecionado': selecionado}">
   <div class="fundo-branco">
-    <img src="{{imagem}}" alt="produto_img" *ngIf="imagem"/>
+    <img src="{{apiUrl + imagem}}" alt="produto_img" *ngIf="imagem"/>
     <fa-icon [icon]="faBox" *ngIf="!imagem"/>
     <div class="conteudo">
       <h3>{{ nome }}</h3>

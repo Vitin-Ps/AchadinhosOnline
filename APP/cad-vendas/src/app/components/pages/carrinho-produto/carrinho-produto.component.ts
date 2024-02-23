@@ -44,12 +44,14 @@ export class CarrinhoProdutoComponent implements OnInit {
     const value = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
 
     this.produtos = this.allProdutos.filter((produto) => {
-      const nome = FuncionalidadesExtrasService.removerAcentuacoes(produto.nome);
+      const nome = FuncionalidadesExtrasService.removerAcentuacoes(
+        produto.nome
+      );
       return nome.includes(value);
     });
   }
 
-  marcarCheckbox(produto: Produto) {
+  selecionarProduto(produto: Produto) {
     produto.selecionado = !produto.selecionado;
   }
 
