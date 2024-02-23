@@ -1,6 +1,6 @@
 export interface Response<T> {
     content: T,
-    pageble?: {
+    pageable?: {
         pageNumber: number,
         pageSize: number
     },

@@ -22,13 +22,13 @@ export class ProdutoService {
     page: number,
     size: number,
     sort: string
-  ): Observable<Produto[]> {
+  ): Observable<Response<Produto[]>> {
     const params = new HttpParams()
     .set('page', page.toString())
     .set('size', size.toString())
     .set('sort', sort)
 
-    return this.http.get<Produto[]>(this.apiUrl, {params});
+    return this.http.get<Response<Produto[]>>(this.apiUrl, {params});
   }
 
   listarAll(): Observable<Response<Produto[]>> {

@@ -54,4 +54,14 @@ public class VendaService {
         if(!vendaRepository.existsById(id)) throw new ValidacaoException(messages.get(1));
         vendaRepository.deleteById(id);
     }
+
+    public DadosStatusLojinha statusLojinha() {
+        List<Object[]> dados = vendaRepository.recuperarStatusLojinha();
+        if(dados != null && !dados.isEmpty() && dados.get(0).length == 3) {
+            Object[] innerArray = dados.get(0);
+            return new DadosStatusLojinha(((Number) innerArray[0]).longValue(), ((Number) innerArray[1]).longValue(), ((Number) innerArray[2]).longValue());
+        } else {
+            throw new ValidacaoException("Não foi possivel recuperar os dados");
+        }
+    }
 }

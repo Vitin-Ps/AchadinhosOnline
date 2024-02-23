@@ -24,6 +24,9 @@ import { CarrinhoProdutoComponent } from './components/pages/carrinho-produto/ca
 import { ConversaoMoedaRealPipe } from './pipes/conversao-moeda-real.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
 import { HomeAdminComponent } from './components/pages/home-admin/home-admin.component';
+import { CardFuncionalidadeComponent } from './components/cards/card-funcionalidade/card-funcionalidade.component';
+import { DadosProdutoComponent } from './components/pages/dados-produto/dados-produto.component';
+import { CardProdutoComponent } from './components/cards/card-produto/card-produto.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +46,9 @@ import { HomeAdminComponent } from './components/pages/home-admin/home-admin.com
     ConversaoMoedaRealPipe,
     LoadingComponent,
     HomeAdminComponent,
+    CardFuncionalidadeComponent,
+    DadosProdutoComponent,
+    CardProdutoComponent,
   ],
   imports: [
     BrowserModule,

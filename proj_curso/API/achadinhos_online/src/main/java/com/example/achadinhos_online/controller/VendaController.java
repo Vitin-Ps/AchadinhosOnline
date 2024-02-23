@@ -51,4 +51,9 @@ public class VendaController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/status")
+    public ResponseEntity statusLojinha() {
+        return ResponseEntity.ok(service.statusLojinha());
+    }
+
 }

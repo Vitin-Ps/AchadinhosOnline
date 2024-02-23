@@ -1,0 +1,15 @@
+.cards-container {
+    width: 100%;
+}
+
+app-card-produto {
+    max-width: 400px;
+  }
+  
+  
+  @media (max-width: 850px) {
+    .cards-container {
+        justify-content: center;
+    }
+  }
+  

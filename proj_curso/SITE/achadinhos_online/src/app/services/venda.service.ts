@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { VendaDTO } from '../interfaces/VendaDTO';
+import { StatusLojinha, VendaDTO } from '../interfaces/Venda';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,5 +14,9 @@ export class VendaService {
 
   registrar(venda: VendaDTO): Observable<VendaDTO> {
     return this.http.post<VendaDTO>(this.apiUrl, venda);
+  }
+
+  recuperarStatusLojinha(): Observable<StatusLojinha> {
+    return this.http.get<StatusLojinha>(`${this.apiUrl}/status`);
   }
 }

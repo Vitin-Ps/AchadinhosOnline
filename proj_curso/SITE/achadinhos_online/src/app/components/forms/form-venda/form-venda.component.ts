@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { VendaDTO } from '../../../interfaces/VendaDTO';
+import { VendaDTO } from '../../../interfaces/Venda';
 import { Funcionario } from '../../../interfaces/Funcionario';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { ActivatedRoute } from '@angular/router';
@@ -50,7 +50,7 @@ export class FormVendaComponent implements OnInit {
       this.funcionario = this.funcionarios.find(
         (funcionario) => funcionario.id === this.idFuncionarioSelecionado
       );
-      this.idFuncionario.setValue(id)
+      this.idFuncionario.setValue(id);
       console.log('está chegando');
     }
     this.loading = true;

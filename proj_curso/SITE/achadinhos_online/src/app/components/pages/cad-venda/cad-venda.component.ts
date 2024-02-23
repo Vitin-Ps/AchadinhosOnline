@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { VendaDTO } from '../../../interfaces/VendaDTO';
+import { VendaDTO } from '../../../interfaces/Venda';
 import { VendaService } from '../../../services/venda.service';
 import { MessageService } from '../../../services/message.service';
 import { Router } from '@angular/router';
@@ -22,15 +22,19 @@ export class CadVendaComponent {
   btnEnviar = 'Registrar';
 
   registrarVenda(venda: VendaDTO) {
-    console.log("chegou", venda)
+    console.log('chegou', venda);
     this.vendaService.registrar(venda).subscribe(
       (res) => {
         this.carrinhoServie.limparCarrinho(venda.idFuncionario).subscribe();
-        this.messageService.alert(`Venda no valor de ${FuncionalidadesService.converterMoedaReal(venda.valor)} realizada com sucesso!`);
-        this.router.navigate(['/'])
+        this.messageService.alert(
+          `Venda no valor de ${FuncionalidadesService.converterMoedaReal(
+            venda.valor
+          )} realizada com sucesso!`
+        );
+        this.router.navigate(['/']);
       },
       (error) => {
-        this.messageService.alert("Falha ao registrar Venda");
+        this.messageService.alert('Falha ao registrar Venda');
       }
     );
   }

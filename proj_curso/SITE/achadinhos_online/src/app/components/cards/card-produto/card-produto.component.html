@@ -1,0 +1,9 @@
+<div class="card-item" [ngClass]="{'selecionado' : selecionado}">
+    <div class="fundo-branco">
+        <img src="assets/imagens/camisa-branca.jpg" alt="img_produto">
+        <div class="conteudo">
+            <h3>{{nome}}</h3>
+            <h4><fa-icon [icon]="faMoneyBill" /> {{valor | moedaReal}}</h4>
+        </div>
+    </div>
+</div>

@@ -1,24 +1,27 @@
 <div class="home-admin-container">
     <div class="status-lojinha-container">
-    <img src="assets/imagens/img-status-lojinha-m.jpg" alt="img_status">
-    <div class="status-conteudo">
-        <div class="conteudo-container">
+        <img src="assets/imagens/img-status-lojinha-m.jpg" alt="img_status">
+        <div class="status-conteudo" *ngIf="status">
             <h2>Status Achadinhos</h2>
             <aside>
                 <div class="card-status">
                     <h3>Funcionários</h3>
-                    <h4>4</h4>
+                    <h4>{{status.funcionarios}}</h4>
                 </div>
                 <div class="card-status">
                     <h3>Vendas</h3>
-                    <h4>4</h4>
+                    <h4>{{status.vendas}}</h4>
                 </div>
                 <div class="card-status">
                     <h3>Produtos</h3>
-                    <h4>4</h4>
+                    <h4>{{status.produtos}}</h4>
                 </div>
             </aside>
         </div>
     </div>
+    <div class="main-container">
+       <app-card-funcionalidade [icon]="faUser" titulo="Funcionários" link="" [btnText]="btnText"/>
+       <app-card-funcionalidade [icon]="faTShirt" titulo="Produtos" link="/home/produtos" [btnText]="btnText"/>
+       <app-card-funcionalidade [icon]="faHandsHelping" titulo="Vendas" link="" [btnText]="btnText"/>
     </div>
 </div>
