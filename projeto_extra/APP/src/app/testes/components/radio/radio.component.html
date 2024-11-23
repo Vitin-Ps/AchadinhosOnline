@@ -1,0 +1,28 @@
+<!-- seu-componente.component.html
+<div
+  *ngFor="let produto of produtos"
+  [attr.id]="'cardContainer' + produto.id"
+  #cardsContainer
+>
+  <app-card-prod
+    [nome]="produto.nome"
+    [valor]="produto.valor"
+  ></app-card-prod>
+</div> -->
+
+<div
+  class="teste-radio-container"
+  *ngFor="let produto of produtos"
+  (click)="labelClicada(produto, $event)"
+  #testeCards
+>
+  <div class="radio">
+      <label>{{ produto.nome }}: </label>
+      <input
+        type="radio"
+        name="produto"
+        value="{{ produto.id }}"
+        [checked]="produto.selecionado"
+      />
+  </div>
+</div>

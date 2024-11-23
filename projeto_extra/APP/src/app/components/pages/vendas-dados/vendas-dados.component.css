@@ -1,0 +1,61 @@
+.vendas-dados-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.filtro-venda-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1em 0;
+}
+
+.filtro-venda-container h2 {
+  font-size: 1.3em;
+  margin-right: 1em;
+}
+
+.filtro-venda-container select {
+  min-width: 150px;
+  padding: .5em 1em;
+  border-radius: 5px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.080);
+}
+
+.venda-total-container {
+  background-image: linear-gradient(to bottom, #B553F7, #9531E6, #6904CE);
+  border-radius: 5px;
+  padding: 0 1em;
+}
+
+.venda-total-container .fundo-branco {
+  background-color: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5em;
+}
+
+.venda-total-container .fundo-branco h3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: .5em 1em;
+  font-size: 1em;
+  letter-spacing: 1.5px;
+}
+
+.vendas-container {
+  width: 95%;
+  max-height: 500px;
+  margin: 2em 0;
+  padding: .5em;
+  padding-left: 2em;
+  border-radius: 5px;
+  @media (min-height: 501px) {
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.095);
+  }
+}

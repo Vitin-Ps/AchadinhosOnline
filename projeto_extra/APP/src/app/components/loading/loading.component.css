@@ -1,0 +1,21 @@
+.loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+}
+
+.spinner {
+  width: 80px;
+  height: 80px;
+  border: 15px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #8056ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

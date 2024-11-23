@@ -1,0 +1,39 @@
+.container-personalizado-1 .cn-conteudo {
+  justify-content: space-between;
+}
+
+form {
+  margin: 0;
+}
+
+.search-container {
+  margin-bottom: 2em;
+  width: 100%;
+}
+
+.search-container form {
+  width: 50%;
+  position: relative;
+}
+
+.search-container fa-icon {
+  color: #6700ac;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.search-container input {
+  padding: 0.5em;
+  padding-left: 30px;
+  width: 100%;
+}
+
+.produtos-container {
+  margin: 1em;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}

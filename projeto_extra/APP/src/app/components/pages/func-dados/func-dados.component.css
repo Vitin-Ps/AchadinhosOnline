@@ -1,0 +1,21 @@
+app-card-func {
+    max-width: 20%;
+  }
+  
+  @media (max-width: 1200px) {
+    app-card-func {
+      max-width: 30%;
+    }
+  }
+  
+  @media (max-width: 850px) {
+    app-card-func {
+      max-width: 40%;
+    }
+  }
+
+  @media (max-width: 650px) {
+    app-card-func {
+      max-width: 90%;
+    }
+  }

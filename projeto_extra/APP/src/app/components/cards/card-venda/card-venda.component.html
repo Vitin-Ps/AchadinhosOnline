@@ -1,0 +1,27 @@
+<div class="card-venda">
+  <h2>{{ id }}</h2>
+  <h2 class="nome">
+    <fa-icon [icon]="faUser"></fa-icon>
+    {{ nome }}
+  </h2>
+  <h2>
+    <fa-icon [icon]="faShoppingBag"></fa-icon>
+    {{ valorTotal | moedaReal }}
+  </h2>
+  <h2>
+    <fa-icon [icon]="faMoneyBill"></fa-icon>
+    {{ comissao | moedaReal }}
+  </h2>
+  <div class="acao">
+    <a routerLink="/vendas/edit/{{id}}"
+      ><button class="btn-padrao btn-acao">
+        <fa-icon [icon]="faEdit"></fa-icon>
+        Editar
+      </button></a
+    >
+    <button class="btn-padrao btn-acao" (click)="ativarBtnExcluir()">
+      <fa-icon [icon]="faTrashAlt"></fa-icon>
+      Excluir
+    </button>
+  </div>
+</div>

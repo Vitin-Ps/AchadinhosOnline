@@ -1,0 +1,34 @@
+<app-loading *ngIf="!loading" />
+<form (ngSubmit)="sumbit()" [formGroup]="funcionarioForm" #formDir="ngForm" *ngIf="loading">
+  <input type="hidden" formControlName="id" />
+  <div class="form-group">
+    <label for="nome">Nome: </label>
+    <input type="text" formControlName="nome" placeholder="Digite seu nome..." required />
+    <div class="validation-error" *ngIf="nome.invalid && formDir.submitted">
+      <p *ngIf="nome.errors?.['required']">Nome é Obrigatório!</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="email">E-mail: </label>
+    <input type="text" formControlName="email" placeholder="Digite seu E-mail..." required />
+    <div class="validation-error" *ngIf="email.invalid && formDir.submitted">
+      <p *ngIf="email.errors?.['required']">E-mail é Obrigatório!</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="porcentagem">Porcentagem: </label>
+    <input type="number" formControlName="porcentagem" placeholder="Digite a Porcentagem..." required />
+    <div class="validation-error" *ngIf="porcentagem.invalid && formDir.submitted">
+      <p *ngIf="porcentagem.errors?.['required']">Porcentagem é Obrigatória!</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="porcentagem">Senha: </label>
+    <input type="password" formControlName="senha" placeholder="Digite a Senha..." *ngIf="funcData"/>
+    <input type="password" formControlName="senha" placeholder="Digite a Senha..." *ngIf="!funcData" required />
+    <div class="validation-error" *ngIf="senha.invalid && formDir.submitted">
+      <p *ngIf="senha.errors?.['required']">Senha é Obrigatória!</p>
+    </div>
+  </div>
+  <input type="submit" value="{{btnText}}" />
+</form>

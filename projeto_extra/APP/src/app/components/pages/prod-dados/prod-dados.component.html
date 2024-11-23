@@ -1,0 +1,39 @@
+<div class="fundo-branco-container">
+  <div class="filtro-container">
+    <h2><span>Busque</span> pelo Produto:</h2>
+    <input type="text" (input)="pesquisar($event)" />
+  </div>
+  <div class="acao" *ngIf="produto != null && produto.selecionado == true">
+    <a routerLink="/produtos/{{ produto.id! }}"
+      ><button class="btn-padrao btn-acao">
+        <fa-icon [icon]="faEdit" /> Editar
+      </button></a
+    >
+    <button class="btn-padrao btn-acao" (click)="chamarComfirm(produto)">
+      <fa-icon [icon]="faTrashAlt" /> Excluir
+    </button>
+  </div>
+  <div
+    class="cards-container scroll-bar"
+    [ngClass]="{ shaded: shaded }"
+    #cardsContainer
+    *ngIf="produtos"
+  >
+    <app-card-prod
+    *ngFor="let produto of produtos"
+      [nome]="produto.nome"
+      [valor]="produto.valor"      
+      (click)="selecionarCard(produto)"
+      [selecionado]="produto.selecionado!"
+    ></app-card-prod>
+  </div>
+  <div class="paginacao-container">
+    <button class="btn-padrao btn-invertido" (click)="mudarPagina(false)">
+      Anterior
+    </button>
+    <h3>Página {{ pageNumber }}</h3>
+    <button class="btn-padrao btn-invertido" (click)="mudarPagina(true)">
+      Próxima
+    </button>
+  </div>
+</div>

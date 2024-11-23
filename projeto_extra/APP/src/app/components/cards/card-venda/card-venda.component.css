@@ -1,0 +1,46 @@
+.card-venda {
+    background-color: #f7fafa;
+    width: 90%;
+    margin-bottom: .5em;
+    padding: 1em 0.5em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.030);
+  }
+  
+  .card-venda h2 {
+    font-size: 1.1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: .8px;
+  }
+
+  .card-venda h2.nome {
+    width: 25%;
+  }
+
+  .btn-acao {
+    margin: 0.5em;
+  }
+  
+  .btn-acao:hover {
+    margin: 0.3em;
+  }
+  
+  .card-venda fa-icon {
+    margin-right: 0.5em;
+  }
+  
+  @media (max-width: 750px) {
+    .card-venda h2 {
+      font-size: 0.6em;
+      display: flex;
+    }
+    .btn-acao {
+      font-size: 0.5em;
+    }
+  }
+  
