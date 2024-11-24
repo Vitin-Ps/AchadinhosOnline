@@ -63,7 +63,6 @@ public class VendaController {
 
     @GetMapping("/comissao")
     public ResponseEntity getComissoes() {
-        System.out.println("chegou");
         var comissoes = service.getComissoes();
         return ResponseEntity.ok(comissoes);
     }

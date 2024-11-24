@@ -49,13 +49,10 @@
 }
 
 .vendas-container {
-  width: 95%;
+  width: 85%;
   max-height: 500px;
   margin: 2em 0;
   padding: .5em;
   padding-left: 2em;
-  border-radius: 5px;
-  @media (min-height: 501px) {
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.095);
-  }
+  border-radius: 5px; 
 }

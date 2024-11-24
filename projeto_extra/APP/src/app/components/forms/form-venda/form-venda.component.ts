@@ -74,7 +74,7 @@ export class FormVendaComponent implements OnInit {
         this.venda ? this.venda.funcionario.id : this.funcionario ? this.funcionario.id : '',
         [Validators.required],
       ),
-      valor: new FormControl(this.venda ? this.venda.venda : '', [Validators.required]),
+      valor: new FormControl(this.venda ? this.venda.valorTotal : '', [Validators.required]),
       // valor: new FormControl('', [Validators.required]),
     });
   }

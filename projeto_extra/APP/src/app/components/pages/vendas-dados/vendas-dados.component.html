@@ -3,20 +3,15 @@
     <h2>Filtre pelo Funcionário:</h2>
     <select (change)="selecionarFuncionario($event)">
       <option value="0" selected>Todos</option>
-      <option
-        *ngFor="let venda of totalVendas"
-        value="{{ venda.funcionario.id }}"
-      >
-        {{ venda.funcionario.nome }}
+      <option *ngFor="let funcionario of funcionarios" value="{{ funcionario.id }}">
+        {{ funcionario.nome }}
       </option>
     </select>
   </div>
   <div class="venda-total-container" *ngIf="totalVendasDoFuncionario !== null">
     <div class="fundo-branco">
       <h3><span>Vendas</span> {{ totalVendasDoFuncionario!.vendas }}</h3>
-      <h3>
-        <span>Total</span> {{ totalVendasDoFuncionario!.valorTotal | moedaReal }}
-      </h3>
+      <h3><span>Total</span> {{ totalVendasDoFuncionario!.valorTotal | moedaReal }}</h3>
       <h3 *ngIf="idFuncSelecionario != 0">
         <span>Comissão</span>
         {{ totalVendasDoFuncionario!.comissao | moedaReal }}
@@ -28,7 +23,7 @@
       *ngFor="let venda of vendas"
       id="{{ venda.id }}"
       nome="{{ venda.funcionario.nome }}"
-      [valorTotal]="venda.venda"
+      [valorTotal]="venda.valorTotal"
       [comissao]="venda.comissao!"
       (emitFunction)="chamarConfirm(venda.id!)"
     />
