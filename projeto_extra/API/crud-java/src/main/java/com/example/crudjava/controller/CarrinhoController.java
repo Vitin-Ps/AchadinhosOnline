@@ -31,9 +31,9 @@ public class CarrinhoController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Page<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id ,Pageable pageable) {
-        var dto = service.listarCarrinho(id, pageable);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<List<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id) {
+        List<DadosListagemCarrinho> listaCarrinho = service.listarCarrinho(id);
+        return ResponseEntity.ok(listaCarrinho);
     }
 
     @DeleteMapping("/{id}")

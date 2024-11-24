@@ -42,8 +42,8 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListegemFuncionario>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(DadosListegemFuncionario::new);
+    public ResponseEntity<Page<DadosListagemFuncionario>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
+        var page = repository.findAllByAtivoTrue(pageable).map(DadosListagemFuncionario::new);
         return ResponseEntity.ok(page);
     }
 

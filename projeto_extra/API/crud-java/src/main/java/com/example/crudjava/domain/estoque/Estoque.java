@@ -28,7 +28,7 @@ public class Estoque {
         this.quantidade = quantidade;
     }
 
-    public void atualizaQuantantidade(Integer quantidade, Boolean acao) { // True add e False remove
+    public void atualizarQuantidade(Integer quantidade, Boolean acao) { // True add e False remove
         if(acao) {
             this.quantidade += quantidade;
         } else {

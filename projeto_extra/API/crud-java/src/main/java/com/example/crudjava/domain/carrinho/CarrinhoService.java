@@ -31,6 +31,10 @@ public class CarrinhoService {
     public void addNoCarrinho(List<DadosCarrinho> dadosList) {
         for (DadosCarrinho dados : dadosList) {
 
+            if(dados.quantidade() == null) {
+                throw new ValidacaoException("O campo quantidade é obrigatório!");
+            }
+
             Funcionario funcionario = funcionarioRepository.getReferenceByIdAndAtivoTrue(dados.funcionarioId());
             Produto produto = produtoRepository.getReferenceByIdAndAtivoTrue(dados.produtoId());
 
@@ -40,7 +44,7 @@ public class CarrinhoService {
 
             Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
 
-            estoqueProduto.atualizaQuantantidade(dados.quantidade(), false);
+            estoqueProduto.atualizarQuantidade(dados.quantidade(), false);
 
             Carrinho carrinho = new Carrinho(null, funcionario, produto, dados.quantidade());
             carrinhoRepository.save(carrinho);
@@ -49,9 +53,20 @@ public class CarrinhoService {
 
     public void removerItemDoCarrinho(List<DadosCarrinho> dadosList) {
         for (DadosCarrinho dados : dadosList) {
-            var carrinho = carrinhoRepository.findFirstByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
+            Carrinho carrinho = carrinhoRepository.findFirstByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
             if (carrinho == null) throw new ValidacaoException("item não está no carrinho");
-            carrinhoRepository.deleteById(carrinho.getId());
+
+
+
+            Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(carrinho.getProduto().getId());
+
+            if(dados.quantidade() > carrinho.getQuantidade()) {
+                throw new ValidacaoException("Essa quantidade é superior a que está no carrinho!");
+            } else if (carrinho.getQuantidade().equals(dados.quantidade())) {
+                carrinhoRepository.delete(carrinho);
+            }
+
+            estoqueProduto.atualizarQuantidade(dados.quantidade(), true);
         }
     }
 
@@ -63,7 +78,7 @@ public class CarrinhoService {
             listaItemsCarrinho.forEach(itemCarrinho -> {
                 if (reporEstoque) {
                     Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(itemCarrinho.getProduto().getId());
-                    estoqueProduto.atualizaQuantantidade(itemCarrinho.getQuantidade(), true);
+                    estoqueProduto.atualizarQuantidade(itemCarrinho.getQuantidade(), true);
                 }
 
                 carrinhoRepository.delete(itemCarrinho);
@@ -73,18 +88,21 @@ public class CarrinhoService {
         }
     }
 
-    public Page<DadosListagemCarrinho> listarCarrinho(Long id, Pageable pageable) {
-        return carrinhoRepository.findAllByFuncionarioId(id, pageable);
+    public List<DadosListagemCarrinho> listarCarrinho(Long id) {
+        return carrinhoRepository.findAllByFuncionarioId(id).stream().map(DadosListagemCarrinho::new).toList();
     }
 
     public BigDecimal calcularValorItems(List<Carrinho> listaItemsCarrinho) {
         BigDecimal valorTotal = BigDecimal.ZERO;
 
-        listaItemsCarrinho.forEach(itemCarrinho -> {
-            valorTotal.add(itemCarrinho.getProduto().getValor().multiply(BigDecimal.valueOf(itemCarrinho.getQuantidade())));
-        });
-
+        for (Carrinho itemCarrinho : listaItemsCarrinho) {
+            valorTotal = valorTotal.add(
+                    itemCarrinho.getProduto().getValor()
+                            .multiply(BigDecimal.valueOf(itemCarrinho.getQuantidade()))
+            );
+        }
 
         return valorTotal;
     }
+
 }

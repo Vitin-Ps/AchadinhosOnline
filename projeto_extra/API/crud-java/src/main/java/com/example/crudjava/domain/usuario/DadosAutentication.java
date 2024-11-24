@@ -7,5 +7,7 @@ public record DadosAutentication(
         @NotNull(message = "Login não Informado!")
         String login,
         @NotBlank(message = "Senha não informada!")
-        String senha) {
+        String senha,
+        String senhaAcesso
+) {
 }

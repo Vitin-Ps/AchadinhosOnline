@@ -28,7 +28,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
+                        .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "funcionarios").hasAnyRole("ADMIN", "FUNCIONARIO")

@@ -2,7 +2,6 @@ package com.example.crudjava.domain.venda;
 
 import com.example.crudjava.domain.carrinho.Carrinho;
 import com.example.crudjava.domain.carrinho.CarrinhoService;
-import com.example.crudjava.domain.estoque.Estoque;
 import com.example.crudjava.domain.funcionario.DadosComissaoFuncionario;
 import com.example.crudjava.domain.funcionario.Funcionario;
 import com.example.crudjava.domain.recibo.Recibo;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,16 +34,16 @@ public class VendaService {
     private CarrinhoService carrinhoService;
 
     public DadosDetalhamentoVenda registrarVenda(DadosResgistroVenda dados) {
-        if(!funcionarioRepository.existsById(dados.idFuncionario())) {
-            throw new ValidacaoException("Funcionario não está cadastrado ou não está ativo!");
-        }
 
-        Funcionario funcionario = funcionarioRepository.getReferenceByIdAndAtivoTrue(dados.idFuncionario());
+        Funcionario funcionario = funcionarioRepository.getReferenceByIdAndAtivoTrue(dados.funcionarioId());
 
         if(funcionario == null) {
             throw new ValidacaoException("Funcionário não existe");
         }
-        List<Carrinho> listaItemsCarrinho = carrinhoRepository.findAllByFuncionarioId(dados.idFuncionario());
+        List<Carrinho> listaItemsCarrinho = carrinhoRepository.findAllByFuncionarioId(dados.funcionarioId());
+
+        if(listaItemsCarrinho.isEmpty()) throw new ValidacaoException("Carrinho está vazio");
+
         BigDecimal valorTotal = carrinhoService.calcularValorItems(listaItemsCarrinho);
 
         Venda venda = new Venda(funcionario, valorTotal, dados.nomeCliente());
@@ -59,7 +57,7 @@ public class VendaService {
             });
         }
 
-        carrinhoService.limparCarrinho(dados.idFuncionario(), false);
+        carrinhoService.limparCarrinho(dados.funcionarioId(), false);
 
         return new DadosDetalhamentoVenda(venda);
     }
@@ -83,7 +81,16 @@ public class VendaService {
     }
 
     public void excluirVenda(Long id) {
-        vendaRepository.deleteById(id);
+        Venda venda = vendaRepository.getReferenceById(id);
+
+        List<Recibo> listRecibo = reciboRepository.findAllByVendaId(id);
+
+        for(Recibo recibo : listRecibo) {
+            reciboRepository.delete(recibo);
+        }
+
+        vendaRepository.delete(venda);
+
     }
 
     public DadosStatusLojinha statusLojinha() {
@@ -102,22 +109,24 @@ public class VendaService {
     }
 
     public List<DadosComissaoFuncionario> getComissoes() {
-//        List<Venda> listaDeVendas = vendaRepository.findAll();
-//
-//        // Agrupar as vendas pelo funcionário e calcular a soma dos valores e comissões para cada funcionário
-//        Map<Funcionario, BigDecimal> somaValoresPorFuncionario = listaDeVendas.stream()
-//                .collect(Collectors.groupingBy(Venda::getFuncionario,
-//                        Collectors.reducing(BigDecimal.ZERO, Venda::getValor, BigDecimal::add)));
-//
-//        Map<Funcionario, BigDecimal> somaComissoesPorFuncionario = listaDeVendas.stream()
-//                .collect(Collectors.groupingBy(Venda::getFuncionario,
-//                        Collectors.reducing(BigDecimal.ZERO, Venda::getComissao, BigDecimal::add)));
-//
-//        return somaValoresPorFuncionario.entrySet().stream()
-//                .map(entry -> new DadosComissaoFuncionario(entry.getKey().getId(), somaComissoesPorFuncionario.get(entry.getKey())))
-//                .collect(Collectors.toList());
+        List<Venda> listaDeVendas = vendaRepository.findAll();
 
-        return null;
+        Map<Funcionario, BigDecimal> funcionariosVenda = listaDeVendas.stream()
+                .collect(Collectors.groupingBy(
+                        Venda::getFuncionario, // Agrupando por funcionário
+                        Collectors.reducing(
+                                BigDecimal.ZERO,
+                                Venda::getValorTotal, // Extraindo o valor da venda
+                                BigDecimal::add  // Somando os valores
+                        )
+                ));
+
+        return funcionariosVenda.entrySet().stream()
+                .map(entry -> new DadosComissaoFuncionario(
+                        entry.getKey().getId(),
+                        entry.getValue().multiply(BigDecimal.valueOf(entry.getKey().getPorcentagem() / 100))
+                ))
+                .collect(Collectors.toList());
     }
 
 }
