@@ -1,26 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
-  font-family: "Roboto";
-  src: local("Roboto"),
-    url("assets/fontes/Roboto-Regular.ttf") format("truetype");
+  font-family: 'Roboto';
+  src: local('Roboto'), url('assets/fontes/Roboto-Regular.ttf') format('truetype');
 }
 
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
 }
 
 :root {
-  --cor001: #fdfdfd; 
-  --cor002: #333; 
-  --cor003: #777; 
-  --cor004: #efefef; 
-  --cor005: #8056ff; 
-  --cor006: #dc3545; 
-  --cor007: #6700ac; 
-  --cor008: #fff; 
-  --cor009: #8036b2a1; 
-  --cor010: #8056ff; 
+  --cor001: #fdfdfd;
+  --cor002: #333;
+  --cor003: #777;
+  --cor004: #efefef;
+  --cor005: #8056ff;
+  --cor006: #dc3545;
+  --cor007: #6700ac;
+  --cor008: #fff;
+  --cor009: #8036b2a1;
+  --cor010: #8056ff;
 
   --roxo-muito-claro: #d953f7;
   --roxo-claro: #c353f7;
@@ -72,7 +75,7 @@ form {
   font-size: 1.2em;
 }
 
-input[type="submit"] {
+input[type='submit'] {
   background-color: var(--cor004);
   border: 2px solid transparent;
   padding: 0.6em 1em;
@@ -81,7 +84,7 @@ input[type="submit"] {
   transition: 0.4s;
 }
 
-input[type="submit"]:hover {
+input[type='submit']:hover {
   color: var(--cor005);
   border-color: var(--cor005);
   background-color: transparent;
@@ -97,46 +100,15 @@ input[type="submit"]:hover {
 /* butoes */
 
 .btn-padrao {
-  background-color: var(--cor007);
-  color: var(--cor008);
-  padding: 0.5em 1em;
-  margin: 1em;
-  font-weight: bold;
-  border-radius: 5px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: 0.2s;
+  @apply bg-purple500 text-white p-2 rounded-[5px] font-bold border-2 border-transparent duration-200 hover:bg-white hover:text-purple500 hover:border-purple500;
 }
 
 .btn-invertido {
-  background-color: var(--cor008);
-  color: var(--cor007);
-  border: 1px solid var(--cor007);
+  @apply bg-white text-purple500 border-2 border-purple500 hover:bg-purple500 hover:text-white hover:border-transparent;
 }
 
 .btn-acao {
-  background-image: var(--gradient-bottom);
-  width: 120px;
-  border-radius: 20px;
-}
-
-.btn-padrao:hover {
-  background-color: var(--cor008);
-  color: var(--cor007);
-  border-color: var(--cor007);
-  margin: 0.8em;
-  padding: 0.7em 1.2em;
-}
-
-.btn-invertido:hover {
-  background-color: var(--cor007);
-  color: var(--cor008);
-  border-color: transparent;
-}
-
-.btn-acao:hover {
-  background-image: none;
-  margin: 0.8em 1em;
+  @apply bg-gradient-to-r from-purple200 via-purple400 to-purple600 border-transparent hover:bg-gradient-to-r hover:from-white hover:to-white hover:text-purple500 border-purple500;
 }
 
 /* barra de rolagem */
@@ -159,7 +131,7 @@ input[type="submit"]:hover {
 }
 
 .scroll-bar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--cor007)bb; /* Cor do botão de rolagem ao passar o mouse */
+  background-color: var(--cor007) bb; /* Cor do botão de rolagem ao passar o mouse */
 }
 
 /* modelo Container com fundo */
@@ -313,12 +285,7 @@ input[type="submit"]:hover {
 /*------- cards --------*/
 
 .card-item {
-  background-image: linear-gradient(
-    to bottom,
-    #d953f7,
-    #b553f7 30%,
-    #6904ce 80%
-  );
+  background-image: linear-gradient(to bottom, #d953f7, #b553f7 30%, #6904ce 80%);
   margin: 1em;
   padding: 0 1em;
   border-radius: 5px;
@@ -341,7 +308,7 @@ input[type="submit"]:hover {
 }
 
 .fundo-branco > fa-icon {
-  margin: .5em;
+  margin: 0.5em;
   font-size: 2em;
 }
 

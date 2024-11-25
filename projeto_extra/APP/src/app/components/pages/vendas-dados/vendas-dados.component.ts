@@ -5,6 +5,7 @@ import { ComunicacaoService } from '../../../services/comunicacao.service';
 import { MensagensService } from '../../../services/mensagens.service';
 import { Funcionario } from '../../../interfaces/Funcionario';
 import { FuncionarioService } from '../../../services/funcionario.service';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vendas-dados',
@@ -22,6 +23,8 @@ export class VendasDadosComponent implements OnInit {
     valorTotal: number;
     comissao: number;
   } | null = null;
+
+  faSearch = faSearch;
 
   constructor(
     private vendaService: VendaService,

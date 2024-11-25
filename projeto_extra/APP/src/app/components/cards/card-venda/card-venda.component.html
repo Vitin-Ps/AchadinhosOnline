@@ -1,26 +1,49 @@
-<div class="card_venda"> 
-  <h2 class="nome">
-    <fa-icon [icon]="faUser"></fa-icon>
-    {{ nome }}
-  </h2>
-  <h2>
-    <fa-icon [icon]="faShoppingBag"></fa-icon>
-    {{ valorTotal | moedaReal }}
-  </h2>
-  <h2>
-    <fa-icon [icon]="faMoneyBill"></fa-icon>
-    {{ comissao | moedaReal }}
-  </h2>
-  <div class="acao">
-    <a routerLink="/vendas/edit/{{id}}"
-      ><button class="btn-padrao btn-acao">
-        <fa-icon [icon]="faEdit"></fa-icon>
-        Editar
-      </button></a
-    >
-    <button class="btn-padrao btn-acao" (click)="ativarBtnExcluir()">
-      <fa-icon [icon]="faTrashAlt"></fa-icon>
-      Excluir
-    </button>
+<div class="flex flex-col bg-gray100">
+  <div class="flex justify-between items-center p-5">
+    <h2 class="nome">
+      <fa-icon [icon]="faUser"></fa-icon>
+      {{ nome }}
+    </h2>
+    <h2>
+      <fa-icon [icon]="faShoppingBag"></fa-icon>
+      {{ valorTotal | moedaReal }}
+    </h2>
+    <h2>
+      <fa-icon [icon]="faMoneyBill"></fa-icon>
+      {{ comissao | moedaReal }}
+    </h2>
+    <div class="flex gap-5 justify-center items-center">
+      <a routerLink="/vendas/edit/{{ id }}">
+        <button class="btn-padrao btn-acao">
+          <fa-icon [icon]="faEdit"></fa-icon>
+        </button>
+      </a>
+      <button class="btn-padrao btn-acao" (click)="ativarBtnExcluir()">
+        <fa-icon [icon]="faTrashAlt"></fa-icon>
+      </button>
+      <span (click)="toggleDescricao()" class="cursor-pointer">
+        <!-- Ícone para expandir/recolher -->
+        <fa-icon [icon]="descricaoEstado === 'open' ? faChevronUp : faChevronDown"></fa-icon>
+      </span>
+    </div>
+  </div>
+  <!-- Div de descrição -->
+  <div
+    class="bg-gray200 transition-all duration-300 ease-in-out overflow-hidden"
+    [style]="{
+      maxHeight: descricaoEstado === 'open' ? '300px' : '0',
+      opacity: descricaoEstado === 'open' ? '1' : '0',     
+    }"
+  >
+    <div class="p-5">
+      <h2>Recibo:</h2>
+      <div *ngFor="let itemRecibo of recibo" class="flex fle-col gap-5">
+        <p>
+          <span class="font-bold">{{ itemRecibo.produto.nome }}</span> -
+          {{ itemRecibo.produto.valor | moedaReal }} X {{ itemRecibo.quantidade }} =
+          <span class="font-bold">{{ itemRecibo.valorTotal | moedaReal }}</span>
+        </p>
+      </div>
+    </div>
   </div>
 </div>

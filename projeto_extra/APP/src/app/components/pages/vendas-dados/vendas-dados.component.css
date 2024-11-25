@@ -1,8 +1,16 @@
 .vendas-dados-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
+}
+
+.filtros_container {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .filtro-venda-container {
@@ -19,23 +27,23 @@
 
 .filtro-venda-container select {
   min-width: 150px;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   border-radius: 5px;
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.080);
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.08);
 }
 
 .venda-total-container {
-  background-image: linear-gradient(to bottom, #B553F7, #9531E6, #6904CE);
+  background-image: linear-gradient(to bottom, #b553f7, #9531e6, #6904ce);
   border-radius: 5px;
   padding: 0 1em;
 }
 
 .venda-total-container .fundo-branco {
-  background-color: #FFF;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: .5em;
+  padding: 0.5em;
 }
 
 .venda-total-container .fundo-branco h3 {
@@ -43,7 +51,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: .5em 1em;
+  margin: 0.5em 1em;
   font-size: 1em;
   letter-spacing: 1.5px;
 }
@@ -52,7 +60,7 @@
   width: 85%;
   max-height: 500px;
   margin: 2em 0;
-  padding: .5em;
+  padding: 0.5em;
   padding-left: 2em;
-  border-radius: 5px; 
+  border-radius: 5px;
 }
