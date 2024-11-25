@@ -1,13 +1,59 @@
-<div class="container-personalizado-1">
-  <div class="cn-decoration area01"></div>
-  <div class="cn-decoration area02"></div>   
-  <div class="cn-conteudo">
-    <h2>Registrar <span>Venda</span></h2>
-    <app-form-venda
-      [btnEnviar]="btnText"
-      [type]="type"
-      [idUrl]="idUrl"
-      (onSubmit)="registrarVenda($event)"
-    ></app-form-venda>
+<div class="h-screen w-full flex flex-col items-center">
+  <h2 class="font-bold text-2xl">Registrar <span class="text-purple500">Venda</span></h2>
+  <div class="flex justify-between p-5 w-full">
+    <div class="flex gap-2 justify-start items-center">
+      <h2 class="font-bold text-xl">Selecione o funcionário:</h2>
+      <select
+        class="border-2 border-purple600 rounded-lg p-2 w-[200px]"
+        (change)="selecionarFuncionario($event)"
+      >
+        <option value="0" selected disabled>Selecione</option>
+        <option *ngFor="let funcionario of funcionarios" value="{{ funcionario.id }}">
+          {{ funcionario.nome }}
+        </option>
+      </select>
+    </div>
+    <div class="flex gap-5" *ngIf="idFuncionarioSelecionado != null">
+      <button class="btn-padrao" (click)="limparCarrinho($event)">Limpar Carrinho</button>
+      <a routerLink="/carrinho/{{ idFuncionarioSelecionado }}"
+        ><button class="btn-padrao">Editar Carrinho</button></a
+      >
+    </div>
+  </div>
+  <div class="p-5 w-full bg-gray200 h-screen flex flex-wrap items-start gap-5">
+    <div
+      class="w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white"
+      *ngFor="let itemCarrinho of itemsCarrinho"
+    >
+      <p>
+        <span class="font-bold">Nome: </span>
+        {{ itemCarrinho.produto.nome }}
+      </p>
+
+      <p>
+        <span class="font-bold">Valor: </span>
+        {{ itemCarrinho.produto.valor | moedaReal }}
+      </p>
+
+      <div class="flex flex-col gap-2">
+        <span class="font-bold">Quantidade: </span>
+        <select
+          class="border-2 border-purple600 rounded-lg p-2 w-[200px]"
+          (change)="alterarQuantidadeItem(itemCarrinho.id!, $event)"
+        >
+          <option value="0" selected disabled>Selecione</option>
+          <option
+            *ngFor="let i of [].constructor(itemCarrinho.quantidade); let index = index"
+            [value]="index + 1"
+            [selected]="index === itemCarrinho.quantidade - 1"
+          >
+            {{ index + 1 }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="p-5 w-full mt-auto flex gap-5" *ngIf="idFuncionarioSelecionado != null">
+    <button class="btn-padrao btn-invertido">Finalizar Carrinho</button>
   </div>
 </div>

@@ -45,7 +45,7 @@ export class FormVendaComponent implements OnInit {
       if (id && this.type === 'create') {
         this.idFuncionarioSelecionado = id;
         this.listarCarrinho(id).subscribe(itens => {
-          this.itensCarrinho = itens.content;
+          // this.itensCarrinho = itens.content;
           let valorTotal: number = 0;
           if (this.itensCarrinho) {
             this.itensCarrinho.forEach(item => {
@@ -93,19 +93,19 @@ export class FormVendaComponent implements OnInit {
   }
 
   selecionarFuncionario(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value;
-    this.idFuncionarioSelecionado = Number(value);
-    this.listarCarrinho(this.idFuncionarioSelecionado!).subscribe(itens => {
-      this.itensCarrinho = itens.content;
-      let valorTotal: number = 0;
-      if (this.itensCarrinho) {
-        this.itensCarrinho.forEach(item => {
-          valorTotal += item.produto.valor!;
-        });
-      }
-      this.valor.setValue(valorTotal);
-    });
+    // const target = e.target as HTMLInputElement;
+    // const value = target.value;
+    // this.idFuncionarioSelecionado = Number(value);
+    // this.listarCarrinho(this.idFuncionarioSelecionado!).subscribe(itens => {
+    //   this.itensCarrinho = itens.content;
+    //   let valorTotal: number = 0;
+    //   if (this.itensCarrinho) {
+    //     this.itensCarrinho.forEach(item => {
+    //       valorTotal += item.produto.valor!;
+    //     });
+    //   }
+    //   this.valor.setValue(valorTotal);
+    // });
   }
 
   limparCarrinho(e: Event) {

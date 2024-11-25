@@ -19,9 +19,9 @@ export class CarrinhoService {
       return this.http.post<CarrinhoEnvio[]>(this.apiUrl, items);
   }
 
-  listarItemsAllPorIdFuncionario(idFuncionario: number): Observable<Response<Carrinho[]>> {
+  listarItemsAllPorIdFuncionario(idFuncionario: number): Observable<Carrinho[]> {
     console.log(`${this.apiUrl}/${idFuncionario}`)
-    return this.http.get<Response<Carrinho[]>>(`${this.apiUrl}/${idFuncionario}`);
+    return this.http.get<Carrinho[]>(`${this.apiUrl}/${idFuncionario}`);
   }
 
   limparCarrinho(id: number) {

@@ -1,37 +1,24 @@
-<app-loading *ngIf="!loading; else form" />
-<ng-template #form>
-    <form (ngSubmit)="submit()" [formGroup]="vendaForm" #formDir="ngForm">
-        <input type="hidden" formControlName="id">
-        <div class="form-group">
-            <label for="funcionario">Funcionário:</label>
-            <ng-container *ngIf="funcionario == undefined; else comId">
-                <select formControlName="idFuncionario" (change)="selecionarFuncionario($event)">
-                    <option value="{{ null }}" selected disabled>Selecione</option>
-                    <option *ngFor="let funcionario of funcionarios" value="{{funcionario.id}}">{{funcionario.nome}}
-                    </option>
-                </select>
-            </ng-container>
-            <ng-template #comId>
-                <input type="text" value="{{funcionario!.nome}}" readonly>
-                <input type="hidden" formControlName="idFuncionario" readonly>
-            </ng-template>
-
-            <div *ngIf="idFuncionario.invalid && formDir.submitted" class="validation-error">
-                <p *ngIf="idFuncionario.errors?.['required']">Escolha um funcionário!</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="valor">Valor:</label>
-            <input type="number" formControlName="valor" readonly>
-            <div *ngIf="valor.invalid && formDir.submitted" class="validation-error">
-                <p *ngIf="valor.errors?.['required']">Valor é Obrigatório!</p>
-            </div>
-        </div>
-        <div class="btn-container" *ngIf="idFuncionarioSelecionado != null && type !== 'edit'">
-            <button class="btn-padrao btn-invertido" (click)="limparCarrinho($event)">Limpar Carrinho</button>
-            <a routerLink="/carrinho/{{idFuncionarioSelecionado}}"><button class="btn-padrao">Editar
-                    Carrinho</button></a>
-        </div>
-        <input type="submit" value="{{btnEnviar}}" />
-    </form>
-</ng-template>
+<app-loading *ngIf="!loading;" />
+<div #form class="bg-gray500 w-full p-5">
+  <input type="hidden" formControlName="id" />
+  <div class="flex gap-2 justify-start items-center w-full bg-purple100">
+    <h2 class="font-bold text-xl">Selecione o funcionário:</h2>
+    <select
+      (change)="selecionarFuncionario($event)"
+      class="border-2 border-purple600 rounded-lg p-2 w-[200px]"
+    >
+      <option value="0" selected disabled>Selecione</option>
+      <option *ngFor="let funcionario of funcionarios" value="{{ funcionario.id }}">
+        {{ funcionario.nome }}
+      </option>
+    </select>
+  </div>
+  <div class="btn-container" *ngIf="idFuncionarioSelecionado != null && type !== 'edit'">
+    <button class="btn-padrao btn-invertido" (click)="limparCarrinho($event)">
+      Limpar Carrinho
+    </button>
+    <a routerLink="/carrinho/{{ idFuncionarioSelecionado }}"
+      ><button class="btn-padrao">Editar Carrinho</button></a
+    >
+  </div>
+</div>

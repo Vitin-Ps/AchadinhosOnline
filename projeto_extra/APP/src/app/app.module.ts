@@ -42,6 +42,7 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { Interceptor } from './interceptor/Interserptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './components/loading/loading.component';
+import { CardItemCarrinhoComponent } from './components/cards/card-item-carrinho/card-item-carrinho.component';
 
 const serviceAutentica = [Interceptor];
 
@@ -79,6 +80,7 @@ const serviceAutentica = [Interceptor];
     CicloVidaComponent,
     LoginComponent,
     LoadingComponent,
+    CardItemCarrinhoComponent,
   ],
   imports: [
     HttpClientModule,
