@@ -126,8 +126,7 @@ export class ProdDadosComponent implements OnInit {
     });
   }
 
-  chamarComfirm(produto: Produto) {
-    console.log('cheguei');
+  chamarComfirm(produto: Produto) {   
     this.mensagemService.confirm(
       `Tem certeza que quer excluir \n ${produto.nome} - ${FuncionalidadesExtrasService.moedaReal(
         produto.valor

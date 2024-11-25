@@ -1,17 +1,29 @@
-<div class="fundo-branco-container">
-  <div class="filtro-container">
-    <h2><span>Busque</span> pelo Funcionário:</h2>
-    <input type="text" (input)="pesquisar($event)" />
+<div class="flex flex-col items-center gap-5 h-screen">
+  <div
+    class="flex justify-between w-full items-center p-5 shadow-[10px_10px_20px] shadow-shadow200"
+  >
+    <div class="flex gap-5 items-center">
+      <h2 class="text-xl"><span class="text-purple400">Busque</span> pelo funcionario:</h2>
+      <input
+        type="text"
+        (input)="searchInput($event)"
+        class="p-2 text-lg border-2 border-purple500 rounded-md"
+      />
+    </div>
+    <div class="flex gap-5" *ngIf="funcionario != null && funcionario.selecionado == true">
+      <a routerLink="/funcionarios/{{ funcionario.id! }}"
+        ><button class="btn-padrao btn-acao"><fa-icon [icon]="faEdit" /> Editar</button></a
+      >
+      <button class="btn-padrao btn-acao" (click)="chamarComfirm(funcionario)">
+        <fa-icon [icon]="faTrashAlt" /> Excluir
+      </button>
+    </div>
   </div>
-  <div class="acao" *ngIf="funcionario != null && funcionario.selecionado == true">
-    <a routerLink="/funcionarios/{{ funcionario.id! }}"
-      ><button class="btn-padrao btn-acao"><fa-icon [icon]="faEdit" /> Editar</button></a
-    >
-    <button class="btn-padrao btn-acao" (click)="chamarComfirm(funcionario)">
-      <fa-icon [icon]="faTrashAlt" /> Excluir
-    </button>
-  </div>
-  <div class="cards-container scroll-bar" #cardsContainer>
+  <div
+    class="w-[90%] p-5 flex flex-wrap justify-start items-center gap-5 scroll-bar"
+    #cardsContainer
+    *ngIf="funcionarios"
+  >
     <app-card-func
       *ngFor="let funcionario of funcionarios"
       [nome]="funcionario.nome"
@@ -21,9 +33,31 @@
       (click)="selecionarCard(funcionario)"
     />
   </div>
-  <div class="paginacao-container">
-    <button class="btn-padrao btn-invertido" (click)="mudarPagina(false)">Anterior</button>
-    <h3>Página {{ pageNumber }}</h3>
-    <button class="btn-padrao btn-invertido" (click)="mudarPagina(true)">Próxima</button>
+  <div class="p-5 w-full mt-auto flex gap-5" *ngIf="numPaginasArray.length > 0">
+    <div
+      *ngIf="numPaginas > paginasPorGrupo && grupoAtual > 1"
+      class="bg-purple100 w-10 h-10 flex justify-center items-center font-bold text-xl rounded-[50%] cursor-pointer hover:bg-purple300 hover:text-white duration-300"
+      (click)="alterarPaginacao(false)"
+    >
+      ...
+    </div>
+    <div *ngFor="let numPagina of numPaginasArray">
+      <div
+        class=" w-10 h-10 flex justify-center items-center font-bold text-xl rounded-[50%] cursor-pointer hover:bg-purple300 hover:text-white duration-300 {{
+          numPagina.selected ? 'bg-purple300 text-white' : 'bg-purple100 text-black'
+        }}"
+        (click)="selecionarPagina(numPagina.numPagina)"
+      >
+        {{ numPagina.numPagina }}
+      </div>
+    </div>
+
+    <div
+      *ngIf="numPaginas > paginasPorGrupo && grupoAtual * paginasPorGrupo < numPaginas"
+      class="bg-purple100 w-10 h-10 flex justify-center items-center font-bold text-xl rounded-[50%] cursor-pointer hover:bg-purple300 hover:text-white duration-300"
+      (click)="alterarPaginacao(true)"
+    >
+      ...
+    </div>
   </div>
 </div>

@@ -1,15 +1,18 @@
-<div class="message" *ngIf="mensagensService.mensagem">
-  <!-- <div class="message"> -->
-  <p>{{ mensagensService.mensagem }}</p>
+<div
+  class="fixed top-10 w-[50%] left-[50%] translate-x-[-50%] bg-white shadow-2xl p-5 flex flex-col justify-between items-center z-50 gap-10"
+  *ngIf="mensagensService.mensagem"
+>
+  <p class="text-black text-lg text-left w-full">{{ mensagensService.mensagem }}</p>
   <ng-container *ngIf="mensagensService.type == 'alert'">
-    <button class="clear" (click)="mensagensService.clear()">
+    <button
+      class="bg-transparent border-none cursor-pointer text-lg text-purple500 duration-200 hover:text-xl absolute top-5 right-5"
+      (click)="mensagensService.clear()"
+    >
       <fa-icon [icon]="faTimes"></fa-icon>
     </button>
   </ng-container>
-  <div class="confirm" *ngIf="mensagensService.type == 'confirm'">
-    <button class="btn-padrao" (click)="acaoConfirm(true)">Comfirmar</button>
-    <button class="btn-padrao btn-invertido" (click)="acaoConfirm(false)">
-      Cancelar
-    </button>
+  <div class="flex gap-5 w-full justify-end" *ngIf="mensagensService.type == 'confirm'">
+    <button class="btn-padrao" (click)="acaoConfirm(true)">Confirmar</button>
+    <button class="btn-padrao btn-invertido" (click)="acaoConfirm(false)">Cancelar</button>
   </div>
 </div>

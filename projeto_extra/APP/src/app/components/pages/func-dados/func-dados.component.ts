@@ -15,15 +15,21 @@ import { Venda } from '../../../interfaces/Venda';
 })
 export class FuncDadosComponent {
   allFuncionarios: Funcionario[] = [];
+  allFuncionariosFiltrado: Funcionario[] = [];
   funcionarios: Funcionario[] = [];
   vendas!: Venda[];
   funcionario!: Funcionario | null;
-  pageNumber: number = 0;
-  totalPages!: number;
   @ViewChild('cardsContainer') cardsContainer!: ElementRef;
 
   faTrashAlt = faTrashAlt;
   faEdit = faEdit;
+
+  registrosPorPagina = 15;
+  numPaginas = 0;
+  numPaginasArray: { numPagina: number; selected: boolean }[] = [];
+  pageAtual = 1;
+  grupoAtual: number = 1;
+  paginasPorGrupo = 5;
 
   constructor(
     private funcionarioService: FuncionarioService,
@@ -39,6 +45,72 @@ export class FuncDadosComponent {
     this.comunicacaoService.emitFunction.subscribe(() => {
       if (this.funcionario != null) this.removerFuncionario();
     });
+  }
+
+  gerarPaginacao() {
+    this.grupoAtual = 1;
+    this.atualizarPaginacao();
+  }
+
+  atualizarPaginacao() {
+    const inicioPaginacao: number = (this.grupoAtual - 1) * this.paginasPorGrupo + 1;
+    const fimPaginacao: number = Math.min(this.grupoAtual * this.paginasPorGrupo, this.numPaginas);
+
+    this.numPaginasArray = [];
+    for (let i = inicioPaginacao; i <= fimPaginacao; i++) {
+      this.numPaginasArray.push({ numPagina: i, selected: false });
+    }
+
+    this.numPaginasArray.forEach(cardPaginacao => {
+      if (cardPaginacao.numPagina === this.pageAtual) cardPaginacao.selected = true;
+    });
+  }
+
+  alterarPaginacao(acao: boolean) {
+    if (acao) this.grupoAtual++;
+    else this.grupoAtual--;
+
+    this.atualizarPaginacao();
+  }
+
+  selecionarPagina(idPagina: number) {
+    this.numPaginasArray.forEach(numPagina => {
+      numPagina.selected = false;
+
+      if (numPagina.numPagina === idPagina) numPagina.selected = true;
+    });
+
+    this.pageAtual = idPagina;
+
+    this.funcionarios = this.filtraListaFuncionario(this.allFuncionariosFiltrado);
+  }
+
+  searchInput(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const text = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
+
+    this.funcionarios = this.allFuncionariosFiltrado.filter(funcionario => {
+      const numeroValido = !isNaN(Number(text));
+      const idIgual = numeroValido && funcionario.id === Number(text);
+      const nomeIgual = FuncionalidadesExtrasService.removerAcentuacoes(funcionario.nome).includes(
+        text
+      );
+
+      return idIgual || nomeIgual;
+    });
+
+    this.numPaginas = Math.ceil(this.funcionarios.length / this.registrosPorPagina);
+
+    this.funcionarios = this.filtraListaFuncionario(this.funcionarios);
+    this.gerarPaginacao();
+  }
+
+  filtraListaFuncionario(produtoFiltro: Funcionario[]): Funcionario[] {
+    return produtoFiltro.filter(
+      (_, index) =>
+        index >= this.registrosPorPagina * (this.pageAtual - 1) &&
+        index < this.registrosPorPagina * this.pageAtual
+    );
   }
 
   selecionarCard(funcionarioSelecionado: Funcionario) {
@@ -78,9 +150,12 @@ export class FuncDadosComponent {
   listarFuncionarios(page: number, numDados: number) {
     this.funcionarioService.listarFuncionariosPage(page, numDados, 'nome').subscribe(item => {
       this.allFuncionarios = item.content;
-      this.funcionarios = item.content;
-      this.pageNumber = item.pageable?.pageNumber! + 1;
-      this.totalPages = item.totalPages!;
+      this.allFuncionariosFiltrado = item.content;
+      this.funcionarios = this.filtraListaFuncionario(this.allFuncionariosFiltrado);
+
+      this.numPaginas = Math.ceil(item.content.length / this.registrosPorPagina);
+
+      this.gerarPaginacao();
     });
     this.funcionario = null;
   }
@@ -95,14 +170,10 @@ export class FuncDadosComponent {
     let comissao = 0;
     if (this.vendas != null && this.vendas.length !== 0) {
       this.vendas.forEach(venda => {
-        if (id === venda.funcionario.id) comissao += venda.comissao!;
+        if (id === venda.funcionario.id)
+          comissao += venda.valorTotal * (venda.funcionario.porcentagem / 100);
       });
     }
     return comissao;
-  }
-
-  mudarPagina(pageAcao: boolean) {
-    if (pageAcao && this.totalPages > this.pageNumber) this.listarFuncionarios(this.pageNumber, 9);
-    else if (!pageAcao && this.pageNumber != 1) this.listarFuncionarios(this.pageNumber - 2, 9);
   }
 }
