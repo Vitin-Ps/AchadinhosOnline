@@ -7,6 +7,7 @@ import {
   faShoppingBag,
   faTrashAlt,
   faUser,
+  faUserTie,
 } from '@fortawesome/free-solid-svg-icons';
 import { Recibo } from '../../../interfaces/Recibo';
 import { VendaService } from '../../../services/venda.service';
@@ -19,13 +20,15 @@ import { VendaService } from '../../../services/venda.service';
 export class CardVendaComponent {
   @Output() emitFunction = new EventEmitter<void>();
   @Input() id: number | undefined = undefined;
-  @Input() nome: string = '';
+  @Input() nomeCliente: string = '';
+  @Input() nomeFuncionario: string = '';
   @Input() valorTotal: number = 0;
   @Input() comissao: number = 0;
 
   recibo: Recibo[] = [];
 
   faUser = faUser;
+  faUserTie = faUserTie;
   faShoppingBag = faShoppingBag;
   faMoneyBill = faMoneyBill;
   faEdit = faEdit;

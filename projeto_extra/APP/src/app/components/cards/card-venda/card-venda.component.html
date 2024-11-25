@@ -1,8 +1,15 @@
-<div class="flex flex-col bg-gray100">
+<div class="flex flex-col bg-gray100 border-b-2 border-gray300">
   <div class="flex justify-between items-center p-5">
-    <h2 class="nome">
+    <h2>
+      {{ id }}
+    </h2>
+    <h2>
       <fa-icon [icon]="faUser"></fa-icon>
-      {{ nome }}
+      {{ nomeCliente }}
+    </h2>
+    <h2>
+      <fa-icon [icon]="faUserTie"></fa-icon>
+      {{ nomeFuncionario }}
     </h2>
     <h2>
       <fa-icon [icon]="faShoppingBag"></fa-icon>

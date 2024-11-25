@@ -1,9 +1,5 @@
 module.exports = {
-  content: [
-    './src/**/*.{js,ts}',
-    './src/**/*.html',  
-    './src/styles/**/*.css',
-  ],
+  content: ['./src/**/*.{js,ts}', './src/**/*.html', './src/styles/**/*.css'],
   important: true,
   theme: {
     screens: {
@@ -15,44 +11,44 @@ module.exports = {
     },
     colors: {
       // Tons neutros (cinzas e brancos)
-      gray100: '#f7f7f7', 
+      gray100: '#f7f7f7',
       gray200: '#efefef',
       gray300: '#d9d9d9',
       gray400: '#8a8a8a',
-      gray500: '#333333', 
-      white: '#ffffff', 
-      black: '#000000', 
+      gray500: '#333333',
+      white: '#ffffff',
+      black: '#000000',
 
       // Tons de roxo
-      purple100: '#f3e9ff', 
+      purple100: '#f3e9ff',
       purple200: '#d953f7',
       purple300: '#c353f7',
       purple400: '#8056ff',
       purple500: '#6700ac',
       purple600: '#6904ce',
-      purpleTransparent: '#8036b2a1', 
+      purpleTransparent: '#8036b2a1',
 
       // Tons de azul
-      blue100: '#e0f4ff', 
+      blue100: '#e0f4ff',
       blue200: '#90dfff',
-      blue300: '#1fb6ff', 
-      blue400: '#0b87cc', 
+      blue300: '#1fb6ff',
+      blue400: '#0b87cc',
 
       // Tons de vermelho
-      red100: '#ffe5e5', 
+      red100: '#ffe5e5',
       red200: '#ff7a7a',
-      red300: '#db0c00', 
-      red400: '#990000', 
+      red300: '#db0c00',
+      red400: '#990000',
 
       // Tons de verde
-      green100: '#eaffec', 
+      green100: '#eaffec',
       green200: '#a8f7c1',
-      green300: '#1ddc67', 
-      green400: '#128a45', 
+      green300: '#1ddc67',
+      green400: '#128a45',
 
       // Tons de rosa
-      pink100: '#ffe3f4', 
-      pink200: '#ff49db', 
+      pink100: '#ffe3f4',
+      pink200: '#ff49db',
 
       // Outros tons
       orange100: '#ffe5d1',
@@ -61,16 +57,15 @@ module.exports = {
       yellow200: '#ffc82c',
 
       // Sombras e transparências
-      shadow100: '#ffffff26', 
-      shadow200: '#00000015', 
-      shadow300: '#00000035', 
+      shadow100: '#ffffff26',
+      shadow200: '#00000015',
+      shadow300: '#00000035',
 
       // Extras
       transparent: '#00000000',
     },
 
-    fontFamily: {  
-    },
+    fontFamily: {},
     extend: {
       spacing: {
         128: '32rem',
@@ -80,7 +75,7 @@ module.exports = {
         '4xl': '2rem',
       },
       backgroundImage: {
-        // 'marca-d-agua': "url('../SVG/MarcaDagua.svg')",       
+        degrade_purple_r: 'linear-gradient(to right, #d953f7 , #8B5CF6 30%, #7C3AED 90%)',
       },
     },
     keyframes: {
