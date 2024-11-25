@@ -111,9 +111,7 @@ export class VendasDadosComponent implements OnInit {
   }
 
   listarFuncionarios() {
-    this.funcionarioService
-      .listarFuncionariosAll()
-      .subscribe(res => (this.funcionarios = res.content));
+    this.funcionarioService.listarFuncionariosAll().subscribe(res => (this.funcionarios = res));
   }
 
   listarVendas() {

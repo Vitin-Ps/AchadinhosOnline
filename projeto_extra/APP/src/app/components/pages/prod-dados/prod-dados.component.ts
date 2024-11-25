@@ -42,7 +42,7 @@ export class ProdDadosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.listarProdutos(0, 9);
+    this.listarProdutos();
 
     this.comunicacaoService.emitFunction.subscribe(() => {
       if (this.produto != null) this.removerProduto();
@@ -140,13 +140,13 @@ export class ProdDadosComponent implements OnInit {
     });
   }
 
-  listarProdutos(page: number, numDados: number) {
-    this.produtoService.listarProdutosPage(page, numDados, 'nome').subscribe(item => {
-      this.allProdutos = item.content;
-      this.allProdutosFiltrado = item.content;
+  listarProdutos() {
+    this.produtoService.listarProdutosAll().subscribe(item => {
+      this.allProdutos = item;
+      this.allProdutosFiltrado = item;
       this.produtos = this.filtraListaProduto(this.allProdutosFiltrado);
 
-      this.numPaginas = Math.ceil(item.content.length / this.registrosPorPagina);
+      this.numPaginas = Math.ceil(item.length / this.registrosPorPagina);
 
       this.gerarPaginacao();
     });

@@ -39,7 +39,7 @@ export class FuncDadosComponent {
   ) {}
 
   ngOnInit(): void {
-    this.listarFuncionarios(0, 9);
+    this.listarFuncionarios();
     this.listarVendas();
 
     this.comunicacaoService.emitFunction.subscribe(() => {
@@ -147,13 +147,13 @@ export class FuncDadosComponent {
     });
   }
 
-  listarFuncionarios(page: number, numDados: number) {
-    this.funcionarioService.listarFuncionariosPage(page, numDados, 'nome').subscribe(item => {
-      this.allFuncionarios = item.content;
-      this.allFuncionariosFiltrado = item.content;
+  listarFuncionarios() {
+    this.funcionarioService.listarFuncionariosAll().subscribe(item => {
+      this.allFuncionarios = item;
+      this.allFuncionariosFiltrado = item;
       this.funcionarios = this.filtraListaFuncionario(this.allFuncionariosFiltrado);
 
-      this.numPaginas = Math.ceil(item.content.length / this.registrosPorPagina);
+      this.numPaginas = Math.ceil(item.length / this.registrosPorPagina);
 
       this.gerarPaginacao();
     });

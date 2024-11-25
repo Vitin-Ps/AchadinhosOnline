@@ -17,21 +17,25 @@ export class ProdutoService {
     return this.http.post<Produto>(this.apiUrl, produto);
   }
 
-  listarProdutosPage(
-    page: number,
-    pageSize: number,
-    sort: string
-  ): Observable<Response<Produto[]>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', pageSize.toString())
-      .set('sort', sort);
+  // listarProdutosPage(
+  //   page: number,
+  //   pageSize: number,
+  //   sort: string
+  // ): Observable<Response<Produto[]>> {
+  //   const params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('size', pageSize.toString())
+  //     .set('sort', sort);
 
-    return this.http.get<Response<Produto[]>>(this.apiUrl, { params });
+  //   return this.http.get<Response<Produto[]>>(this.apiUrl, { params });
+  // }
+
+  listarProdutosAll(): Observable<Produto[]> {
+    return this.http.get<Produto[]>(this.apiUrl);
   }
 
-  listarProdutosAll(): Observable<Response<Produto[]>> {
-    return this.http.get<Response<Produto[]>>(this.apiUrl);
+  listarProdutosCarrinhoAll(): Observable<Produto[]> {
+    return this.http.get<Produto[]>(`${this.apiUrl}/carrinho`);
   }
 
   excluirProdutoLogico(id: number) {

@@ -1,6 +1,7 @@
 export interface Produto {
-    id?: number;
-    nome: string;
-    valor: number;    
-    selecionado?: boolean
+  id?: number;
+  nome: string;
+  valor: number;
+  quantidade?: number;
+  selecionado?: boolean;
 }

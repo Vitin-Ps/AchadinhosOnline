@@ -1,1 +1,41 @@
-<p>card-item-carrinho works!</p>
+<div
+  class="w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white flex flex-col gap-3"
+>
+  <p>
+    <span class="font-bold">Nome: </span>
+    {{ nome }}
+  </p>
+
+  <p>
+    <span class="font-bold">Valor: </span>
+    {{ valor | moedaReal }}
+  </p>
+
+  <div class="flex flex-col gap-2">
+    <span class="font-bold">Quantidade: </span>
+    <select
+      class="border-2 border-purple600 rounded-lg p-2 w-full"
+      (change)="alterarQuantidadeItem(id, $event)"
+    >
+      <option value="0" selected disabled>Selecione</option>
+      <option
+        *ngFor="let i of [].constructor(quantidade); let index = index"
+        [value]="index + 1"
+        [selected]="index === 0"
+      >
+        {{ index + 1 }}
+      </option>
+    </select>
+  </div>
+  <button
+    *ngIf="quantidade > 0; else esgotado;"
+    class="btn-padrao btn-acao w-full"
+    (click)="addCarrinho()"
+  >
+    Adicionar no carrinho
+  </button>
+
+  <ng-template #esgotado>
+    <p class="font-bold text-gray300">Produto esgotado</p>
+  </ng-template>
+</div>

@@ -71,7 +71,7 @@ export class CadVendaComponent implements OnInit {
 
   listarFuncionarios() {
     this.funcionarioService.listarFuncionariosAll().subscribe(res => {
-      this.funcionarios = res.content;
+      this.funcionarios = res;
     });
   }
 

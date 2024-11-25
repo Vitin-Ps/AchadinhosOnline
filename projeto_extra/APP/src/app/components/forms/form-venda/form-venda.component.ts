@@ -40,7 +40,7 @@ export class FormVendaComponent implements OnInit {
     this.loading = false;
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.funcionarioService.listarFuncionariosAll().subscribe(item => {
-      this.funcionarios = item.content;
+      this.funcionarios = item;
       this.validaForm();
       if (id && this.type === 'create') {
         this.idFuncionarioSelecionado = id;

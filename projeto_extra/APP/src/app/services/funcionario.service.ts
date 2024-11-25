@@ -14,24 +14,24 @@ export class FuncionarioService {
 
   constructor(private http: HttpClient) {}
 
-  registraFuncionario(funcionario: Funcionario): Observable<Funcionario> {    
+  registraFuncionario(funcionario: Funcionario): Observable<Funcionario> {
     return this.http.post<Funcionario>(this.apiUrl, funcionario);
   }
 
-  listarFuncionariosPage(
-    page: number,
-    pageSize: number,
-    sort: string
-  ): Observable<Response<Funcionario[]>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', pageSize.toString())
-      .set('sort', sort);
-    return this.http.get<Response<Funcionario[]>>(this.apiUrl, { params });
-  }
+  // listarFuncionariosPage(
+  //   page: number,
+  //   pageSize: number,
+  //   sort: string
+  // ): Observable<Response<Funcionario[]>> {
+  //   const params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('size', pageSize.toString())
+  //     .set('sort', sort);
+  //   return this.http.get<Response<Funcionario[]>>(this.apiUrl, { params });
+  // }
 
-  listarFuncionariosAll(): Observable<Response<Funcionario[]>> {
-    return this.http.get<Response<Funcionario[]>>(this.apiUrl);
+  listarFuncionariosAll(): Observable<Funcionario[]> {
+    return this.http.get<Funcionario[]>(this.apiUrl);
   }
 
   excluirFuncionarioLogico(id: number) {

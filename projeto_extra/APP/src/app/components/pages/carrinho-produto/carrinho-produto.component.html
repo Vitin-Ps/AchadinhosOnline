@@ -1,20 +1,31 @@
-<div class="container-personalizado-1">
-  <div class="cn-decoration area01"></div>
-  <div class="cn-decoration area02"></div>
-  <div class="cn-conteudo">
-    <div class="header">
-      <h2>Selecione o seu <span>Produto</span></h2>
-      <div class="search-container">
-        <form>
-          <fa-icon [icon]="faSearch"></fa-icon>
-          <input type="text" placeholder="Qual item você deseja?" (input)="procurar($event)" />
-        </form>
-      </div>
+<div class="bg-gray200 w-full h-screen flex flex-col items-center">
+  <h2 class="font-semibold text-xl">Selecione o seu <span class="text-purple500">Produto</span></h2>
+  <div class="bg-purple100 w-full flex justify-start p-5">
+    <div
+      class="relative flex justify-center items-center border-2 border-purple400 rounded-md overflow-hidden w-[300px]"
+    >
+      <span class="absolute top-3 right-2">
+        <fa-icon [icon]="faSearch"></fa-icon>
+      </span>
+      <input
+        class="p-2 text-lg w-full"
+        type="text"
+        placeholder="Qual item você deseja?"
+        (input)="procurar($event)"
+      />
     </div>
-    <div class="produtos-container scroll-bar">
-      <app-card-prod *ngFor="let produto of produtos" (click)="selecionarProduto(produto)"
-        [selecionado]="produto.selecionado!" [nome]="produto.nome" [valor]="produto.valor" />
-    </div>
-    <input type="submit" value="Finalizar" (click)="onSubmit()" />
+  </div>
+  <div class="p-5 w-full flex flex-wrap gap-5 h-screen scroll-bar">
+    <app-card-item-carrinho
+      *ngFor="let produto of produtos"
+      [nome]="produto.nome"
+      [valor]="produto.valor"
+      [quantidade]="produto.quantidade!"
+      [funcionarioId]="idFuncionario"
+      [produtoId]="produto.id!"
+    ></app-card-item-carrinho>
+  </div>
+  <div class="p-5 w-full mt-auto flex gap-5">
+    <button class="btn-padrao btn-invertido">Finalizar Carrinho</button>
   </div>
 </div>

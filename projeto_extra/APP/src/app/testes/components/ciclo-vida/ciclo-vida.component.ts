@@ -39,10 +39,7 @@ export class CicloVidaComponent
   produto!: Produto;
   prodForm!: FormGroup;
 
-  constructor(
-    private produtosService: ProdutoService,
-    private funcService: FuncionarioService
-  ) {}
+  constructor(private produtosService: ProdutoService, private funcService: FuncionarioService) {}
   ngOnDestroy(): void {
     // console.log('ngOnDestroy');
   }
@@ -70,8 +67,8 @@ export class CicloVidaComponent
       console.log('Entrou no produtos');
       this.produto = this.allProdutos[0];
     }
-      console.log('Entrou no Valida');
-      this.validaForm();
+    console.log('Entrou no Valida');
+    this.validaForm();
     console.log(this.produtos);
     console.log('---------------------------');
   }
@@ -104,14 +101,14 @@ export class CicloVidaComponent
   }
 
   async listarProdutos(): Promise<void> {
-    await this.produtosService.listarProdutosAll().subscribe((item) => {
-      this.allProdutos = item.content;
+    await this.produtosService.listarProdutosAll().subscribe(item => {
+      this.allProdutos = item;
     });
   }
 
   listarFuncionarios() {
-    this.funcService.listarFuncionariosAll().subscribe((item) => {
-      this.allFuncionarios = item.content;
+    this.funcService.listarFuncionariosAll().subscribe(item => {
+      this.allFuncionarios = item;
     });
   }
 
@@ -124,7 +121,7 @@ export class CicloVidaComponent
   async listarProdutos2(): Promise<Produto[]> {
     try {
       const item = await this.produtosService.listarProdutosAll().toPromise();
-      return item!.content;
+      return item!;
     } catch (error) {
       // Tratar erro, se necessário
       console.error('Erro ao listar produtos:', error);

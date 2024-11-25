@@ -32,8 +32,8 @@ export class CarrinhoProdutoComponent implements OnInit {
 
   ngOnInit(): void {
     this.idFuncionario = Number(this.route.snapshot.paramMap.get('id'));
-    this.produtoService.listarProdutosAll().subscribe((response) => {
-      const data = response.content;
+    this.produtoService.listarProdutosCarrinhoAll().subscribe(response => {
+      const data = response;
       this.allProdutos = data;
       this.produtos = data;
     });
@@ -43,10 +43,8 @@ export class CarrinhoProdutoComponent implements OnInit {
     const target = e.target as HTMLInputElement;
     const value = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
 
-    this.produtos = this.allProdutos.filter((produto) => {
-      const nome = FuncionalidadesExtrasService.removerAcentuacoes(
-        produto.nome
-      );
+    this.produtos = this.allProdutos.filter(produto => {
+      const nome = FuncionalidadesExtrasService.removerAcentuacoes(produto.nome);
       return nome.includes(value);
     });
   }
@@ -56,25 +54,21 @@ export class CarrinhoProdutoComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.produtosSelecionados = this.produtos.filter(
-      (produto) => produto.selecionado
-    );
+    this.produtosSelecionados = this.produtos.filter(produto => produto.selecionado);
     if (this.idFuncionario != null) {
       console.log(this.itemsCarrinho);
-      this.produtosSelecionados.forEach((produto) => {
+      this.produtosSelecionados.forEach(produto => {
         const carrinho: CarrinhoEnvio = {
           funcionarioId: this.idFuncionario!,
           produtoId: Number(produto.id),
         };
         this.itemsCarrinho.push(carrinho);
       });
-      this.carrinhoService
-        .addItemNoCarrinho(this.itemsCarrinho)
-        .subscribe(() => {
-          this.router.navigate([`/vendas/${this.idFuncionario}`]).then(() => {
-            window.location.reload();
-          });
+      this.carrinhoService.addItemNoCarrinho(this.itemsCarrinho).subscribe(() => {
+        this.router.navigate([`/vendas/${this.idFuncionario}`]).then(() => {
+          window.location.reload();
         });
+      });
     } else {
       this.mensagemService.alert('Id do Funcionário não foi passado!');
     }
