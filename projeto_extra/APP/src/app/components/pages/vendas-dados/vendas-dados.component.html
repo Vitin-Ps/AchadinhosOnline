@@ -29,7 +29,7 @@
     </div>
     <div
       class="bg-degrade_purple_r px-5 rounded-xl shadow-2xl"
-      *ngIf="totalVendasDoFuncionario !== null"
+      *ngIf="vendas.length > 0"
     >
       <div class="bg-white p-5 flex gap-5">
         <h3 class="flex flex-col items-center text-md">
@@ -61,8 +61,7 @@
   <ng-template #noVendas>
     <p>Não há vendas registradas.</p>
   </ng-template>
-
-  <!-- Elemento alinhado ao final -->
+ 
   <div class="p-5 w-full mt-auto flex gap-5" *ngIf="numPaginasArray.length > 0">
     <div
       *ngIf="numPaginas > paginasPorGrupo && grupoAtual > 1"

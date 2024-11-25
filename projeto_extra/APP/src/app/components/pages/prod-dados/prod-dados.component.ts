@@ -21,47 +21,102 @@ import { ComunicacaoService } from '../../../services/comunicacao.service';
 })
 export class ProdDadosComponent implements OnInit {
   allProdutos: Produto[] = [];
+  allProdutosFiltrado: Produto[] = [];
   produtos: Produto[] = [];
-  shaded: boolean = false;
   produto!: Produto | null;
-  pageNumber: number = 0;
-  totalPages!: number;
-  @ViewChild('cardsContainer') cardsContainer!: ElementRef;
 
   faTrashAlt = faTrashAlt;
   faEdit = faEdit;
 
+  registrosPorPagina = 15;
+  numPaginas = 0;
+  numPaginasArray: { numPagina: number; selected: boolean }[] = [];
+  pageAtual = 1;
+  grupoAtual: number = 1;
+  paginasPorGrupo = 5;
+
   constructor(
     private produtoService: ProdutoService,
-    // private funcionalidades: FuncionalidadesExtrasService,
     private mensagemService: MensagensService,
-    private comunicacaoService: ComunicacaoService,
+    private comunicacaoService: ComunicacaoService
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    await this.listarProdutos(0, 9);
-    setTimeout(() => {
-      this.verificarAltura();
-    }, 100);
+  ngOnInit(): void {
+    this.listarProdutos(0, 9);
 
-    await this.comunicacaoService.emitFunction.subscribe(() => {
+    this.comunicacaoService.emitFunction.subscribe(() => {
       if (this.produto != null) this.removerProduto();
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.verificarAltura();
+  gerarPaginacao() {
+    this.grupoAtual = 1;
+    this.atualizarPaginacao();
   }
 
-  verificarAltura() {
-    const cardsContainer = this.cardsContainer.nativeElement;
-    if (cardsContainer.offsetHeight > 500) this.shaded = true;
-    else this.shaded = false;
+  atualizarPaginacao() {
+    const inicioPaginacao: number = (this.grupoAtual - 1) * this.paginasPorGrupo + 1;
+    const fimPaginacao: number = Math.min(this.grupoAtual * this.paginasPorGrupo, this.numPaginas);
+
+    this.numPaginasArray = [];
+    for (let i = inicioPaginacao; i <= fimPaginacao; i++) {
+      this.numPaginasArray.push({ numPagina: i, selected: false });
+    }
+
+    this.numPaginasArray.forEach(cardPaginacao => {
+      if (cardPaginacao.numPagina === this.pageAtual) cardPaginacao.selected = true;
+    });
+  }
+
+  alterarPaginacao(acao: boolean) {
+    if (acao) this.grupoAtual++;
+    else this.grupoAtual--;
+
+    this.atualizarPaginacao();
+  }
+
+  selecionarPagina(idPagina: number) {
+    this.numPaginasArray.forEach(numPagina => {
+      numPagina.selected = false;
+
+      if (numPagina.numPagina === idPagina) numPagina.selected = true;
+    });
+
+    this.pageAtual = idPagina;
+
+    this.produtos = this.filtraListaProduto(this.allProdutosFiltrado);
+  }
+
+  searchInput(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const text = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
+
+    this.produtos = this.allProdutosFiltrado.filter(produto => {
+      const numeroValido = !isNaN(Number(text));
+      const idIgual = numeroValido && produto.id === Number(text);
+      const nomeIgual = FuncionalidadesExtrasService.removerAcentuacoes(produto.nome).includes(
+        text
+      );
+
+      return idIgual || nomeIgual;
+    });
+
+    this.numPaginas = Math.ceil(this.produtos.length / this.registrosPorPagina);
+
+    this.produtos = this.filtraListaProduto(this.produtos);
+    this.gerarPaginacao();
+  }
+
+  filtraListaProduto(produtoFiltro: Produto[]): Produto[] {
+    return produtoFiltro.filter(
+      (_, index) =>
+        index >= this.registrosPorPagina * (this.pageAtual - 1) &&
+        index < this.registrosPorPagina * this.pageAtual
+    );
   }
 
   selecionarCard(produtoSelecionado: Produto) {
-    this.produtos.forEach((produto) => {
+    this.produtos.forEach(produto => {
       if (produto.id === produtoSelecionado.id) {
         produto.selecionado = !produto.selecionado;
       } else {
@@ -71,54 +126,31 @@ export class ProdDadosComponent implements OnInit {
     });
   }
 
-  pesquisar(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const valor = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
-    console.log(valor);
-    this.produtos = this.allProdutos.filter((produto) => {
-      const nome = FuncionalidadesExtrasService.removerAcentuacoes(
-        produto.nome
-      );
-      return nome.includes(valor);
-    });
-    setTimeout(() => {
-      this.verificarAltura();
-    }, 50);
-  }
-
   chamarComfirm(produto: Produto) {
     console.log('cheguei');
     this.mensagemService.confirm(
-      `Tem certeza que quer excluir \n ${
-        produto.nome
-      } - ${FuncionalidadesExtrasService.moedaReal(produto.valor)}`
+      `Tem certeza que quer excluir \n ${produto.nome} - ${FuncionalidadesExtrasService.moedaReal(
+        produto.valor
+      )}`
     );
   }
 
   removerProduto() {
-    this.produtoService
-      .excluirProdutoLogico(this.produto!.id!)
-      .subscribe(() => {
-        window.location.reload();
-      });
+    this.produtoService.excluirProdutoLogico(this.produto!.id!).subscribe(() => {
+      window.location.reload();
+    });
   }
 
-  async listarProdutos(page: number, numDados: number) {
-    await this.produtoService
-      .listarProdutosPage(page, numDados, 'nome')
-      .subscribe((item) => {
-        this.allProdutos = item.content;
-        this.produtos = this.allProdutos;
-        this.pageNumber = item.pageable?.pageNumber! + 1;
-        this.totalPages = item.totalPages!;
-      });
+  listarProdutos(page: number, numDados: number) {
+    this.produtoService.listarProdutosPage(page, numDados, 'nome').subscribe(item => {
+      this.allProdutos = item.content;
+      this.allProdutosFiltrado = item.content;
+      this.produtos = this.filtraListaProduto(this.allProdutosFiltrado);
+
+      this.numPaginas = Math.ceil(item.content.length / this.registrosPorPagina);
+
+      this.gerarPaginacao();
+    });
     this.produto = null;
-  }
-
-  mudarPagina(pageAcao: boolean) {
-    if (pageAcao && this.totalPages > this.pageNumber)
-      this.listarProdutos(this.pageNumber, 9);
-    else if (!pageAcao && this.pageNumber != 1)
-      this.listarProdutos(this.pageNumber - 2, 9);
   }
 }

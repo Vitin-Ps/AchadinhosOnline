@@ -76,6 +76,8 @@ module.exports = {
       },
       backgroundImage: {
         degrade_purple_r: 'linear-gradient(to right, #d953f7 , #8B5CF6 30%, #7C3AED 90%)',
+        degrade_purple_l: 'linear-gradient(to left, #b553f7 10%,#6904ce 80%)',
+        degrade_purple_b: 'linear-gradient(to bottom, #d953f7, #b553f7 30%, #6904ce 80%)',
       },
     },
     keyframes: {

@@ -104,6 +104,8 @@ export class VendasDadosComponent implements OnInit {
       return idIgual || nomeIgual;
     });
 
+    this.numPaginas = Math.ceil(this.vendas.length / this.registrosPorPagina);
+
     this.vendas = this.filtraVenda(this.vendas);
     this.gerarPaginacao();
   }
@@ -139,10 +141,9 @@ export class VendasDadosComponent implements OnInit {
       );
 
       this.vendas = this.filtraVenda(this.allVendasFiltrado);
-
-      this.numPaginas = Math.ceil(this.allVendasFiltrado.length / this.registrosPorPagina);
     } else {
       this.allVendasFiltrado = this.allVendas;
+
       this.vendas = this.filtraVenda(this.allVendasFiltrado);
     }
     let vendas: number = 0;
@@ -161,6 +162,7 @@ export class VendasDadosComponent implements OnInit {
       comissao: comissao,
     };
 
+    this.numPaginas = Math.ceil(this.allVendasFiltrado.length / this.registrosPorPagina);
     this.gerarPaginacao();
   }
 

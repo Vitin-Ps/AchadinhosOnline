@@ -1,8 +1,3 @@
 div.container {
   min-height: 70vh;
 }
-
-.shaded {
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.040);
-  transition: box-shadow 0.3s ease; /* Adiciona uma transição suave para a sombra */
-}

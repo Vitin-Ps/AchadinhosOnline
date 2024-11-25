@@ -17,7 +17,6 @@ export class FuncDadosComponent {
   allFuncionarios: Funcionario[] = [];
   funcionarios: Funcionario[] = [];
   vendas!: Venda[];
-  shaded: boolean = false;
   funcionario!: Funcionario | null;
   pageNumber: number = 0;
   totalPages!: number;
@@ -27,7 +26,7 @@ export class FuncDadosComponent {
   faEdit = faEdit;
 
   constructor(
-    private funcionarioService: FuncionarioService,    
+    private funcionarioService: FuncionarioService,
     private vendaService: VendaService,
     private mensagemService: MensagensService,
     private comunicacaoService: ComunicacaoService
@@ -36,28 +35,14 @@ export class FuncDadosComponent {
   ngOnInit(): void {
     this.listarFuncionarios(0, 9);
     this.listarVendas();
-    setTimeout(() => {
-      this.verificarAltura();
-    }, 10);
 
     this.comunicacaoService.emitFunction.subscribe(() => {
       if (this.funcionario != null) this.removerFuncionario();
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.verificarAltura();
-  }
-
-  verificarAltura() {
-    const cardsContainer = this.cardsContainer.nativeElement;
-    if (cardsContainer.offsetHeight > 500) this.shaded = true;
-    else this.shaded = false;
-  }
-
   selecionarCard(funcionarioSelecionado: Funcionario) {
-    this.funcionarios.forEach((funcionario) => {
+    this.funcionarios.forEach(funcionario => {
       if (funcionario.id === funcionarioSelecionado.id) {
         funcionario.selecionado = !funcionario.selecionado;
       } else {
@@ -71,15 +56,10 @@ export class FuncDadosComponent {
     const target = e.target as HTMLInputElement;
     const valor = FuncionalidadesExtrasService.removerAcentuacoes(target.value);
     console.log(valor);
-    this.funcionarios = this.allFuncionarios.filter((funcionarios) => {
-      const nome = FuncionalidadesExtrasService.removerAcentuacoes(
-        funcionarios.nome
-      );
+    this.funcionarios = this.allFuncionarios.filter(funcionarios => {
+      const nome = FuncionalidadesExtrasService.removerAcentuacoes(funcionarios.nome);
       return nome.includes(valor);
     });
-    setTimeout(() => {
-      this.verificarAltura();
-    }, 50);
   }
 
   chamarComfirm(funcionario: Funcionario) {
@@ -90,35 +70,31 @@ export class FuncDadosComponent {
   }
 
   removerFuncionario() {
-    this.funcionarioService
-      .excluirFuncionarioLogico(this.funcionario!.id!)
-      .subscribe(() => {
-        window.location.reload();
-      });
+    this.funcionarioService.excluirFuncionarioLogico(this.funcionario!.id!).subscribe(() => {
+      window.location.reload();
+    });
   }
 
   listarFuncionarios(page: number, numDados: number) {
-    this.funcionarioService
-      .listarFuncionariosPage(page, numDados, 'nome')
-      .subscribe((item) => {
-        this.allFuncionarios = item.content;
-        this.funcionarios = item.content;
-        this.pageNumber = item.pageable?.pageNumber! + 1;
-        this.totalPages = item.totalPages!;
-      });
+    this.funcionarioService.listarFuncionariosPage(page, numDados, 'nome').subscribe(item => {
+      this.allFuncionarios = item.content;
+      this.funcionarios = item.content;
+      this.pageNumber = item.pageable?.pageNumber! + 1;
+      this.totalPages = item.totalPages!;
+    });
     this.funcionario = null;
   }
 
   listarVendas() {
-    this.vendaService.listarVendas().subscribe((res) => {
+    this.vendaService.listarVendas().subscribe(res => {
       this.vendas = res.content;
     });
   }
 
   calcularcomissao(id: number): number {
     let comissao = 0;
-    if(this.vendas != null && this.vendas.length !== 0) {
-      this.vendas.forEach((venda) => {
+    if (this.vendas != null && this.vendas.length !== 0) {
+      this.vendas.forEach(venda => {
         if (id === venda.funcionario.id) comissao += venda.comissao!;
       });
     }
@@ -126,9 +102,7 @@ export class FuncDadosComponent {
   }
 
   mudarPagina(pageAcao: boolean) {
-    if (pageAcao && this.totalPages > this.pageNumber)
-      this.listarFuncionarios(this.pageNumber, 9);
-    else if (!pageAcao && this.pageNumber != 1)
-      this.listarFuncionarios(this.pageNumber - 2, 9);
+    if (pageAcao && this.totalPages > this.pageNumber) this.listarFuncionarios(this.pageNumber, 9);
+    else if (!pageAcao && this.pageNumber != 1) this.listarFuncionarios(this.pageNumber - 2, 9);
   }
 }
