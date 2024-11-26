@@ -4,9 +4,13 @@ import com.example.crudjava.domain.carrinho.Carrinho;
 import com.example.crudjava.domain.carrinho.CarrinhoService;
 import com.example.crudjava.domain.funcionario.DadosComissaoFuncionario;
 import com.example.crudjava.domain.funcionario.Funcionario;
+import com.example.crudjava.domain.recibo.DadosListagemRecibo;
 import com.example.crudjava.domain.recibo.Recibo;
 import com.example.crudjava.infra.exception.ValidacaoException;
-import com.example.crudjava.repository.*;
+import com.example.crudjava.repository.CarrinhoRepository;
+import com.example.crudjava.repository.FuncionarioRepository;
+import com.example.crudjava.repository.ReciboRepository;
+import com.example.crudjava.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,12 +41,12 @@ public class VendaService {
 
         Funcionario funcionario = funcionarioRepository.getReferenceByIdAndAtivoTrue(dados.funcionarioId());
 
-        if(funcionario == null) {
+        if (funcionario == null) {
             throw new ValidacaoException("Funcionário não existe");
         }
         List<Carrinho> listaItemsCarrinho = carrinhoRepository.findAllByFuncionarioId(dados.funcionarioId());
 
-        if(listaItemsCarrinho.isEmpty()) throw new ValidacaoException("Carrinho está vazio");
+        if (listaItemsCarrinho.isEmpty()) throw new ValidacaoException("Carrinho está vazio");
 
         BigDecimal valorTotal = carrinhoService.calcularValorItems(listaItemsCarrinho);
 
@@ -50,7 +54,7 @@ public class VendaService {
 
         vendaRepository.save(venda);
 
-        if(!listaItemsCarrinho.isEmpty()) {
+        if (!listaItemsCarrinho.isEmpty()) {
             listaItemsCarrinho.forEach(itemCarrinho -> {
                 Recibo recibo = new Recibo(itemCarrinho.getProduto(), venda, itemCarrinho.getQuantidade());
                 reciboRepository.save(recibo);
@@ -65,6 +69,7 @@ public class VendaService {
     public Page<DadosListagemVenda> listarVendas(Pageable pageable) {
         return vendaRepository.findAll(pageable).map(DadosListagemVenda::new);
     }
+
     public Page<DadosListagemVenda> listarVendasPorIdFuncionario(Long id, Pageable pageable) {
         return vendaRepository.findAllByFuncionarioId(id, pageable).map(DadosListagemVenda::new);
     }
@@ -85,7 +90,7 @@ public class VendaService {
 
         List<Recibo> listRecibo = reciboRepository.findAllByVendaId(id);
 
-        for(Recibo recibo : listRecibo) {
+        for (Recibo recibo : listRecibo) {
             reciboRepository.delete(recibo);
         }
 
@@ -104,7 +109,7 @@ public class VendaService {
 
             return new DadosStatusLojinha(funcionarios, produtos, vendas);
         } else {
-           throw new ValidacaoException("Não foi possivel recuperar os dados!!!");
+            throw new ValidacaoException("Não foi possivel recuperar os dados!!!");
         }
     }
 
@@ -129,4 +134,7 @@ public class VendaService {
                 .collect(Collectors.toList());
     }
 
+    public List<DadosListagemRecibo> listarReciboVenda(Long id) {
+        return reciboRepository.findAllByVendaId(id).stream().map(DadosListagemRecibo::new).toList();
+    }
 }

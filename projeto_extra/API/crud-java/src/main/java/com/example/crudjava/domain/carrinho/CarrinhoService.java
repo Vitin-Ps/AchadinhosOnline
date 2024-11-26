@@ -9,11 +9,10 @@ import com.example.crudjava.repository.EstoqueRepository;
 import com.example.crudjava.repository.FuncionarioRepository;
 import com.example.crudjava.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,19 +27,22 @@ public class CarrinhoService {
     @Autowired
     private EstoqueRepository estoqueRepository;
 
-    public void addNoCarrinho(List<DadosCarrinho> dadosList) {
+    public List<DadosListagemCarrinho> addNoCarrinho(List<DadosCarrinho> dadosList) {
+        Long funcionarioId = null;
         for (DadosCarrinho dados : dadosList) {
 
-            if(dados.quantidade() == null) {
+            if (dados.quantidade() == null) {
                 throw new ValidacaoException("O campo quantidade é obrigatório!");
             }
 
             Funcionario funcionario = funcionarioRepository.getReferenceByIdAndAtivoTrue(dados.funcionarioId());
             Produto produto = produtoRepository.getReferenceByIdAndAtivoTrue(dados.produtoId());
 
-            if(produto == null || funcionario == null){
+            if (produto == null || funcionario == null) {
                 throw new ValidacaoException("Funcionário ou Produto inexistentes!");
             }
+
+            if (funcionarioId == null) funcionarioId = dados.funcionarioId();
 
             Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
 
@@ -49,25 +51,49 @@ public class CarrinhoService {
             Carrinho carrinho = new Carrinho(null, funcionario, produto, dados.quantidade());
             carrinhoRepository.save(carrinho);
         }
+
+        if (funcionarioId != null) {
+            return carrinhoRepository.findAllByFuncionarioId(funcionarioId).stream().map(DadosListagemCarrinho::new).toList();
+        }
+        return null;
     }
 
-    public void removerItemDoCarrinho(List<DadosCarrinho> dadosList) {
+    public List<DadosListagemCarrinho> removerItemDoCarrinho(List<DadosCarrinho> dadosList) {
+        Long funcionarioId = null;
         for (DadosCarrinho dados : dadosList) {
-            Carrinho carrinho = carrinhoRepository.findFirstByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
-            if (carrinho == null) throw new ValidacaoException("item não está no carrinho");
+            List<Carrinho> itemsCarrinho = carrinhoRepository.findAllByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
+            Integer quantidadeTotalItems = 0;
+            if (itemsCarrinho.isEmpty()) throw new ValidacaoException("item não está no carrinho");
+            else {
+                for (Carrinho itemCarrinho : itemsCarrinho) {
+                    quantidadeTotalItems += itemCarrinho.getQuantidade();
+                }
+            }
+            if (funcionarioId == null) funcionarioId = dados.funcionarioId();
 
+            Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
 
-
-            Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(carrinho.getProduto().getId());
-
-            if(dados.quantidade() > carrinho.getQuantidade()) {
+            if (dados.quantidade() > quantidadeTotalItems) {
                 throw new ValidacaoException("Essa quantidade é superior a que está no carrinho!");
-            } else if (carrinho.getQuantidade().equals(dados.quantidade())) {
-                carrinhoRepository.delete(carrinho);
+            } else if (quantidadeTotalItems.equals(dados.quantidade())) {
+                carrinhoRepository.deleteAllByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
+            } else {
+                quantidadeTotalItems = dados.quantidade();
+                for (Carrinho itemCarrinho : itemsCarrinho) {
+                    if (quantidadeTotalItems > 0) {
+                        quantidadeTotalItems -= itemCarrinho.getQuantidade();
+                        itemCarrinho.setQuantidade(quantidadeTotalItems);
+                    }
+                }
             }
 
             estoqueProduto.atualizarQuantidade(dados.quantidade(), true);
         }
+
+        if (funcionarioId != null) {
+            return listarCarrinho(funcionarioId);
+        }
+        return null;
     }
 
     public void limparCarrinho(Long funcionarioId, boolean reporEstoque) {
@@ -89,7 +115,30 @@ public class CarrinhoService {
     }
 
     public List<DadosListagemCarrinho> listarCarrinho(Long id) {
-        return carrinhoRepository.findAllByFuncionarioId(id).stream().map(DadosListagemCarrinho::new).toList();
+        List<Carrinho> listCarrinho = carrinhoRepository.findAllByFuncionarioId(id);
+        List<DadosListagemCarrinho> listItemsCarrinho = new ArrayList<>();
+
+        if (!listCarrinho.isEmpty()) {
+            for (Carrinho itemCarrinho : listCarrinho) {
+
+                DadosListagemCarrinho itemExistente = listItemsCarrinho.stream()
+                        .filter(dados -> dados.produto().id().equals(itemCarrinho.getProduto().getId()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (itemExistente == null) {
+                    listItemsCarrinho.add(new DadosListagemCarrinho(itemCarrinho));
+                } else {
+                    listItemsCarrinho.remove(itemExistente);
+                    listItemsCarrinho.add(new DadosListagemCarrinho(
+                            itemCarrinho, itemExistente.quantidade() + itemCarrinho.getQuantidade()
+                    ));
+                }
+            }
+        }
+
+
+        return listItemsCarrinho;
     }
 
     public BigDecimal calcularValorItems(List<Carrinho> listaItemsCarrinho) {

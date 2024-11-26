@@ -8,13 +8,12 @@ import com.example.crudjava.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -42,9 +41,9 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemFuncionario>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(DadosListagemFuncionario::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<DadosListagemFuncionario>> listar() {
+        var listaFunc = repository.findAllByAtivoTrue().stream().map(DadosListagemFuncionario::new).toList();
+        return ResponseEntity.ok(listaFunc);
     }
 
     @PutMapping
@@ -53,9 +52,9 @@ public class FuncionarioController {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
         var usuario = usuarioRepository.getReferenceByLogin(funcionario.getEmail());
         funcionario.atualizarInfo(dados);
-        
+
         String senhaCodificada = null;
-        if(dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
+        if (dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
         usuario.atualizarInfo(dados.email(), senhaCodificada);
 
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));

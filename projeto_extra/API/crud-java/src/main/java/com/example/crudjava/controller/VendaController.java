@@ -1,5 +1,6 @@
 package com.example.crudjava.controller;
 
+import com.example.crudjava.domain.recibo.DadosListagemRecibo;
 import com.example.crudjava.domain.venda.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/vendas")
@@ -28,6 +31,12 @@ public class VendaController {
     public ResponseEntity<Page<DadosListagemVenda>> listarVendas(Pageable pageable) {
         var page = service.listarVendas(pageable);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/recibo/{id}")
+    public ResponseEntity<List<DadosListagemRecibo>> listReciboVenda(@PathVariable Long id) {
+        List<DadosListagemRecibo> listRecibo = service.listarReciboVenda(id);
+        return ResponseEntity.ok(listRecibo);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Page<DadosListagemVenda>> listarVendasPorIdFuncionario(@PathVariable Long id, @PageableDefault(size = 10, page = 0, sort = {"funcionario_id"})Pageable pageable) {

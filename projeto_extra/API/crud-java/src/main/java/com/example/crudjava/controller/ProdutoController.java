@@ -9,12 +9,11 @@ import com.example.crudjava.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
@@ -40,9 +39,27 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemProduto>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(DadosListagemProduto::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<DadosListagemProduto>> listar() {
+        var listaProd = repository.findAllByAtivoTrue().stream().map(DadosListagemProduto::new).toList();
+        return ResponseEntity.ok(listaProd);
+    }
+
+    @GetMapping("/carrinho")
+    public ResponseEntity<List<DadosListagemProdutoCarrinho>> listarProdutosCarrinho() {
+
+        var listaEstoque = estoqueRepository.findAll();
+
+        var listaProd = repository.findAllByAtivoTrue().stream().map(produto -> {
+            Estoque estoqueProduto = listaEstoque.stream()
+                    .filter(estoque -> estoque.getProduto().getId().equals(produto.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            return new DadosListagemProdutoCarrinho(produto, estoqueProduto.getQuantidade());
+        }).toList();
+
+
+        return ResponseEntity.ok(listaProd);
     }
 
     @PutMapping
@@ -60,6 +77,7 @@ public class ProdutoController {
         produto.excluirLogico();
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
@@ -73,10 +91,17 @@ public class ProdutoController {
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
 
+    @GetMapping("/carrinho/{id}")
+    public ResponseEntity<DadosListagemProdutoCarrinho> detalharProdutoCarrinho(@PathVariable Long id) {
+        Produto produto = repository.getReferenceByIdAndAtivoTrue(id);
+        Estoque estoque = estoqueRepository.getReferenceByProdutoId(id);
+        return ResponseEntity.ok(new DadosListagemProdutoCarrinho(produto, estoque.getQuantidade()));
+    }
+
     @PostMapping("/estoque")
     @Transactional
     public ResponseEntity alterarEstoque(@RequestBody @Valid DadosRegistroEstoque dados) {
-        if(!repository.existsById(dados.produtoId())) {
+        if (!repository.existsById(dados.produtoId())) {
             throw new ValidacaoException("Produto não existe");
         }
 

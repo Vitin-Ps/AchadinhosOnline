@@ -3,10 +3,7 @@ package com.example.crudjava.domain.carrinho;
 import com.example.crudjava.domain.funcionario.Funcionario;
 import com.example.crudjava.domain.produto.Produto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "carrinho")
 @Entity(name = "Carrinho")
@@ -24,6 +21,7 @@ public class Carrinho {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_id")
     private Produto produto;
+    @Setter
     private Integer quantidade;
 
 }

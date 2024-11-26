@@ -16,4 +16,8 @@ public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
     Carrinho findFirstByFuncionarioIdAndProdutoId(Long funcionarioId, Long produtoId);
     Page<DadosListagemCarrinho> findAllByFuncionarioId(Long funcionarioId, Pageable pageable);
     List<Carrinho> findAllByFuncionarioId(Long funcionarioId);
+
+    void deleteAllByFuncionarioIdAndProdutoId(Long funcionarioId, Long produtoId);
+
+    List<Carrinho> findAllByFuncionarioIdAndProdutoId(Long aLong, Long aLong1);
 }

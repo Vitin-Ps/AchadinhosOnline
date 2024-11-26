@@ -12,4 +12,8 @@ public record DadosListagemCarrinho(
     public DadosListagemCarrinho(Carrinho carrinho) {
         this(carrinho.getId(), new DadosListagemFuncionario(carrinho.getFuncionario()), new DadosListagemProduto(carrinho.getProduto()), carrinho.getQuantidade());
     }
+
+    public DadosListagemCarrinho(Carrinho carrinho, Integer quantidade) {
+        this(carrinho.getId(), new DadosListagemFuncionario(carrinho.getFuncionario()), new DadosListagemProduto(carrinho.getProduto()), quantidade);
+    }
 }
