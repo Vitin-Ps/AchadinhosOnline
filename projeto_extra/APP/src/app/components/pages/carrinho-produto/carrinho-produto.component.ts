@@ -19,8 +19,10 @@ export class CarrinhoProdutoComponent implements OnInit {
   produtosSelecionados: Produto[] = [];
   itemsCarrinho: CarrinhoEnvio[] = [];
   idFuncionario?: number;
-  faSearch = faSearch;
   pesquisaText: string = '';
+  loadingProdutos: boolean = false;
+
+  faSearch = faSearch;
 
   constructor(
     private produtoService: ProdutoService,
@@ -32,10 +34,12 @@ export class CarrinhoProdutoComponent implements OnInit {
 
   ngOnInit(): void {
     this.idFuncionario = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadingProdutos = true;
     this.produtoService.listarProdutosCarrinhoAll().subscribe(response => {
       const data = response;
       this.allProdutos = data;
       this.produtos = data;
+      this.loadingProdutos = false;
     });
   }
 

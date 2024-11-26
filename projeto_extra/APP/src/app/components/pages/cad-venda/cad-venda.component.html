@@ -1,6 +1,8 @@
-<div class="h-screen w-full flex flex-col items-center">
-  <h2 class="font-bold text-2xl">Registrar <span class="text-purple500">Venda</span></h2>
-  <div class="flex justify-between p-5 w-full">
+<div class="h-screen w-full flex flex-col items-center bg-gray200">
+  <h2 class="font-bold text-2xl w-full text-center p-2 bg-white">
+    Registrar <span class="text-purple500">Venda</span>
+  </h2>
+  <div class="bg-white flex justify-between p-5 w-full shadow-md">
     <div class="flex gap-2 justify-start items-center" *ngIf="!idUrl">
       <h2 class="font-bold text-xl">Selecione o funcionário:</h2>
       <select
@@ -29,7 +31,10 @@
       >
     </div>
   </div>
-  <div class="p-5 w-full bg-gray200 h-screen flex flex-wrap items-start gap-5">
+  <div
+    class="p-5 w-full flex flex-wrap items-start gap-5 scroll-bar max-h-[700px]"
+    *ngIf="step === 1"
+  >
     <div
       class="relative w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white"
       *ngFor="let itemCarrinho of itemsCarrinho"
@@ -54,7 +59,7 @@
         <span class="font-bold">Quantidade: </span>
         <select
           class="border-2 border-purple600 rounded-lg p-2 w-[200px]"
-          (change)="alterarQuantidadeItem(itemCarrinho.id!, $event)"
+          (change)="alterarQuantidadeItem(itemCarrinho.produto.id!, $event)"
         >
           <option value="0" selected disabled>Selecione</option>
           <option
@@ -67,8 +72,31 @@
         </select>
       </div>
     </div>
+    <p
+      class="text-xl font-bold text-gray400 mt-5"
+      *ngIf="(idUrl || idFuncionarioSelecionado) && itemsCarrinho.length === 0"
+    >
+      Nenhum item no carrinho.
+    </p>
   </div>
-  <div class="p-5 w-full mt-auto flex gap-5" *ngIf="idFuncionarioSelecionado || idUrl">
-    <button class="btn-padrao btn-invertido">Finalizar Venda</button>
+  <div class="w-full p-5" *ngIf="step === 2">
+    <div class="flex flex-col">
+      <h3 class="font-bold text-lg">Nome do Cliente:</h3>
+      <input
+        type="text"
+        (input)="changeInputNomeCliente($event)"
+        class="w-[300px] p-2 text-lg text-gray50000 rounded-md border-2 border-purple500"
+      />
+    </div>
+  </div>
+  <div
+    class="p-5 w-full flex gap-5"
+    *ngIf="(idUrl || idFuncionarioSelecionado) && itemsCarrinho.length > 0"
+  >
+    <button class="btn-padrao" (click)="muadaEtapa(false)" *ngIf="step === 2">Anterior</button>
+    <button class="btn-padrao btn-invertido" (click)="registrarVenda()" *ngIf="nomeCliente">
+      Finalizar Venda
+    </button>
+    <button class="btn-padrao" (click)="muadaEtapa(true)" *ngIf="step === 1">Próximo</button>
   </div>
 </div>

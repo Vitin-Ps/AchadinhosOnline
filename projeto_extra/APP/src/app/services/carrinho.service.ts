@@ -23,7 +23,6 @@ export class CarrinhoService {
   }
 
   listarItemsAllPorIdFuncionario(idFuncionario: number): Observable<Carrinho[]> {
-    console.log(`${this.apiUrl}/${idFuncionario}`);
     return this.http.get<Carrinho[]>(`${this.apiUrl}/${idFuncionario}`);
   }
 

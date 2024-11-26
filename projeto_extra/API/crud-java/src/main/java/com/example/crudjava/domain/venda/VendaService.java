@@ -5,6 +5,7 @@ import com.example.crudjava.domain.carrinho.CarrinhoService;
 import com.example.crudjava.domain.funcionario.DadosComissaoFuncionario;
 import com.example.crudjava.domain.funcionario.Funcionario;
 import com.example.crudjava.domain.recibo.DadosListagemRecibo;
+import com.example.crudjava.domain.recibo.DadosRegistroRecibo;
 import com.example.crudjava.domain.recibo.Recibo;
 import com.example.crudjava.infra.exception.ValidacaoException;
 import com.example.crudjava.repository.CarrinhoRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,8 +57,9 @@ public class VendaService {
         vendaRepository.save(venda);
 
         if (!listaItemsCarrinho.isEmpty()) {
-            listaItemsCarrinho.forEach(itemCarrinho -> {
-                Recibo recibo = new Recibo(itemCarrinho.getProduto(), venda, itemCarrinho.getQuantidade());
+            List<DadosRegistroRecibo> dadosRecibo = listarCarrinhoRecibo(listaItemsCarrinho);
+            dadosRecibo.forEach(itemCarrinho -> {
+                Recibo recibo = new Recibo(itemCarrinho.produto(), venda, itemCarrinho.quantidade());
                 reciboRepository.save(recibo);
             });
         }
@@ -136,5 +139,26 @@ public class VendaService {
 
     public List<DadosListagemRecibo> listarReciboVenda(Long id) {
         return reciboRepository.findAllByVendaId(id).stream().map(DadosListagemRecibo::new).toList();
+    }
+
+    public List<DadosRegistroRecibo> listarCarrinhoRecibo(List<Carrinho> listCarrinho) {
+        List<DadosRegistroRecibo> listCarrinhoRecibo = new ArrayList<>();
+
+        if (!listCarrinho.isEmpty()) {
+            for (Carrinho itemCarrinho : listCarrinho) {
+
+                DadosRegistroRecibo itemExistente = listCarrinhoRecibo.stream().filter(dados -> dados.produto().getId().equals(itemCarrinho.getProduto().getId())).findFirst().orElse(null);
+
+                if (itemExistente == null) {
+                    listCarrinhoRecibo.add(new DadosRegistroRecibo(itemCarrinho, itemCarrinho.getQuantidade()));
+                } else {
+                    listCarrinhoRecibo.remove(itemExistente);
+                    listCarrinhoRecibo.add(new DadosRegistroRecibo(itemCarrinho, itemExistente.quantidade() + itemCarrinho.getQuantidade()));
+                }
+            }
+        }
+
+
+        return listCarrinhoRecibo;
     }
 }

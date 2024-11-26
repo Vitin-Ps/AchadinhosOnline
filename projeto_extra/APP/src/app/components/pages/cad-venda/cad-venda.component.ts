@@ -3,14 +3,12 @@ import { VendaService } from '../../../services/venda.service';
 import { MensagensService } from '../../../services/mensagens.service';
 import { CarrinhoService } from '../../../services/carrinho.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Venda, VendaDTO } from '../../../interfaces/Venda';
 import { Funcionario } from '../../../interfaces/Funcionario';
 import { FuncionarioService } from '../../../services/funcionario.service';
-import { Carrinho } from '../../../interfaces/Carrinho';
-import { identifierName } from '@angular/compiler';
+import { Carrinho, CarrinhoEnvio } from '../../../interfaces/Carrinho';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Produto } from '../../../interfaces/Produto';
 import { ComunicacaoService } from '../../../services/comunicacao.service';
+import { VendaDTO } from '../../../interfaces/Venda';
 
 @Component({
   selector: 'app-cad-venda',
@@ -25,9 +23,11 @@ export class CadVendaComponent implements OnInit {
   funcionarios: Funcionario[] = [];
   funcionarioUrl: Funcionario | null = null;
   idFuncionarioSelecionado: number | null = null;
+  step: number = 1;
+  nomeCliente: string = '';
 
   itemsCarrinho: Carrinho[] = [];
-  itemsCarrinhoFiltrado: Carrinho[] = [];
+  itemsCarrinhoNaoSelecionados: Carrinho[] = [];
   itemCarrinnhoExcluir: Carrinho | null = null;
 
   constructor(
@@ -39,6 +39,7 @@ export class CadVendaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {}
+
   ngOnInit(): void {
     this.idUrl = Number(this.route.snapshot.paramMap.get('id'));
     this.detalharFuncionario();
@@ -57,25 +58,45 @@ export class CadVendaComponent implements OnInit {
     }
   }
 
-  registrarVenda(venda: VendaDTO) {
-    this.vendaService.registrarVenda(venda).subscribe(
-      response => {
-        console.log('Resposta do servidor:', response);
-        this.mensagemService.alert(`Venda cadastrada com Sucesso!`);
-        this.carrinhoService.limparCarrinho(venda.idFuncionario).subscribe();
-        this.router.navigate(['/']);
-      },
-      error => {
-        console.error('Erro na requisição:', error);
-        if (error.status === 0) {
-          this.mensagemService.alert(
-            'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
-          );
-        } else {
-          this.mensagemService.alert('Erro desconhecido ao cadastrar funcionário.');
-        }
+  registrarVenda() {
+    const itemsNaoSelecionados: CarrinhoEnvio[] = [];
+    this.itemsCarrinhoNaoSelecionados.forEach(itemCarrinho => {
+      if (itemCarrinho.quantidade !== 0) {
+        const carrinhoEnvio: CarrinhoEnvio = {
+          funcionarioId: itemCarrinho.funcionario.id!,
+          produtoId: itemCarrinho.produto.id!,
+          quantidade: itemCarrinho.quantidade,
+        };
+
+        itemsNaoSelecionados.push(carrinhoEnvio);
       }
-    );
+    });
+
+    this.carrinhoService.removeItemsNoCarrinho(itemsNaoSelecionados).subscribe(() => {
+      const venda: VendaDTO = {
+        funcionarioId: this.idUrl ? this.idUrl : this.idFuncionarioSelecionado!,
+        nomeCliente: this.nomeCliente,
+      };
+
+      this.vendaService.registrarVenda(venda).subscribe(
+        response => {
+          console.log('Resposta do servidor:', response);
+          this.mensagemService.alert(`Venda cadastrada com Sucesso!`);
+          this.router.navigate(['/']);
+        },
+        error => {
+          if (error.error) {
+            this.mensagemService.alert(error.error);
+          } else if (error.status === 0) {
+            this.mensagemService.alert(
+              'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
+            );
+          } else {
+            this.mensagemService.alert('Erro desconhecido ao cadastrar funcionário.');
+          }
+        }
+      );
+    });
   }
 
   limparCarrinho(e: Event) {
@@ -84,10 +105,14 @@ export class CadVendaComponent implements OnInit {
       .limparCarrinho(this.idUrl ? this.idUrl : this.idFuncionarioSelecionado!)
       .subscribe(
         res => {
-          this.router.navigate(['vendas']);
+          if (this.router.url === '/vendas') {
+            window.location.reload();
+          } else {
+            this.router.navigate(['vendas']);
+          }
         },
         error => {
-          this.mensagemService.alert('Carrinho já está vazio.');
+          this.mensagemService.alert(error.error);
         }
       );
   }
@@ -101,7 +126,6 @@ export class CadVendaComponent implements OnInit {
   listarCarrinho(idFuncionario: number) {
     this.carrinhoService.listarItemsAllPorIdFuncionario(idFuncionario).subscribe(res => {
       this.itemsCarrinho = res.map(item => ({ ...item }));
-      this.itemsCarrinhoFiltrado = res.map(item => ({ ...item }));
     });
   }
 
@@ -110,15 +134,33 @@ export class CadVendaComponent implements OnInit {
     const value = target.value;
     this.idFuncionarioSelecionado = Number(value);
     this.listarCarrinho(this.idFuncionarioSelecionado);
+    this.nomeCliente = '';
+    this.step = 1;
   }
 
   alterarQuantidadeItem(idItem: number, e: Event) {
     const target = e.target as HTMLInputElement;
     const value: number = Number(target.value);
 
-    this.itemsCarrinhoFiltrado.forEach(itemCarrinho => {
-      itemCarrinho.id === idItem && (itemCarrinho.quantidade = value);
-    });
+    const itemCarrinhoOriginal = structuredClone(
+      this.itemsCarrinho.find(itemCarrinhoOriginal => itemCarrinhoOriginal.produto.id === idItem)
+    );
+
+    if (itemCarrinhoOriginal) {
+      if (
+        !this.itemsCarrinhoNaoSelecionados.find(
+          itemCarrinhoNaoSelecionado => itemCarrinhoNaoSelecionado.produto.id === idItem
+        )
+      ) {
+        itemCarrinhoOriginal.quantidade -= value;
+        this.itemsCarrinhoNaoSelecionados.push(itemCarrinhoOriginal);
+      } else {
+        this.itemsCarrinhoNaoSelecionados.forEach(itemCarrinho => {
+          itemCarrinho.produto.id === idItem &&
+            (itemCarrinho.quantidade = itemCarrinhoOriginal.quantidade - value);
+        });
+      }
+    }
   }
 
   chamarComfirmExcluir(carrinho: Carrinho) {
@@ -143,5 +185,18 @@ export class CadVendaComponent implements OnInit {
           this.itemCarrinnhoExcluir = null;
         });
     }
+  }
+
+  muadaEtapa(acao: boolean) {
+    if (acao) {
+      this.step += 1;
+    } else {
+      this.step -= 1;
+    }
+  }
+
+  changeInputNomeCliente(e: Event) {
+    const target = e.target as HTMLInputElement;
+    this.nomeCliente = target.value;
   }
 }

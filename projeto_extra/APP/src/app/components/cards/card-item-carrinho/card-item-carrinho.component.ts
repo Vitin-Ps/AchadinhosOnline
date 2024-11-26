@@ -15,6 +15,7 @@ export class CardItemCarrinhoComponent {
   @Input() nome: string = '';
   @Input() valor: number = 0;
   @Input() quantidade!: number;
+  @Input() loading: boolean = false;
   @Input() funcionarioId: number | undefined;
   @Input() produtoId!: number;
 
@@ -41,7 +42,9 @@ export class CardItemCarrinhoComponent {
         quantidade: this.novaQuantidade,
       };
       this.carrinhoService.addItemsNoCarrinho([itemCarrinho]).subscribe(() => {
-        this.messagemService.alert(`${this.nome} adiciodado ao carrinho!`);
+        this.messagemService.alert(`${this.nome} adicionado ao carrinho!`);
+        this.loading = true;
+        this.quantidade = 0;
         this.produtoService.detalharProdutoCarrinho(this.produtoId).subscribe(produto => {
           if (produto.quantidade && produto.quantidade > 0) {
             this.quantidade = produto.quantidade;
@@ -50,6 +53,8 @@ export class CardItemCarrinhoComponent {
             this.quantidade = 0;
             this.novaQuantidade = 0;
           }
+
+          this.loading = false;
         });
       });
     } else {

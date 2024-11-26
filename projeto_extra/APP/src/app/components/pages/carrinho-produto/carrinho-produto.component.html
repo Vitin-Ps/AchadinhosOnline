@@ -17,7 +17,8 @@
       Selecione o seu <span class="text-purple500">Produto</span>
     </h2>
   </div>
-  <div class="p-5 w-full flex flex-wrap gap-5 h-screen scroll-bar">
+  <app-loading *ngIf="loadingProdutos"></app-loading>
+  <div class="p-5 w-full flex flex-wrap gap-5 h-screen scroll-bar" *ngIf="!loadingProdutos">
     <app-card-item-carrinho
       *ngFor="let produto of produtos"
       [nome]="produto.nome"
@@ -25,6 +26,7 @@
       [quantidade]="produto.quantidade!"
       [funcionarioId]="idFuncionario"
       [produtoId]="produto.id!"
+      [loading]="loadingProdutos"
     ></app-card-item-carrinho>
   </div>
   <div class="p-5 w-full mt-auto flex gap-5">
