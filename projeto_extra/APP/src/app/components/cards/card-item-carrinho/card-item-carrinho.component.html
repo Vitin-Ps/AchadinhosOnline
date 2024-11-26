@@ -1,5 +1,5 @@
 <div
-  class="w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white flex flex-col gap-3"
+  class="w-[300px] min-h-[250px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white flex flex-col gap-3"
 >
   <p>
     <span class="font-bold">Nome: </span>
@@ -11,7 +11,7 @@
     {{ valor | moedaReal }}
   </p>
 
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2" *ngIf="quantidade > 0">
     <span class="font-bold">Quantidade: </span>
     <select
       class="border-2 border-purple600 rounded-lg p-2 w-full"
@@ -28,7 +28,7 @@
     </select>
   </div>
   <button
-    *ngIf="quantidade > 0; else esgotado;"
+    *ngIf="quantidade > 0; else esgotado"
     class="btn-padrao btn-acao w-full"
     (click)="addCarrinho()"
   >
@@ -36,6 +36,6 @@
   </button>
 
   <ng-template #esgotado>
-    <p class="font-bold text-gray300">Produto esgotado</p>
+    <p class="font-bold text-gray300 text-xl mt-5">Produto esgotado</p>
   </ng-template>
 </div>

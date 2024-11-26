@@ -8,6 +8,9 @@ import { Funcionario } from '../../../interfaces/Funcionario';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { Carrinho } from '../../../interfaces/Carrinho';
 import { identifierName } from '@angular/compiler';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Produto } from '../../../interfaces/Produto';
+import { ComunicacaoService } from '../../../services/comunicacao.service';
 
 @Component({
   selector: 'app-cad-venda',
@@ -17,23 +20,41 @@ import { identifierName } from '@angular/compiler';
 export class CadVendaComponent implements OnInit {
   idUrl!: number;
 
+  faTrash = faTrash;
+
   funcionarios: Funcionario[] = [];
+  funcionarioUrl: Funcionario | null = null;
   idFuncionarioSelecionado: number | null = null;
 
   itemsCarrinho: Carrinho[] = [];
   itemsCarrinhoFiltrado: Carrinho[] = [];
+  itemCarrinnhoExcluir: Carrinho | null = null;
 
   constructor(
     private vendaService: VendaService,
     private funcionarioService: FuncionarioService,
     private mensagemService: MensagensService,
     private carrinhoService: CarrinhoService,
+    private comunicacaoService: ComunicacaoService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
   ngOnInit(): void {
     this.idUrl = Number(this.route.snapshot.paramMap.get('id'));
-    this.listarFuncionarios();
+    this.detalharFuncionario();
+    !this.idUrl && this.listarFuncionarios();
+    this.comunicacaoService.emitFunction.subscribe(() => {
+      if (this.itemCarrinnhoExcluir != null) this.removerItemCarrinho();
+    });
+  }
+
+  detalharFuncionario() {
+    if (this.idUrl) {
+      this.funcionarioService.detalharFuncionario(this.idUrl).subscribe(res => {
+        this.funcionarioUrl = res;
+      });
+      this.listarCarrinho(this.idUrl);
+    }
   }
 
   registrarVenda(venda: VendaDTO) {
@@ -59,14 +80,16 @@ export class CadVendaComponent implements OnInit {
 
   limparCarrinho(e: Event) {
     e.preventDefault();
-    this.carrinhoService.limparCarrinho(this.idFuncionarioSelecionado!).subscribe(
-      res => {
-        window.location.reload();
-      },
-      error => {
-        this.mensagemService.alert('Carrinho já está vazio.');
-      }
-    );
+    this.carrinhoService
+      .limparCarrinho(this.idUrl ? this.idUrl : this.idFuncionarioSelecionado!)
+      .subscribe(
+        res => {
+          this.router.navigate(['vendas']);
+        },
+        error => {
+          this.mensagemService.alert('Carrinho já está vazio.');
+        }
+      );
   }
 
   listarFuncionarios() {
@@ -95,6 +118,30 @@ export class CadVendaComponent implements OnInit {
 
     this.itemsCarrinhoFiltrado.forEach(itemCarrinho => {
       itemCarrinho.id === idItem && (itemCarrinho.quantidade = value);
-    });    
+    });
+  }
+
+  chamarComfirmExcluir(carrinho: Carrinho) {
+    this.itemCarrinnhoExcluir = carrinho;
+    this.mensagemService.confirm(
+      `Tem certeza que quer excluir o Item \n ${carrinho.produto.nome} / quantidade ${carrinho.quantidade} do Carrinho?`
+    );
+  }
+
+  removerItemCarrinho() {
+    if (this.itemCarrinnhoExcluir) {
+      this.carrinhoService
+        .removeItemsNoCarrinho([
+          {
+            funcionarioId: this.itemCarrinnhoExcluir.funcionario.id!,
+            produtoId: this.itemCarrinnhoExcluir.produto.id!,
+            quantidade: this.itemCarrinnhoExcluir.quantidade,
+          },
+        ])
+        .subscribe(res => {
+          this.itemsCarrinho = res;
+          this.itemCarrinnhoExcluir = null;
+        });
+    }
   }
 }

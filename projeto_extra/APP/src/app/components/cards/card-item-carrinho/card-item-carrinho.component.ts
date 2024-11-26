@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { CarrinhoService } from '../../../services/carrinho.service';
 import { CarrinhoEnvio } from '../../../interfaces/Carrinho';
 import { MensagensService } from '../../../services/mensagens.service';
+import { EventEmitter } from 'node:stream';
+import { ProdutoService } from '../../../services/produto.service';
 
 @Component({
   selector: 'app-card-item-carrinho',
@@ -20,6 +22,7 @@ export class CardItemCarrinhoComponent {
 
   constructor(
     private carrinhoService: CarrinhoService,
+    private produtoService: ProdutoService,
     private messagemService: MensagensService
   ) {}
 
@@ -37,8 +40,17 @@ export class CardItemCarrinhoComponent {
         produtoId: this.produtoId,
         quantidade: this.novaQuantidade,
       };
-      this.carrinhoService.addItemNoCarrinho([itemCarrinho]).subscribe(() => {
+      this.carrinhoService.addItemsNoCarrinho([itemCarrinho]).subscribe(() => {
         this.messagemService.alert(`${this.nome} adiciodado ao carrinho!`);
+        this.produtoService.detalharProdutoCarrinho(this.produtoId).subscribe(produto => {
+          if (produto.quantidade && produto.quantidade > 0) {
+            this.quantidade = produto.quantidade;
+            this.novaQuantidade = 1;
+          } else {
+            this.quantidade = 0;
+            this.novaQuantidade = 0;
+          }
+        });
       });
     } else {
       this.messagemService.alert(`Funcionário não especificado. Cheque e a url`);

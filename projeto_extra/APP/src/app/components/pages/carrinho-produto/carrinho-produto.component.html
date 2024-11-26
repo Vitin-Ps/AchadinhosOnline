@@ -1,6 +1,5 @@
-<div class="bg-gray200 w-full h-screen flex flex-col items-center">
-  <h2 class="font-semibold text-xl">Selecione o seu <span class="text-purple500">Produto</span></h2>
-  <div class="bg-purple100 w-full flex justify-start p-5">
+<div class="w-full h-screen flex flex-col items-center">
+  <div class="w-full flex flex-wrap justify-between items-center p-5 shadow-md px-10 mb-10">
     <div
       class="relative flex justify-center items-center border-2 border-purple400 rounded-md overflow-hidden w-[300px]"
     >
@@ -14,6 +13,9 @@
         (input)="procurar($event)"
       />
     </div>
+    <h2 class="font-semibold text-2xl">
+      Selecione o seu <span class="text-purple500">Produto</span>
+    </h2>
   </div>
   <div class="p-5 w-full flex flex-wrap gap-5 h-screen scroll-bar">
     <app-card-item-carrinho
@@ -26,6 +28,8 @@
     ></app-card-item-carrinho>
   </div>
   <div class="p-5 w-full mt-auto flex gap-5">
-    <button class="btn-padrao btn-invertido">Finalizar Carrinho</button>
+    <a routerLink="/vendas/{{ idFuncionario }}"
+      ><button class="btn-padrao btn-invertido">Finalizar Carrinho</button></a
+    >
   </div>
 </div>

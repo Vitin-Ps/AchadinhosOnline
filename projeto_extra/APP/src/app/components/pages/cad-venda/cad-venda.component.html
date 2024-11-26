@@ -1,7 +1,7 @@
 <div class="h-screen w-full flex flex-col items-center">
   <h2 class="font-bold text-2xl">Registrar <span class="text-purple500">Venda</span></h2>
   <div class="flex justify-between p-5 w-full">
-    <div class="flex gap-2 justify-start items-center">
+    <div class="flex gap-2 justify-start items-center" *ngIf="!idUrl">
       <h2 class="font-bold text-xl">Selecione o funcionário:</h2>
       <select
         class="border-2 border-purple600 rounded-lg p-2 w-[200px]"
@@ -13,18 +13,33 @@
         </option>
       </select>
     </div>
-    <div class="flex gap-5" *ngIf="idFuncionarioSelecionado != null">
-      <button class="btn-padrao" (click)="limparCarrinho($event)">Limpar Carrinho</button>
-      <a routerLink="/carrinho/{{ idFuncionarioSelecionado }}"
-        ><button class="btn-padrao">Editar Carrinho</button></a
+
+    <div class="flex justify-start items-center gap-10" *ngIf="funcionarioUrl">
+      <h2 class="font-bold text-xl">
+        Funcionário Selecionado: <span class="text-purple500">{{ funcionarioUrl.nome }}</span>
+      </h2>
+      <a routerLink="/vendas" class="btn-padrao btn-invertido">Selecionar outro funcionário</a>
+    </div>
+    <div class="flex gap-5" *ngIf="idFuncionarioSelecionado || idUrl">
+      <button class="btn-padrao" (click)="limparCarrinho($event)" *ngIf="itemsCarrinho.length > 0">
+        Limpar Carrinho
+      </button>
+      <a routerLink="/carrinho/{{ idUrl ? idUrl : idFuncionarioSelecionado }}"
+        ><button class="btn-padrao">Continuar Comprando</button></a
       >
     </div>
   </div>
   <div class="p-5 w-full bg-gray200 h-screen flex flex-wrap items-start gap-5">
     <div
-      class="w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white"
+      class="relative w-[300px] p-5 rounded-md shadow-[10px_10px_20px] shadow-shadow200 bg-white"
       *ngFor="let itemCarrinho of itemsCarrinho"
     >
+      <div
+        class="absolute text-purple300 top-2 right-4 cursor-pointer text-lg"
+        (click)="chamarComfirmExcluir(itemCarrinho)"
+      >
+        <fa-icon [icon]="faTrash"></fa-icon>
+      </div>
       <p>
         <span class="font-bold">Nome: </span>
         {{ itemCarrinho.produto.nome }}
@@ -53,7 +68,7 @@
       </div>
     </div>
   </div>
-  <div class="p-5 w-full mt-auto flex gap-5" *ngIf="idFuncionarioSelecionado != null">
+  <div class="p-5 w-full mt-auto flex gap-5" *ngIf="idFuncionarioSelecionado || idUrl">
     <button class="btn-padrao btn-invertido">Finalizar Venda</button>
   </div>
 </div>

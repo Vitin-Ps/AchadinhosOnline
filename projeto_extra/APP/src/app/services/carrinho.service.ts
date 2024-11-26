@@ -11,21 +11,24 @@ import { Response } from '../interfaces/Response';
 export class CarrinhoService {
   private baseApiUrl = environment.baseApiUrl;
   private apiUrl = `${this.baseApiUrl}carrinho`;
-  
+
   constructor(private http: HttpClient) {}
 
-  addItemNoCarrinho(items: CarrinhoEnvio[]): Observable<CarrinhoEnvio[]> {
-    console.log(items)
-      return this.http.post<CarrinhoEnvio[]>(this.apiUrl, items);
+  addItemsNoCarrinho(items: CarrinhoEnvio[]): Observable<Carrinho[]> {
+    return this.http.post<Carrinho[]>(this.apiUrl, items);
+  }
+
+  removeItemsNoCarrinho(items: CarrinhoEnvio[]): Observable<Carrinho[]> {
+    return this.http.post<Carrinho[]>(`${this.apiUrl}/remover`, items);
   }
 
   listarItemsAllPorIdFuncionario(idFuncionario: number): Observable<Carrinho[]> {
-    console.log(`${this.apiUrl}/${idFuncionario}`)
+    console.log(`${this.apiUrl}/${idFuncionario}`);
     return this.http.get<Carrinho[]>(`${this.apiUrl}/${idFuncionario}`);
   }
 
   limparCarrinho(id: number) {
-    const url = `${this.apiUrl}/${id}`
+    const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url);
   }
 }

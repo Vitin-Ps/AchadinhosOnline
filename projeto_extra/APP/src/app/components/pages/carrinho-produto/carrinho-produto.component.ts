@@ -64,7 +64,7 @@ export class CarrinhoProdutoComponent implements OnInit {
         };
         this.itemsCarrinho.push(carrinho);
       });
-      this.carrinhoService.addItemNoCarrinho(this.itemsCarrinho).subscribe(() => {
+      this.carrinhoService.addItemsNoCarrinho(this.itemsCarrinho).subscribe(() => {
         this.router.navigate([`/vendas/${this.idFuncionario}`]).then(() => {
           window.location.reload();
         });

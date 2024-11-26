@@ -50,6 +50,10 @@ export class ProdutoService {
     return this.http.get<Produto>(`${this.apiUrl}/${id}`);
   }
 
+  detalharProdutoCarrinho(id: number): Observable<Produto> {
+    return this.http.get<Produto>(`${this.apiUrl}/carrinho/${id}`);
+  }
+
   alteraProduto(produto: Produto): Observable<Produto> {
     return this.http.put<Produto>(this.apiUrl, produto);
   }
