@@ -6,6 +6,8 @@ export interface Venda {
   valorTotal: number;
   nomeCliente: string;
   comissaoTotal: number;
+  dateCreated: string;
+  dateUpdated?: string;
 }
 
 export interface VendaDTO {

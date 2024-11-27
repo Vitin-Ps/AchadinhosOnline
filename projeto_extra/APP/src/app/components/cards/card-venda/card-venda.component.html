@@ -36,7 +36,7 @@
   </div>
   <!-- Div de descrição -->
   <div
-    class="bg-gray200 transition-all duration-300 ease-in-out overflow-hidden"
+    class="bg-gray200 transition-all duration-300 ease-in-out overflow-hidden flex justify-between"
     [style]="{
       maxHeight: descricaoEstado === 'open' ? '300px' : '0',
       opacity: descricaoEstado === 'open' ? '1' : '0',     
@@ -51,6 +51,11 @@
           <span class="font-bold">{{ itemRecibo.valorTotal | moedaReal }}</span>
         </p>
       </div>
+    </div>
+    <div class="p-5 text-gray400 font-bold text-lg" *ngIf="dateCreated">
+      <p>
+        {{ dateCreated }}
+      </p>
     </div>
   </div>
 </div>

@@ -28,6 +28,9 @@ export class VendasDadosComponent implements OnInit {
 
   faSearch = faSearch;
 
+  dateInicio: Date | null = null;
+  dateFim: Date | null = null;
+
   registrosPorPagina = 15;
   numPaginas = 0;
   numPaginasArray: { numPagina: number; selected: boolean }[] = [];
@@ -96,7 +99,7 @@ export class VendasDadosComponent implements OnInit {
 
     this.vendas = this.allVendasFiltrado.filter(venda => {
       const numeroValido = !isNaN(Number(text));
-      const idIgual = numeroValido && venda.id === Number(text);
+      const idIgual = numeroValido && String(venda.id).includes(text);
       const nomeIgual = FuncionalidadesExtrasService.removerAcentuacoes(venda.nomeCliente).includes(
         text
       );
@@ -108,6 +111,61 @@ export class VendasDadosComponent implements OnInit {
 
     this.vendas = this.filtraVenda(this.vendas);
     this.gerarPaginacao();
+  }
+
+  filtrarPorData(inputInicio: Event | null, inputFim: Event | null) {
+    inputInicio &&
+      (this.dateInicio = (inputInicio.target as HTMLInputElement).value
+        ? FuncionalidadesExtrasService.getDateComparativa(
+            (inputInicio.target as HTMLInputElement).value
+          )
+        : null);
+    inputFim &&
+      (this.dateFim = (inputFim.target as HTMLInputElement).value
+        ? FuncionalidadesExtrasService.getDateComparativa(
+            (inputFim.target as HTMLInputElement).value
+          )
+        : null);
+
+    if (this.idFuncSelecionario !== 0) {
+      this.vendas = this.allVendasFiltrado.filter(venda => {
+        const dateCreated: Date = FuncionalidadesExtrasService.getDateComparativa(
+          venda.dateCreated
+        );
+
+        if (this.dateInicio && this.dateFim) {
+          return dateCreated >= this.dateInicio && dateCreated <= this.dateFim;
+        } else if (this.dateInicio && !this.dateFim) {
+          return dateCreated >= this.dateInicio;
+        } else if (!this.dateInicio && this.dateFim) {
+          return dateCreated <= this.dateFim;
+        }
+
+        return venda;
+      });
+
+      this.vendas = this.filtraVenda(this.vendas);
+    } else {
+      this.allVendasFiltrado = this.allVendas.filter(venda => {
+        const dateCreated: Date = FuncionalidadesExtrasService.getDateComparativa(
+          venda.dateCreated
+        );
+
+        if (this.dateInicio && this.dateFim) {
+          return dateCreated >= this.dateInicio && dateCreated <= this.dateFim;
+        } else if (this.dateInicio && !this.dateFim) {
+          return dateCreated >= this.dateInicio;
+        } else if (!this.dateInicio && this.dateFim) {
+          return dateCreated <= this.dateFim;
+        }
+
+        return venda;
+      });
+
+      this.vendas = this.filtraVenda(this.allVendasFiltrado);
+    }
+
+    this.calcularComissao();
   }
 
   listarFuncionarios() {
@@ -130,16 +188,32 @@ export class VendasDadosComponent implements OnInit {
 
   calcularDadosFuncionario() {
     if (this.idFuncSelecionario != 0) {
-      this.allVendasFiltrado = this.allVendas.filter(
-        venda => venda.funcionario.id === this.idFuncSelecionario
-      );
+      if (this.dateInicio || this.dateFim) {
+        this.vendas = this.allVendasFiltrado.filter(
+          venda => venda.funcionario.id === this.idFuncSelecionario
+        );
 
-      this.vendas = this.filtraVenda(this.allVendasFiltrado);
+        this.vendas = this.filtraVenda(this.vendas);
+      } else {
+        this.allVendasFiltrado = this.allVendas.filter(
+          venda => venda.funcionario.id === this.idFuncSelecionario
+        );
+
+        this.vendas = this.filtraVenda(this.allVendasFiltrado);
+      }
     } else {
-      this.allVendasFiltrado = this.allVendas;
+      if (this.dateInicio || this.dateFim) this.vendas = this.filtraVenda(this.allVendasFiltrado);
+      else {
+        this.allVendasFiltrado = this.allVendas;
 
-      this.vendas = this.filtraVenda(this.allVendasFiltrado);
+        this.vendas = this.filtraVenda(this.allVendasFiltrado);
+      }
     }
+
+    this.calcularComissao();
+  }
+
+  calcularComissao() {
     let vendas: number = 0;
     let comissao: number = 0;
     let valorTotal: number = 0;

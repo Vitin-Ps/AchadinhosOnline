@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Recibo } from '../../../interfaces/Recibo';
 import { VendaService } from '../../../services/venda.service';
+import { FuncionalidadesExtrasService } from '../../../services/funcionalidades-extras.service';
 
 @Component({
   selector: 'app-card-venda',
@@ -24,6 +25,7 @@ export class CardVendaComponent {
   @Input() nomeFuncionario: string = '';
   @Input() valorTotal: number = 0;
   @Input() comissaoTotal: number = 0;
+  @Input() dateCreated?: string;
 
   recibo: Recibo[] = [];
 
@@ -39,6 +41,8 @@ export class CardVendaComponent {
 
   ngOnInit(): void {
     this.id && this.listarRecibo(this.id);
+    this.dateCreated &&
+      (this.dateCreated = FuncionalidadesExtrasService.formatarData(new Date(this.dateCreated)));
   }
 
   listarRecibo(idVenda: number) {
