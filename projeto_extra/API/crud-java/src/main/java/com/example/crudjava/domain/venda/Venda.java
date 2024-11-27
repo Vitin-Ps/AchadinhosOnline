@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Table(name = "vendas")
 @Entity(name = "Venda")
@@ -24,24 +25,34 @@ public class Venda {
     private Funcionario funcionario;
     private String nomeCliente;
     private BigDecimal valorTotal;
+    private BigDecimal comissaoTotal;
+    @Column(name = "date_created", updatable = false)
+    private LocalDateTime dateCreated;
 
-    public Venda (Funcionario funcionario, BigDecimal valorTotal, String nomeCliente) {
+    @Column(name = "date_updated")
+    private LocalDateTime dateUpdated;
+
+    public Venda(Funcionario funcionario, BigDecimal valorTotal, String nomeCliente) {
         this.funcionario = funcionario;
         this.valorTotal = valorTotal;
         this.nomeCliente = nomeCliente;
+        this.comissaoTotal = calculaComissao(funcionario, valorTotal);
     }
 
     public void atualizarInformacoes(DadosAtualizaVenda dados, Funcionario funcionario) {
-        if(funcionario != null) {
+        if (funcionario != null) {
             this.funcionario = funcionario;
         }
-        if(dados.valorTotal() != null) {
+        if (dados.valorTotal() != null) {
             this.valorTotal = dados.valorTotal();
+            if (funcionario != null)
+                this.comissaoTotal = calculaComissao(funcionario, valorTotal);
         }
+
     }
 
     private BigDecimal calculaComissao(Funcionario funcionario, BigDecimal valor) {
-        var porcentagem = new BigDecimal(funcionario.getPorcentagem()).divide(new BigDecimal("100"));
-        return valor.multiply(porcentagem);
+        return valor.multiply(
+                BigDecimal.valueOf(funcionario.getPorcentagem()).divide(BigDecimal.valueOf(100)));
     }
 }

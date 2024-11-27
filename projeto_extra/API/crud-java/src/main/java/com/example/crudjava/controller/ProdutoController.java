@@ -100,13 +100,13 @@ public class ProdutoController {
 
     @PostMapping("/estoque")
     @Transactional
-    public ResponseEntity alterarEstoque(@RequestBody @Valid DadosRegistroEstoque dados) {
+    public ResponseEntity<DadosListagemProdutoCarrinho> alterarEstoque(@RequestBody @Valid DadosRegistroEstoque dados) {
         if (!repository.existsById(dados.produtoId())) {
             throw new ValidacaoException("Produto não existe");
         }
-
+        Produto produto = repository.getReferenceByIdAndAtivoTrue(dados.produtoId());
         Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
         estoqueProduto.atualizarQuantidade(dados.quantidade(), dados.acao());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new DadosListagemProdutoCarrinho(produto, estoqueProduto.getQuantidade()));
     }
 }

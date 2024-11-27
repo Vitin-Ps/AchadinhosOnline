@@ -119,20 +119,23 @@ public class VendaService {
     public List<DadosComissaoFuncionario> getComissoes() {
         List<Venda> listaDeVendas = vendaRepository.findAll();
 
-        Map<Funcionario, BigDecimal> funcionariosVenda = listaDeVendas.stream()
+        Map<Funcionario, BigDecimal[]> funcionariosVenda = listaDeVendas.stream()
                 .collect(Collectors.groupingBy(
-                        Venda::getFuncionario, // Agrupando por funcionário
+                        Venda::getFuncionario,
                         Collectors.reducing(
-                                BigDecimal.ZERO,
-                                Venda::getValorTotal, // Extraindo o valor da venda
-                                BigDecimal::add  // Somando os valores
+                                new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ZERO},
+                                venda -> new BigDecimal[]{venda.getValorTotal(), venda.getComissaoTotal()},
+                                (valor, proxValor) -> new BigDecimal[]{
+                                        valor[0].add(proxValor[0]),
+                                        valor[1].add(proxValor[1])
+                                }
                         )
                 ));
 
         return funcionariosVenda.entrySet().stream()
                 .map(entry -> new DadosComissaoFuncionario(
                         entry.getKey().getId(),
-                        entry.getValue().multiply(BigDecimal.valueOf(entry.getKey().getPorcentagem() / 100))
+                        entry.getValue()[1]
                 ))
                 .collect(Collectors.toList());
     }

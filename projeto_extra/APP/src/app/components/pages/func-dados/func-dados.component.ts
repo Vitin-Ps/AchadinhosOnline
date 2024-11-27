@@ -17,12 +17,16 @@ export class FuncDadosComponent {
   allFuncionarios: Funcionario[] = [];
   allFuncionariosFiltrado: Funcionario[] = [];
   funcionarios: Funcionario[] = [];
-  vendas!: Venda[];
+  allVendas: Venda[] = [];
+  vendas: Venda[] = [];
   funcionario!: Funcionario | null;
   @ViewChild('cardsContainer') cardsContainer!: ElementRef;
 
   faTrashAlt = faTrashAlt;
   faEdit = faEdit;
+
+  dateInicio: Date | null = null;
+  dateFim: Date | null = null;
 
   registrosPorPagina = 15;
   numPaginas = 0;
@@ -162,17 +166,47 @@ export class FuncDadosComponent {
 
   listarVendas() {
     this.vendaService.listarVendas().subscribe(res => {
+      this.allVendas = res.content;
       this.vendas = res.content;
     });
   }
 
   calcularcomissao(id: number): number {
     let comissao = 0;
-    if (this.vendas != null && this.vendas.length !== 0) {
-      this.vendas.forEach(venda => {
-        if (id === venda.funcionario.id) comissao += venda.comissaoTotal;
-      });
-    }
+
+    this.vendas.forEach(venda => {
+      if (id === venda.funcionario.id) comissao += venda.comissaoTotal;
+    });
+
     return comissao;
+  }
+
+  filtrarPorData(inputInicio: Event | null, inputFim: Event | null) {
+    inputInicio &&
+      (this.dateInicio = (inputInicio.target as HTMLInputElement).value
+        ? FuncionalidadesExtrasService.getDateComparativa(
+            (inputInicio.target as HTMLInputElement).value
+          )
+        : null);
+    inputFim &&
+      (this.dateFim = (inputFim.target as HTMLInputElement).value
+        ? FuncionalidadesExtrasService.getDateComparativa(
+            (inputFim.target as HTMLInputElement).value
+          )
+        : null);
+
+    this.vendas = this.allVendas.filter(venda => {
+      const dateCreated: Date = FuncionalidadesExtrasService.getDateComparativa(venda.dateCreated);
+
+      if (this.dateInicio && this.dateFim) {
+        return dateCreated >= this.dateInicio && dateCreated <= this.dateFim;
+      } else if (this.dateInicio && !this.dateFim) {
+        return dateCreated >= this.dateInicio;
+      } else if (!this.dateInicio && this.dateFim) {
+        return dateCreated <= this.dateFim;
+      }
+
+      return venda;
+    });
   }
 }
