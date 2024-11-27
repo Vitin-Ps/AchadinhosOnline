@@ -27,10 +27,7 @@
         </select>
       </div>
     </div>
-    <div
-      class="bg-degrade_purple_r px-5 rounded-xl shadow-2xl"
-      *ngIf="vendas.length > 0"
-    >
+    <div class="bg-degrade_purple_r px-5 rounded-xl shadow-2xl" *ngIf="vendas.length > 0">
       <div class="bg-white p-5 flex gap-5">
         <h3 class="flex flex-col items-center text-md">
           <span class="font-bold">Vendas</span> {{ totalVendasDoFuncionario!.vendas }}
@@ -54,14 +51,14 @@
       [nomeFuncionario]="venda.funcionario.nome"
       [nomeCliente]="venda.nomeCliente"
       [valorTotal]="venda.valorTotal"
-      [comissao]="venda.comissao!"
+      [comissaoTotal]="venda.comissaoTotal"
       (emitFunction)="chamarConfirm(venda.id!)"
     ></app-card-venda>
   </div>
   <ng-template #noVendas>
     <p>Não há vendas registradas.</p>
   </ng-template>
- 
+
   <div class="p-5 w-full mt-auto flex gap-5" *ngIf="numPaginasArray.length > 0">
     <div
       *ngIf="numPaginas > paginasPorGrupo && grupoAtual > 1"

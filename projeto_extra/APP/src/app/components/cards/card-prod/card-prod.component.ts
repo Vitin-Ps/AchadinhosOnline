@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 export class CardProdComponent {
   @Input() nome!: string;
   @Input() valor!: number;
+  @Input() quantidade!: number;
   @Input() selecionado: boolean = false;
 
   faMoneyBill = faMoneyBill;

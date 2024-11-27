@@ -23,7 +23,7 @@ export class CardVendaComponent {
   @Input() nomeCliente: string = '';
   @Input() nomeFuncionario: string = '';
   @Input() valorTotal: number = 0;
-  @Input() comissao: number = 0;
+  @Input() comissaoTotal: number = 0;
 
   recibo: Recibo[] = [];
 

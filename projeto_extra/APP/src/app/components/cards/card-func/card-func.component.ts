@@ -4,15 +4,15 @@ import { faMoneyBill, faPercent, faUser } from '@fortawesome/free-solid-svg-icon
 @Component({
   selector: 'app-card-func',
   templateUrl: './card-func.component.html',
-  styleUrl: './card-func.component.css'
+  styleUrl: './card-func.component.css',
 })
 export class CardFuncComponent {
   @Input() nome!: string;
-  @Input() valor!: number;
+  @Input() comissao!: number;
   @Input() selecionado: boolean = false;
   @Input() porcentagem!: number;
 
-  faUser = faUser
+  faUser = faUser;
   faMoneyBill = faMoneyBill;
-  faPercent = faPercent
+  faPercent = faPercent;
 }

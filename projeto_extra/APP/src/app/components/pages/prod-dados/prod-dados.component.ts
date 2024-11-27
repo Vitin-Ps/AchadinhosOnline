@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Produto } from '../../../interfaces/Produto';
 import { ProdutoService } from '../../../services/produto.service';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FuncionalidadesExtrasService } from '../../../services/funcionalidades-extras.service';
 import { MensagensService } from '../../../services/mensagens.service';
 import { ComunicacaoService } from '../../../services/comunicacao.service';
@@ -24,9 +24,12 @@ export class ProdDadosComponent implements OnInit {
   allProdutosFiltrado: Produto[] = [];
   produtos: Produto[] = [];
   produto!: Produto | null;
+  quantidadeEstoque: number = 0;
+  showModalAlterarEstoque: boolean = false;
 
   faTrashAlt = faTrashAlt;
   faEdit = faEdit;
+  faPlus = faPlus;
 
   registrosPorPagina = 15;
   numPaginas = 0;
@@ -126,7 +129,7 @@ export class ProdDadosComponent implements OnInit {
     });
   }
 
-  chamarComfirm(produto: Produto) {   
+  chamarComfirm(produto: Produto) {
     this.mensagemService.confirm(
       `Tem certeza que quer excluir \n ${produto.nome} - ${FuncionalidadesExtrasService.moedaReal(
         produto.valor
@@ -141,7 +144,7 @@ export class ProdDadosComponent implements OnInit {
   }
 
   listarProdutos() {
-    this.produtoService.listarProdutosAll().subscribe(item => {
+    this.produtoService.listarProdutosCarrinhoAll().subscribe(item => {
       this.allProdutos = item;
       this.allProdutosFiltrado = item;
       this.produtos = this.filtraListaProduto(this.allProdutosFiltrado);
@@ -151,5 +154,26 @@ export class ProdDadosComponent implements OnInit {
       this.gerarPaginacao();
     });
     this.produto = null;
+  }
+
+  alterarEstoqueProduto(acao: boolean) {
+    if (this.produto) {
+      this.produtoService
+        .alterarEstoque(this.produto.id!, this.quantidadeEstoque, acao)
+        .subscribe(res => {
+          res.selecionado = true;
+          this.produto = res;
+
+          const itemProdutoAll = this.allProdutos.find(produtoLista => produtoLista.id === res.id);
+          const itemProduto = this.produtos.find(produtoLista => produtoLista.id === res.id);
+
+          itemProdutoAll && (itemProdutoAll.quantidade = res.quantidade);
+          itemProduto && (itemProduto.quantidade = res.quantidade);
+        });
+    }
+  }
+
+  changeQuantidadeEstoque(e: Event) {
+    this.quantidadeEstoque = Number((e.target as HTMLInputElement).value);
   }
 }

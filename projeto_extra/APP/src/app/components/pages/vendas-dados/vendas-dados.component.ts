@@ -118,10 +118,6 @@ export class VendasDadosComponent implements OnInit {
     this.vendaService.listarVendas().subscribe(item => {
       const data = item.content;
 
-      data.forEach(venda => {
-        venda.comissao = venda.valorTotal * (venda.funcionario.porcentagem / 100);
-      });
-
       this.allVendas = data;
 
       this.allVendasFiltrado = data;

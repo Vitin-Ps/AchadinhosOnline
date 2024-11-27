@@ -170,8 +170,7 @@ export class FuncDadosComponent {
     let comissao = 0;
     if (this.vendas != null && this.vendas.length !== 0) {
       this.vendas.forEach(venda => {
-        if (id === venda.funcionario.id)
-          comissao += venda.valorTotal * (venda.funcionario.porcentagem / 100);
+        if (id === venda.funcionario.id) comissao += venda.comissaoTotal;
       });
     }
     return comissao;

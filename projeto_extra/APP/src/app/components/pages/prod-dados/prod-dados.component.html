@@ -1,3 +1,34 @@
+<div
+  class="bg-shadow300 backdrop-blur-[20px] fixed w-screen h-screen top-0 left-0 z-50 flex justify-center items-start"
+  *ngIf="showModalAlterarEstoque"
+>
+  <div
+    class="relative p-5 rounded-md shadow-md bg-white min-w-[40%] mt-44 text-lg flex flex-col gap-5"
+  >
+    <div
+      class="absolute top-2 right-5 text-purple500 text-2xl cursor-pointer"
+      (click)="showModalAlterarEstoque = !showModalAlterarEstoque"
+    >
+      x
+    </div>
+    <h2>Nome: {{ produto && produto.nome }}</h2>
+    <h3>Quantidade atual: {{ produto && produto.quantidade }}</h3>
+
+    <div class="w-full">
+      <input
+        type="text"
+        placeholder="Digite a quantidade desejada..."
+        class="w-full border-2 border-purple500 rounded-md p-2"
+        (input)="changeQuantidadeEstoque($event)"
+      />
+    </div>
+    <div class="flex gap-5 w-full justify-center">
+      <button class="btn-padrao" (click)="alterarEstoqueProduto(true)">Adicionar</button>
+      <button class="btn-padrao" (click)="alterarEstoqueProduto(false)">Remover</button>
+    </div>
+  </div>
+</div>
+
 <div class="flex flex-col items-center gap-5 h-screen">
   <div
     class="flex justify-between w-full items-center p-5 shadow-[10px_10px_20px] shadow-shadow200"
@@ -10,7 +41,13 @@
         class="p-2 text-lg border-2 border-purple500 rounded-md"
       />
     </div>
-    <div class="flex gap-5" *ngIf="produto != null && produto.selecionado == true">
+    <div class="flex gap-5" *ngIf="produto && produto.selecionado">
+      <button
+        class="btn-padrao btn-acao"
+        (click)="showModalAlterarEstoque = !showModalAlterarEstoque"
+      >
+        <fa-icon [icon]="faPlus" /> Add Estoque
+      </button>
       <a routerLink="/produtos/{{ produto.id! }}"
         ><button class="btn-padrao btn-acao"><fa-icon [icon]="faEdit" /> Editar</button></a
       >
@@ -28,6 +65,7 @@
       *ngFor="let produto of produtos"
       [nome]="produto.nome"
       [valor]="produto.valor"
+      [quantidade]="produto.quantidade!"
       (click)="selecionarCard(produto)"
       [selecionado]="produto.selecionado!"
     ></app-card-prod>

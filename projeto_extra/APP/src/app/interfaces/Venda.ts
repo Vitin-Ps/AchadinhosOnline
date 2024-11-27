@@ -5,7 +5,7 @@ export interface Venda {
   funcionario: Funcionario;
   valorTotal: number;
   nomeCliente: string;
-  comissao?: number;
+  comissaoTotal: number;
 }
 
 export interface VendaDTO {

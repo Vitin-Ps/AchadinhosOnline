@@ -17,6 +17,10 @@ export class ProdutoService {
     return this.http.post<Produto>(this.apiUrl, produto);
   }
 
+  alterarEstoque(produtoId: number, quantidade: number, acao: boolean): Observable<Produto> {
+    return this.http.post<Produto>(`${this.apiUrl}/estoque`, { produtoId, quantidade, acao });
+  }
+
   // listarProdutosPage(
   //   page: number,
   //   pageSize: number,

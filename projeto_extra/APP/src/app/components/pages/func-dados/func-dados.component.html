@@ -28,7 +28,7 @@
       *ngFor="let funcionario of funcionarios"
       [nome]="funcionario.nome"
       [porcentagem]="funcionario.porcentagem"
-      [valor]="calcularcomissao(funcionario.id!)"
+      [comissao]="calcularcomissao(funcionario.id!)"
       [selecionado]="funcionario.selecionado!"
       (click)="selecionarCard(funcionario)"
     />
