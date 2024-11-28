@@ -54,7 +54,7 @@ export class CadVendaComponent implements OnInit {
       this.funcionarioService.detalharFuncionario(this.idUrl).subscribe(res => {
         this.funcionarioUrl = res;
       });
-      this.listarCarrinho(this.idUrl);
+      this.listarCarrinho(this.idUrl, false);
     }
   }
 
@@ -66,6 +66,7 @@ export class CadVendaComponent implements OnInit {
           funcionarioId: itemCarrinho.funcionario.id!,
           produtoId: itemCarrinho.produto.id!,
           quantidade: itemCarrinho.quantidade,
+          codEditVenda: false,
         };
 
         itemsNaoSelecionados.push(carrinhoEnvio);
@@ -102,7 +103,7 @@ export class CadVendaComponent implements OnInit {
   limparCarrinho(e: Event) {
     e.preventDefault();
     this.carrinhoService
-      .limparCarrinho(this.idUrl ? this.idUrl : this.idFuncionarioSelecionado!)
+      .limparCarrinho(this.idUrl ? this.idUrl : this.idFuncionarioSelecionado!, false)
       .subscribe(
         res => {
           if (this.router.url === '/vendas') {
@@ -123,17 +124,19 @@ export class CadVendaComponent implements OnInit {
     });
   }
 
-  listarCarrinho(idFuncionario: number) {
-    this.carrinhoService.listarItemsAllPorIdFuncionario(idFuncionario).subscribe(res => {
-      this.itemsCarrinho = res.map(item => ({ ...item }));
-    });
+  listarCarrinho(idFuncionario: number, codEditVenda: boolean) {
+    this.carrinhoService
+      .listarItemsAllPorIdFuncionario(idFuncionario, codEditVenda)
+      .subscribe(res => {
+        this.itemsCarrinho = res.map(item => ({ ...item }));
+      });
   }
 
   selecionarFuncionario(e: Event) {
     const target = e.target as HTMLInputElement;
     const value = target.value;
     this.idFuncionarioSelecionado = Number(value);
-    this.listarCarrinho(this.idFuncionarioSelecionado);
+    this.listarCarrinho(this.idFuncionarioSelecionado, false);
     this.nomeCliente = '';
     this.step = 1;
   }
@@ -178,6 +181,7 @@ export class CadVendaComponent implements OnInit {
             funcionarioId: this.itemCarrinnhoExcluir.funcionario.id!,
             produtoId: this.itemCarrinnhoExcluir.produto.id!,
             quantidade: this.itemCarrinnhoExcluir.quantidade,
+            codEditVenda: false,
           },
         ])
         .subscribe(res => {
@@ -187,7 +191,7 @@ export class CadVendaComponent implements OnInit {
     }
   }
 
-  muadaEtapa(acao: boolean) {
+  mudarEtapa(acao: boolean) {
     if (acao) {
       this.step += 1;
     } else {

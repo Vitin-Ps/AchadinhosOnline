@@ -19,21 +19,26 @@ export class CarrinhoProdutoComponent implements OnInit {
   produtosSelecionados: Produto[] = [];
   itemsCarrinho: CarrinhoEnvio[] = [];
   idFuncionario?: number;
+  idVenda?: number;
+  codEditVenda?: boolean;
   pesquisaText: string = '';
   loadingProdutos: boolean = false;
 
   faSearch = faSearch;
 
-  constructor(
-    private produtoService: ProdutoService,
-    private route: ActivatedRoute,
-    private carrinhoService: CarrinhoService,
-    private mensagemService: MensagensService,
-    private router: Router
-  ) {}
+  constructor(private produtoService: ProdutoService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.idFuncionario = Number(this.route.snapshot.paramMap.get('id'));
+    this.idVenda = Number(this.route.snapshot.paramMap.get('idVenda'));
+    if (
+      this.route.snapshot.paramMap.get('codEditVenda') &&
+      Number(this.route.snapshot.paramMap.get('codEditVenda')) === 1
+    ) {
+      this.codEditVenda = true;
+    } else {
+      this.codEditVenda = false;
+    }
     this.loadingProdutos = true;
     this.produtoService.listarProdutosCarrinhoAll().subscribe(response => {
       const data = response;
@@ -55,26 +60,5 @@ export class CarrinhoProdutoComponent implements OnInit {
 
   selecionarProduto(produto: Produto) {
     produto.selecionado = !produto.selecionado;
-  }
-
-  onSubmit(): void {
-    this.produtosSelecionados = this.produtos.filter(produto => produto.selecionado);
-    if (this.idFuncionario != null) {
-      console.log(this.itemsCarrinho);
-      this.produtosSelecionados.forEach(produto => {
-        const carrinho: CarrinhoEnvio = {
-          funcionarioId: this.idFuncionario!,
-          produtoId: Number(produto.id),
-        };
-        this.itemsCarrinho.push(carrinho);
-      });
-      this.carrinhoService.addItemsNoCarrinho(this.itemsCarrinho).subscribe(() => {
-        this.router.navigate([`/vendas/${this.idFuncionario}`]).then(() => {
-          window.location.reload();
-        });
-      });
-    } else {
-      this.mensagemService.alert('Id do Funcionário não foi passado!');
-    }
   }
 }

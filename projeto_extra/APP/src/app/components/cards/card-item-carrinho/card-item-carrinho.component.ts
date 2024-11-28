@@ -18,6 +18,7 @@ export class CardItemCarrinhoComponent {
   @Input() loading: boolean = false;
   @Input() funcionarioId: number | undefined;
   @Input() produtoId!: number;
+  @Input() codEditVenda?: boolean;
 
   novaQuantidade: number = this.quantidade !== 0 ? 1 : 0;
 
@@ -27,7 +28,7 @@ export class CardItemCarrinhoComponent {
     private messagemService: MensagensService
   ) {}
 
-  alterarQuantidadeItem(idItem: number, e: Event) {
+  alterarQuantidadeItem(e: Event) {
     const target = e.target as HTMLInputElement;
     const value: number = Number(target.value);
 
@@ -40,6 +41,7 @@ export class CardItemCarrinhoComponent {
         funcionarioId: this.funcionarioId,
         produtoId: this.produtoId,
         quantidade: this.novaQuantidade,
+        codEditVenda: this.codEditVenda ? this.codEditVenda : false,
       };
       this.carrinhoService.addItemsNoCarrinho([itemCarrinho]).subscribe(() => {
         this.messagemService.alert(`${this.nome} adicionado ao carrinho!`);

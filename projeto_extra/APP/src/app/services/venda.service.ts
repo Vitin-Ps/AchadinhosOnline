@@ -28,12 +28,16 @@ export class VendaService {
     return this.http.get<Recibo[]>(`${this.apiUrl}/recibo/${idVenda}`);
   }
 
+  deleteItemRecibo(idItemRecibo: number): Observable<Recibo[]> {
+    return this.http.delete<Recibo[]>(`${this.apiUrl}/recibo/${idItemRecibo}`);
+  }
+
   detalharVenda(id: number): Observable<Venda> {
     return this.http.get<Venda>(`${this.apiUrl}/${id}/detalhar`);
   }
 
-  alterarVenda(venda: VendaDTO): Observable<Venda> {
-    return this.http.put<Venda>(this.apiUrl, venda);
+  alterarVenda(id: number, nomeCliente: string): Observable<Venda> {
+    return this.http.put<Venda>(this.apiUrl, { id, nomeCliente });
   }
 
   excluirVenda(id: number) {

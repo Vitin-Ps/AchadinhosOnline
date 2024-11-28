@@ -64,7 +64,7 @@ const routes: Routes = [
   },
   { path: 'sobre', component: SobreComponent },
   {
-    path: 'carrinho/:id',
+    path: 'carrinho/:id/:codEditVenda/:idVenda',
     component: CarrinhoProdutoComponent,
     canActivate: [RoleGuard],
     data: { expectedRole: ['FUNCIONARIO'] },

@@ -22,12 +22,15 @@ export class CarrinhoService {
     return this.http.post<Carrinho[]>(`${this.apiUrl}/remover`, items);
   }
 
-  listarItemsAllPorIdFuncionario(idFuncionario: number): Observable<Carrinho[]> {
-    return this.http.get<Carrinho[]>(`${this.apiUrl}/${idFuncionario}`);
+  listarItemsAllPorIdFuncionario(
+    idFuncionario: number,
+    codEditVenda: boolean
+  ): Observable<Carrinho[]> {
+    return this.http.get<Carrinho[]>(`${this.apiUrl}/${idFuncionario}/${codEditVenda}`);
   }
 
-  limparCarrinho(id: number) {
-    const url = `${this.apiUrl}/${id}`;
+  limparCarrinho(id: number, codEditVenda: boolean) {
+    const url = `${this.apiUrl}/${id}/${codEditVenda}`;
     return this.http.delete(url);
   }
 }

@@ -28,8 +28,7 @@
       <button class="btn-padrao btn-acao" (click)="ativarBtnExcluir()">
         <fa-icon [icon]="faTrashAlt"></fa-icon>
       </button>
-      <span (click)="toggleDescricao()" class="cursor-pointer">
-        <!-- Ícone para expandir/recolher -->
+      <span (click)="toggleDescricao()" class="cursor-pointer">        
         <fa-icon [icon]="descricaoEstado === 'open' ? faChevronUp : faChevronDown"></fa-icon>
       </span>
     </div>

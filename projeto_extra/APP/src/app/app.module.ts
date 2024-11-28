@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  provideClientHydration,
-} from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +17,6 @@ import { FormFuncComponent } from './components/forms/form-func/form-func.compon
 import { MensagensComponent } from './components/mensagens/mensagens.component';
 import { FormProdutoComponent } from './components/forms/form-produto/form-produto.component';
 import { CarrinhoProdutoComponent } from './components/pages/carrinho-produto/carrinho-produto.component';
-import { FormVendaComponent } from './components/forms/form-venda/form-venda.component';
 import { HomeAdminComponent } from './components/pages/home-admin/home-admin.component';
 import { FuncDadosComponent } from './components/pages/func-dados/func-dados.component';
 import { VendasDadosComponent } from './components/pages/vendas-dados/vendas-dados.component';
@@ -60,7 +56,6 @@ const serviceAutentica = [Interceptor];
     MensagensComponent,
     FormProdutoComponent,
     CarrinhoProdutoComponent,
-    FormVendaComponent,
     HomeAdminComponent,
     FuncDadosComponent,
     VendasDadosComponent,

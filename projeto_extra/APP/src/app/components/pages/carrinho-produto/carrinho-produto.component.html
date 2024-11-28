@@ -27,10 +27,11 @@
       [funcionarioId]="idFuncionario"
       [produtoId]="produto.id!"
       [loading]="loadingProdutos"
+      [codEditVenda]="codEditVenda"
     ></app-card-item-carrinho>
   </div>
   <div class="p-5 w-full mt-auto flex gap-5">
-    <a routerLink="/vendas/{{ idFuncionario }}"
+    <a [routerLink]="codEditVenda && idVenda ? '/vendas/edit/' + idVenda : '/vendas/' + idFuncionario"
       ><button class="btn-padrao btn-invertido">Finalizar Carrinho</button></a
     >
   </div>

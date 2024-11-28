@@ -26,7 +26,7 @@
       <button class="btn-padrao" (click)="limparCarrinho($event)" *ngIf="itemsCarrinho.length > 0">
         Limpar Carrinho
       </button>
-      <a routerLink="/carrinho/{{ idUrl ? idUrl : idFuncionarioSelecionado }}"
+      <a routerLink="/carrinho/{{ idUrl ? idUrl : idFuncionarioSelecionado }}/0/0"
         ><button class="btn-padrao">Continuar Comprando</button></a
       >
     </div>
@@ -93,10 +93,10 @@
     class="p-5 w-full flex gap-5"
     *ngIf="(idUrl || idFuncionarioSelecionado) && itemsCarrinho.length > 0"
   >
-    <button class="btn-padrao" (click)="muadaEtapa(false)" *ngIf="step === 2">Anterior</button>
+    <button class="btn-padrao" (click)="mudarEtapa(false)" *ngIf="step === 2">Anterior</button>
     <button class="btn-padrao btn-invertido" (click)="registrarVenda()" *ngIf="nomeCliente">
       Finalizar Venda
     </button>
-    <button class="btn-padrao" (click)="muadaEtapa(true)" *ngIf="step === 1">Próximo</button>
+    <button class="btn-padrao" (click)="mudarEtapa(true)" *ngIf="step === 1">Próximo</button>
   </div>
 </div>

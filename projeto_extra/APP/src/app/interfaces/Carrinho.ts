@@ -12,5 +12,6 @@ export interface CarrinhoEnvio {
   id?: number;
   funcionarioId: number;
   produtoId: number;
-  quantidade?: number;
+  codEditVenda: boolean;
+  quantidade: number;
 }
