@@ -16,4 +16,12 @@ export class LoginService {
   loginUser(login: Login): Observable<Token> {
     return this.http.post<Token>(this.apiUrl, login);
   }
+
+  recuperarSenha(novaSenha: string, confirmaSenha: string, rawToken: string): Observable<Token> {
+    return this.http.post<Token>(`${this.apiUrl}/recuperar`, {
+      novaSenha,
+      confirmaSenha,
+      rawToken,
+    });
+  }
 }

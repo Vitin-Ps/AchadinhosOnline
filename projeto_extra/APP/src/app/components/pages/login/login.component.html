@@ -1,18 +1,47 @@
-<div class="fundo-roxo">
-    <div class="imagem-com-overlay">
-        <img src="../../../../assets/imagens/img002.jpg" alt="">
-        <div class="conteudo">
-            <form [formGroup]="loginForm" #formDir="ngForm" (ngSubmit)="submit()">
-                <div class="form-group"><input type="text" placeholder="Login" formControlName="login"></div>
-                <div class="form-group"><input type="password" placeholder="Senha" formControlName="senha"></div>
-                <div class="opcoes-usuario">
-                    <div>
-                        <input type="checkbox" class="checkbox" formControlName="lembrar">
-                        <label for="lembrar">Manter-se Conectado</label>
-                    </div>
-                </div>
-                <input type="submit" value="Entrar">
-            </form>
+<div class="relative w-full bg-degrade_purple_l h-screen flex justify-center items-center">
+  <img
+    src="../../../../assets/imagens/img002.jpg"
+    class="w-[90%] h-screen absolute left-[50%] translate-x-[-50%] object-cover z-0"
+  />
+  <div class="relative z-10">
+    <form
+      [formGroup]="loginForm"
+      #formDir="ngForm"
+      (ngSubmit)="submit()"
+      class="flex flex-col gap-5"
+    >
+      <div class="w-[300px]">
+        <input
+          type="text"
+          placeholder="Login"
+          formControlName="login"
+          class="w-full p-3 border-2 border-purple500 text-2xl rounded-lg"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Senha"
+          formControlName="senha"
+          class="w-full p-3 border-2 border-purple500 text-2xl rounded-lg"
+        />
+      </div>
+      <div class="opcoes-usuario">
+        <div class="flex gap-2 items-center">
+          <input type="checkbox" class="w-8 h-8 rounded-lg" formControlName="lembrar" />
+          <label for="lembrar" class="font-normal text-xl text-white shadow-lg"
+            >Manter-se Conectado</label
+          >
         </div>
-    </div>
+        <div class="py-3 flex items-center">
+          <a
+          routerLink="/esqueceu-senha"
+            class="font-normal text-xl text-purple100 shadow-lg hover:text-purple200 hover:underline duration-200"
+            >Esqueceu a senha</a
+          >
+        </div>
+      </div>
+      <input type="submit" value="Entrar" />
+    </form>
+  </div>
 </div>

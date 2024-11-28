@@ -39,6 +39,8 @@ import { Interceptor } from './interceptor/Interserptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CardItemCarrinhoComponent } from './components/cards/card-item-carrinho/card-item-carrinho.component';
+import { RecuperarSenhaComponent } from './components/pages/recuperar-senha/recuperar-senha.component';
+import { EsqueceuSenhaComponent } from './components/pages/esqueceu-senha/esqueceu-senha.component';
 
 const serviceAutentica = [Interceptor];
 
@@ -76,6 +78,8 @@ const serviceAutentica = [Interceptor];
     LoginComponent,
     LoadingComponent,
     CardItemCarrinhoComponent,
+    RecuperarSenhaComponent,
+    EsqueceuSenhaComponent,
   ],
   imports: [
     HttpClientModule,

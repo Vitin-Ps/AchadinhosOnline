@@ -33,7 +33,7 @@ public class FuncionarioController {
         repository.save(funcionario);
 
         String senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        Usuario usuario = new Usuario(dados.email(), senhaCodificada, TipoUsuario.FUNCIONARIO);
+        Usuario usuario = new Usuario(dados.email(), senhaCodificada, dados.nome(), TipoUsuario.FUNCIONARIO);
         usuarioRepository.save(usuario);
 
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();
@@ -55,7 +55,7 @@ public class FuncionarioController {
 
         String senhaCodificada = null;
         if (dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        usuario.atualizarInfo(dados.email(), senhaCodificada);
+        usuario.atualizarInfo(dados.email(), dados.nome(), senhaCodificada);
 
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }

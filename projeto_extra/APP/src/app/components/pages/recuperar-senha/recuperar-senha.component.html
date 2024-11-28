@@ -1,0 +1,30 @@
+<div class="p-5 flex flex-col items-center gap-5">
+  <h2 class="font-bold text-2xl">Recuperar <span class="text-purple500">Senha</span></h2>
+  <form
+    [formGroup]="recuperarSenhaForm"
+    #formDir="ngForm"
+    (ngSubmit)="submit()"
+    class="flex flex-col gap-5"
+  >
+    <div class="w-[300px]">
+      <input
+        type="password"
+        placeholder="Senha"
+        formControlName="senha"
+        class="w-full p-3 border-2 border-purple500 text-2xl rounded-lg"
+      />
+    </div>
+    <div class="form-group">
+      <input
+        type="password"
+        placeholder="Nova senha"
+        formControlName="novaSenha"
+        class="w-full p-3 border-2 border-purple500 text-2xl rounded-lg"
+      />
+    </div>
+    <input type="submit" value="Entrar" />
+  </form>
+  <div class="max-w-[800px] p-5">
+    <p class="text-xl text-gray500"></p>
+  </div>
+</div>

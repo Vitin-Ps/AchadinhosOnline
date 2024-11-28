@@ -28,6 +28,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login/recuperar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/token/token-senha").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").hasRole("ADMIN")

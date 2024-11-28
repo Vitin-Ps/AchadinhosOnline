@@ -25,24 +25,25 @@ export class MensagensService {
 
   confirm(mensagem: string) {
     this.type = 'confirm';
-    this.mensagem = mensagem;    
+    this.mensagem = mensagem;
     setTimeout(() => {
       this.clear();
     }, 10000);
   }
 
-  tratadorDeErro(error: any, errorData: { campo: string, mensagem: string }[] | string) {
-    if (error.status === 401 &&  typeof errorData === 'string') {
+  tratadorDeErro(error: any, errorData: { campo: string; mensagem: string }[] | string) {
+    if (error.status === 401 && typeof errorData === 'string') {
       return this.alert(errorData);
     }
-  
+
     if (error.status === 400 && Array.isArray(errorData)) {
       let mensagem = errorData.map(entry => entry.mensagem).join(' - ');
-  
+
       this.alert(mensagem);
     }
+
+    if (error.error) {
+      this.alert(error.error);
+    }
   }
-  
-  
-  
 }

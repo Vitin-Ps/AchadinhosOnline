@@ -2,10 +2,7 @@ package com.example.crudjava.domain.usuario;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,20 +23,25 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
+    @Setter
     private String senha;
+    private String nome;
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo;
 
-    public Usuario(String login, String senhaCodificada, TipoUsuario tipoUsuario) {
+    public Usuario(String login, String senhaCodificada, String nome, TipoUsuario tipoUsuario) {
         this.login = login;
         this.senha = senhaCodificada;
         this.tipo = tipoUsuario;
+        this.nome = nome;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.tipo == TipoUsuario.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        if(this.tipo == TipoUsuario.FUNCIONARIO) return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.tipo == TipoUsuario.ADMIN)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.tipo == TipoUsuario.FUNCIONARIO)
+            return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
@@ -73,12 +75,15 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public void atualizarInfo(String email, String senhaCodificada) {
-        if(!StringUtils.isBlank(email)) {
+    public void atualizarInfo(String email, String nome, String senhaCodificada) {
+        if (!StringUtils.isBlank(email)) {
             this.login = email;
         }
-        if(!StringUtils.isBlank(senhaCodificada)) {
+        if (!StringUtils.isBlank(senhaCodificada)) {
             this.senha = senhaCodificada;
+        }
+        if (!StringUtils.isBlank(nome)) {
+            this.nome = nome;
         }
     }
 }
