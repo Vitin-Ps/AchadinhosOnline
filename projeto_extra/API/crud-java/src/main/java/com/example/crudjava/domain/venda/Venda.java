@@ -2,10 +2,7 @@ package com.example.crudjava.domain.venda;
 
 import com.example.crudjava.domain.funcionario.Funcionario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,8 +20,11 @@ public class Venda {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
+    @Setter
     private String nomeCliente;
+    @Setter
     private BigDecimal valorTotal;
+    @Setter
     private BigDecimal comissaoTotal;
     @Column(name = "date_created", updatable = false)
     private LocalDateTime dateCreated;
@@ -39,19 +39,7 @@ public class Venda {
         this.comissaoTotal = calculaComissao(funcionario, valorTotal);
     }
 
-    public void atualizarInformacoes(DadosAtualizaVenda dados, Funcionario funcionario) {
-        if (funcionario != null) {
-            this.funcionario = funcionario;
-        }
-        if (dados.valorTotal() != null) {
-            this.valorTotal = dados.valorTotal();
-            if (funcionario != null)
-                this.comissaoTotal = calculaComissao(funcionario, valorTotal);
-        }
-
-    }
-
-    private BigDecimal calculaComissao(Funcionario funcionario, BigDecimal valor) {
+    public BigDecimal calculaComissao(Funcionario funcionario, BigDecimal valor) {
         return valor.multiply(
                 BigDecimal.valueOf(funcionario.getPorcentagem()).divide(BigDecimal.valueOf(100)));
     }

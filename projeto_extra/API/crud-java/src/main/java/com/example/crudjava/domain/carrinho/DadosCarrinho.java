@@ -8,6 +8,8 @@ public record DadosCarrinho(
         @NotNull
         Long produtoId,
         @NotNull
-        Integer quantidade
+        Integer quantidade,
+        @NotNull
+        Boolean codEditVenda
 ) {
 }

@@ -29,6 +29,7 @@ public class CarrinhoService {
 
     public List<DadosListagemCarrinho> addNoCarrinho(List<DadosCarrinho> dadosList) {
         Long funcionarioId = null;
+        Boolean codEditVenda = null;
         for (DadosCarrinho dados : dadosList) {
 
             if (dados.quantidade() == null) {
@@ -43,25 +44,27 @@ public class CarrinhoService {
             }
 
             if (funcionarioId == null) funcionarioId = dados.funcionarioId();
+            if (codEditVenda == null) codEditVenda = dados.codEditVenda();
 
             Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
 
             estoqueProduto.atualizarQuantidade(dados.quantidade(), false);
 
-            Carrinho carrinho = new Carrinho(null, funcionario, produto, dados.quantidade());
+            Carrinho carrinho = new Carrinho(null, funcionario, produto, dados.quantidade(), dados.codEditVenda());
             carrinhoRepository.save(carrinho);
         }
 
         if (funcionarioId != null) {
-            return carrinhoRepository.findAllByFuncionarioId(funcionarioId).stream().map(DadosListagemCarrinho::new).toList();
+            return carrinhoRepository.findAllByFuncionarioIdAndCodEditVenda(funcionarioId, codEditVenda).stream().map(DadosListagemCarrinho::new).toList();
         }
         return null;
     }
 
     public List<DadosListagemCarrinho> removerItemDoCarrinho(List<DadosCarrinho> dadosList) {
         Long funcionarioId = null;
+        Boolean codEditVenda = null;
         for (DadosCarrinho dados : dadosList) {
-            List<Carrinho> itemsCarrinho = carrinhoRepository.findAllByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
+            List<Carrinho> itemsCarrinho = carrinhoRepository.findAllByFuncionarioIdAndProdutoIdAndCodEditVenda(dados.funcionarioId(), dados.produtoId(), dados.codEditVenda());
             Integer quantidadeTotalItems = 0;
             if (itemsCarrinho.isEmpty()) throw new ValidacaoException("item não está no carrinho");
             else {
@@ -70,13 +73,14 @@ public class CarrinhoService {
                 }
             }
             if (funcionarioId == null) funcionarioId = dados.funcionarioId();
+            if (codEditVenda == null) codEditVenda = dados.codEditVenda();
 
             Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
 
             if (dados.quantidade() > quantidadeTotalItems) {
                 throw new ValidacaoException("Essa quantidade é superior a que está no carrinho!");
             } else if (quantidadeTotalItems.equals(dados.quantidade())) {
-                carrinhoRepository.deleteAllByFuncionarioIdAndProdutoId(dados.funcionarioId(), dados.produtoId());
+                carrinhoRepository.deleteAllByFuncionarioIdAndProdutoIdAndCodEditVenda(dados.funcionarioId(), dados.produtoId(), dados.codEditVenda());
             } else {
                 quantidadeTotalItems = dados.quantidade();
                 for (Carrinho itemCarrinho : itemsCarrinho) {
@@ -95,14 +99,14 @@ public class CarrinhoService {
         }
 
         if (funcionarioId != null) {
-            return listarCarrinho(funcionarioId);
+            return listarCarrinho(funcionarioId, codEditVenda);
         }
         return null;
     }
 
-    public void limparCarrinho(Long funcionarioId, boolean reporEstoque) {
+    public void limparCarrinho(Long funcionarioId, Boolean codEditVenda, boolean reporEstoque) {
 
-        List<Carrinho> listaItemsCarrinho = carrinhoRepository.findAllByFuncionarioId(funcionarioId);
+        List<Carrinho> listaItemsCarrinho = carrinhoRepository.findAllByFuncionarioIdAndCodEditVenda(funcionarioId, codEditVenda);
 
         if (!listaItemsCarrinho.isEmpty()) {
             listaItemsCarrinho.forEach(itemCarrinho -> {
@@ -118,8 +122,8 @@ public class CarrinhoService {
         }
     }
 
-    public List<DadosListagemCarrinho> listarCarrinho(Long id) {
-        List<Carrinho> listCarrinho = carrinhoRepository.findAllByFuncionarioId(id);
+    public List<DadosListagemCarrinho> listarCarrinho(Long id, Boolean codEditVenda) {
+        List<Carrinho> listCarrinho = carrinhoRepository.findAllByFuncionarioIdAndCodEditVenda(id, codEditVenda);
         List<DadosListagemCarrinho> listItemsCarrinho = new ArrayList<>();
 
         if (!listCarrinho.isEmpty()) {

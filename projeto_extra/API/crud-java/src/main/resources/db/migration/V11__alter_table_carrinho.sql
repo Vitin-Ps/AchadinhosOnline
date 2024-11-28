@@ -1,0 +1,2 @@
+ALTER TABLE carrinho
+ADD cod_edit_venda TINYINT NOT NULL DEFAULT 0;

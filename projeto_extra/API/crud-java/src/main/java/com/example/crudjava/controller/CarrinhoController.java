@@ -21,22 +21,21 @@ public class CarrinhoController {
     @PostMapping
     @Transactional
     public ResponseEntity<List<DadosListagemCarrinho>> addCarrinho(@RequestBody @Valid List<DadosCarrinho> dadosList) {
-        System.out.println(dadosList);
         List<DadosListagemCarrinho> listaDados = service.addNoCarrinho(dadosList);
         return ResponseEntity.ok(listaDados);
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id) {
-        List<DadosListagemCarrinho> listaCarrinho = service.listarCarrinho(id);
+    @GetMapping("/{id}/{codEditVenda}")
+    public ResponseEntity<List<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id, @PathVariable Boolean codEditVenda) {
+        List<DadosListagemCarrinho> listaCarrinho = service.listarCarrinho(id, codEditVenda);
         return ResponseEntity.ok(listaCarrinho);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{codEditVenda}")
     @Transactional
-    public ResponseEntity limparCarrinho(@PathVariable Long id) {
-        service.limparCarrinho(id, true);
+    public ResponseEntity limparCarrinho(@PathVariable Long id, @PathVariable Boolean codEditVenda) {
+        service.limparCarrinho(id, codEditVenda, true);
         return ResponseEntity.noContent().build();
     }
 

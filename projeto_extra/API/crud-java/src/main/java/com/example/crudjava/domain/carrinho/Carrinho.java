@@ -23,5 +23,6 @@ public class Carrinho {
     private Produto produto;
     @Setter
     private Integer quantidade;
+    private Boolean codEditVenda;
 
 }
