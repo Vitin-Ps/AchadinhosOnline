@@ -32,6 +32,10 @@ export class MensagensService {
   }
 
   tratadorDeErro(error: any, errorData: { campo: string; mensagem: string }[] | string) {
+    if (error.error) {
+      this.alert(error.error);
+    }
+
     if (error.status === 401 && typeof errorData === 'string') {
       return this.alert(errorData);
     }
@@ -40,10 +44,6 @@ export class MensagensService {
       let mensagem = errorData.map(entry => entry.mensagem).join(' - ');
 
       this.alert(mensagem);
-    }
-
-    if (error.error) {
-      this.alert(error.error);
-    }
+    }    
   }
 }

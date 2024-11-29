@@ -45,8 +45,9 @@ export class RoleGuardService implements CanActivate {
       }
 
       return true;
-    } else {   
-      return false;
     }
+    window.location.href = '/login';
+
+    return false;
   }
 }
