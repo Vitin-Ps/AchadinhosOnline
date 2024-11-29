@@ -3,27 +3,21 @@ package com.example.crudjava.controller;
 import com.example.crudjava.domain.funcionario.*;
 import com.example.crudjava.domain.usuario.TipoUsuario;
 import com.example.crudjava.domain.usuario.Usuario;
-import com.example.crudjava.infra.FuncionalidadesService;
-import com.example.crudjava.infra.file.ArquivoService;
 import com.example.crudjava.repository.FuncionarioRepository;
 import com.example.crudjava.repository.UsuarioRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/funcionarios")
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class FuncionarioController {
     @Autowired
     private FuncionarioRepository repository;
@@ -31,23 +25,15 @@ public class FuncionarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ArquivoService arquivoService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("dados") String dadosString, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
-        DadosCadastroFuncionario dados = objectMapper.readValue(dadosString, DadosCadastroFuncionario.class);
-        FuncionalidadesService.validarRecord(dados);
-        String imagem = null;
-        if(arquivo != null) imagem = arquivoService.enviarArquivo(arquivo, null);
-        var funcionario = new Funcionario(dados, imagem);
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroFuncionario dados, UriComponentsBuilder uriComponentsBuilder) {
+        var funcionario = new Funcionario(dados);
         repository.save(funcionario);
 
         String senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        Usuario usuario = new Usuario(dados.email(), senhaCodificada, TipoUsuario.FUNCIONARIO);
+        Usuario usuario = new Usuario(dados.email(), senhaCodificada, dados.nome(), TipoUsuario.FUNCIONARIO);
         usuarioRepository.save(usuario);
 
         var uri = uriComponentsBuilder.path("/funcionarios/{id}").buildAndExpand(funcionario.getId()).toUri();
@@ -55,28 +41,21 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListegemFuncionario>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(DadosListegemFuncionario::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<DadosListagemFuncionario>> listar() {
+        var listaFunc = repository.findAllByAtivoTrue().stream().map(DadosListagemFuncionario::new).toList();
+        return ResponseEntity.ok(listaFunc);
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestPart(value = "arquivo", required = false) MultipartFile arquivo, @RequestPart("dados") String dadosString) throws JsonProcessingException {
-        DadosAtualizaFuncionario dados = objectMapper.readValue(dadosString, DadosAtualizaFuncionario.class);
-        FuncionalidadesService.validarRecord(dados);
+    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaFuncionario dados) {
         var funcionario = repository.getReferenceByIdAndAtivoTrue(dados.id());
         var usuario = usuarioRepository.getReferenceByLogin(funcionario.getEmail());
-        String arquivoUrl = null;
-        if(arquivo != null)  {
-            if(StringUtils.isBlank(funcionario.getImagem())) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
-            else arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem()));
-        }
-        funcionario.atualizarInfo(dados, arquivoUrl);
-        
+        funcionario.atualizarInfo(dados);
+
         String senhaCodificada = null;
-        if(dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        usuario.atualizarInfo(dados.email(), senhaCodificada);
+        if (dados.senha() != null) senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
+        usuario.atualizarInfo(dados.email(), dados.nome(), senhaCodificada);
 
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
@@ -92,11 +71,7 @@ public class FuncionarioController {
     @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
-        var funcionario = repository.getReferenceByIdAndAtivoTrue(id);
         repository.deleteById(id);
-        String arquivo = null;
-        if(!StringUtils.isBlank(funcionario.getImagem())) arquivo = FuncionalidadesService.extrairNomeArquivo(funcionario.getImagem());
-        if(arquivo != null) arquivoService.deletarArquivo(arquivo);
         return ResponseEntity.noContent().build();
     }
 

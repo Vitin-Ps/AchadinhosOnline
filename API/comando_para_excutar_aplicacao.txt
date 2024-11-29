@@ -1,1 +1,0 @@
-java -jar -DDATASOURCE_URL=jdbc:mysql://localhost/cad_vendas?createDatabaseIfNotExist=true -DDATASOURCE_USERNAME=root -DDATASOURCE_PASSWORD= crud-java.jar

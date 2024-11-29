@@ -1,68 +1,72 @@
 package com.example.crudjava.controller;
 
+import com.example.crudjava.domain.estoque.DadosRegistroEstoque;
+import com.example.crudjava.domain.estoque.Estoque;
 import com.example.crudjava.domain.produto.*;
-import com.example.crudjava.infra.FuncionalidadesService;
-import com.example.crudjava.infra.file.ArquivoService;
+import com.example.crudjava.infra.exception.ValidacaoException;
+import com.example.crudjava.repository.EstoqueRepository;
 import com.example.crudjava.repository.ProdutoRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class ProdutoController {
     @Autowired
     private ProdutoRepository repository;
+
     @Autowired
-    private ArquivoService arquivoService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private EstoqueRepository estoqueRepository;
 
     @PostMapping
     @Transactional
-//    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados, UriComponentsBuilder uriComponentsBuilder) {
-    public ResponseEntity cadastrar(@RequestPart(value = "arquivo", required = false)MultipartFile arquivo, @RequestPart("dados") String dadosJson, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
-        DadosCadastroProduto dados = objectMapper.readValue(dadosJson, DadosCadastroProduto.class);
-        FuncionalidadesService.validarRecord(dados);
-        String arquivoUrl = null;
-        if(arquivo != null) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
-        var produto = new Produto(dados, arquivoUrl);
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados, UriComponentsBuilder uriComponentsBuilder) {
+        Produto produto = new Produto(dados);
         repository.save(produto);
+
+        Estoque estoqueProduto = new Estoque(produto, 0);
+        estoqueRepository.save(estoqueProduto);
+
         var uri = uriComponentsBuilder.path("/produtos/{id}").buildAndExpand(produto.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoProduto(produto));
-//        System.out.println(arquivo);
-//        return null;
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListegemProduto>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"})Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(DadosListegemProduto::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<DadosListagemProduto>> listar() {
+        var listaProd = repository.findAllByAtivoTrue().stream().map(DadosListagemProduto::new).toList();
+        return ResponseEntity.ok(listaProd);
+    }
+
+    @GetMapping("/carrinho")
+    public ResponseEntity<List<DadosListagemProdutoCarrinho>> listarProdutosCarrinho() {
+
+        var listaEstoque = estoqueRepository.findAll();
+
+        var listaProd = repository.findAllByAtivoTrue().stream().map(produto -> {
+            Estoque estoqueProduto = listaEstoque.stream()
+                    .filter(estoque -> estoque.getProduto().getId().equals(produto.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            return new DadosListagemProdutoCarrinho(produto, estoqueProduto.getQuantidade());
+        }).toList();
+
+
+        return ResponseEntity.ok(listaProd);
     }
 
     @PutMapping
     @Transactional
-//    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaProduto dados) {
-    public ResponseEntity atualizar(@RequestPart(value = "arquivo", required = false)MultipartFile arquivo, @RequestPart("dados")String dadosJson) throws JsonProcessingException {
-        DadosAtualizaProduto dados = objectMapper.readValue(dadosJson, DadosAtualizaProduto.class);
-        FuncionalidadesService.validarRecord(dados);
+    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaProduto dados) {
         var produto = repository.getReferenceByIdAndAtivoTrue(dados.id());
-        String arquivoUrl = null;
-        if(arquivo != null)  {
-            if(StringUtils.isBlank(produto.getImagem())) arquivoUrl = arquivoService.enviarArquivo(arquivo, null);
-            else arquivoUrl = arquivoService.enviarArquivo(arquivo, FuncionalidadesService.extrairNomeArquivo(produto.getImagem()));
-        }
-        produto.atualizarInfo(dados, arquivoUrl);
+        produto.atualizarInfo(dados);
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
 
@@ -73,14 +77,11 @@ public class ProdutoController {
         produto.excluirLogico();
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{id}/del")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
-        Produto produto = repository.getReferenceByIdAndAtivoTrue(id);
         repository.deleteById(id);
-        String arquivo = null;
-        if(!StringUtils.isBlank(produto.getImagem())) arquivo = FuncionalidadesService.extrairNomeArquivo(produto.getImagem());
-        if(arquivo != null) arquivoService.deletarArquivo(arquivo);
         return ResponseEntity.noContent().build();
     }
 
@@ -88,5 +89,24 @@ public class ProdutoController {
     public ResponseEntity detalhar(@PathVariable Long id) {
         var produto = repository.getReferenceByIdAndAtivoTrue(id);
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
+    }
+
+    @GetMapping("/carrinho/{id}")
+    public ResponseEntity<DadosListagemProdutoCarrinho> detalharProdutoCarrinho(@PathVariable Long id) {
+        Produto produto = repository.getReferenceByIdAndAtivoTrue(id);
+        Estoque estoque = estoqueRepository.getReferenceByProdutoId(id);
+        return ResponseEntity.ok(new DadosListagemProdutoCarrinho(produto, estoque.getQuantidade()));
+    }
+
+    @PostMapping("/estoque")
+    @Transactional
+    public ResponseEntity<DadosListagemProdutoCarrinho> alterarEstoque(@RequestBody @Valid DadosRegistroEstoque dados) {
+        if (!repository.existsById(dados.produtoId())) {
+            throw new ValidacaoException("Produto não existe");
+        }
+        Produto produto = repository.getReferenceByIdAndAtivoTrue(dados.produtoId());
+        Estoque estoqueProduto = estoqueRepository.getReferenceByProdutoId(dados.produtoId());
+        estoqueProduto.atualizarQuantidade(dados.quantidade(), dados.acao());
+        return ResponseEntity.ok(new DadosListagemProdutoCarrinho(produto, estoqueProduto.getQuantidade()));
     }
 }

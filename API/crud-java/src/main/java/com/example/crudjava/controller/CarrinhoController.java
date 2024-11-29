@@ -6,9 +6,6 @@ import com.example.crudjava.domain.carrinho.DadosListagemCarrinho;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,37 +13,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/carrinho")
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.100.46:4200"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class CarrinhoController {
     @Autowired
     private CarrinhoService service;
 
     @PostMapping
     @Transactional
-    public ResponseEntity addCarrinho(@RequestBody @Valid List<DadosCarrinho> dadosList) {
-        System.out.println(dadosList);
-        service.addNoCarrinho(dadosList);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<DadosListagemCarrinho>> addCarrinho(@RequestBody @Valid List<DadosCarrinho> dadosList) {
+        List<DadosListagemCarrinho> listaDados = service.addNoCarrinho(dadosList);
+        return ResponseEntity.ok(listaDados);
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Page<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id ,Pageable pageable) {
-        var dto = service.listarCarrinho(id, pageable);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/{id}/{codEditVenda}")
+    public ResponseEntity<List<DadosListagemCarrinho>> listarCarrinho(@PathVariable Long id, @PathVariable Boolean codEditVenda) {
+        List<DadosListagemCarrinho> listaCarrinho = service.listarCarrinho(id, codEditVenda);
+        return ResponseEntity.ok(listaCarrinho);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{codEditVenda}")
     @Transactional
-    public ResponseEntity limparCarrinho(@PathVariable Long id) {
-        service.limparCarrinho(id);
+    public ResponseEntity limparCarrinho(@PathVariable Long id, @PathVariable Boolean codEditVenda) {
+        service.limparCarrinho(id, codEditVenda, true);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/remover")
     @Transactional
-    public ResponseEntity removerItem(@RequestBody @Valid List<DadosCarrinho> dadosList) {
-        service.removerItemDoCarrinho(dadosList);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<DadosListagemCarrinho>> removerItem(@RequestBody @Valid List<DadosCarrinho> dadosList) {
+        List<DadosListagemCarrinho> listDados = service.removerItemDoCarrinho(dadosList);
+        return ResponseEntity.ok(listDados);
     }
 }

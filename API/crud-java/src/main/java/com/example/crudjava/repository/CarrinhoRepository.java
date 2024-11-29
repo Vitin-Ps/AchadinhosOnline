@@ -1,20 +1,14 @@
 package com.example.crudjava.repository;
 
 import com.example.crudjava.domain.carrinho.Carrinho;
-import com.example.crudjava.domain.carrinho.DadosListagemCarrinho;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
+    List<Carrinho> findAllByFuncionarioIdAndCodEditVenda(Long funcionarioId, Boolean codEditVenda);
 
-    Carrinho findFirstByFuncionarioIdAndProdutoId(Long funcionarioId, Long produtoId);
-    Page<DadosListagemCarrinho> findAllByFuncionarioId(Long funcionarioId, Pageable pageable);
+    List<Carrinho> findAllByFuncionarioIdAndProdutoIdAndCodEditVenda(Long FuncionarioId, Long ProdutoId, Boolean aBoolean);
 
-    int deleteAllByFuncionarioId(Long funcionarioId);
+    void deleteAllByFuncionarioIdAndProdutoIdAndCodEditVenda(Long aLong, Long aLong1, Boolean aBoolean);
 }

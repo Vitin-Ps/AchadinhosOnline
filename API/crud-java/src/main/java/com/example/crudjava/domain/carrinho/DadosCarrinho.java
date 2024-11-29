@@ -6,6 +6,10 @@ public record DadosCarrinho(
         @NotNull
         Long funcionarioId,
         @NotNull
-        Long produtoId
+        Long produtoId,
+        @NotNull
+        Integer quantidade,
+        @NotNull
+        Boolean codEditVenda
 ) {
 }

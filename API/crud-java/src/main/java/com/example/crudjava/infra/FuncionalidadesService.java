@@ -1,74 +1,67 @@
 package com.example.crudjava.infra;
 
-import com.example.crudjava.infra.exception.ValidacaoException;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.springframework.util.StringUtils;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.Normalizer;
-import java.util.Set;
 
 public abstract class FuncionalidadesService {
-    public static String formatarNomeArquivo(String nomeArquivo) {
-        // Transforma tudo em letra minúscula
-        nomeArquivo = nomeArquivo.toLowerCase();
-        // Remove caracteres especiais
-        nomeArquivo = removerCaracteresEspeciais(nomeArquivo);
-        // Substitui espaços por _
-        nomeArquivo = nomeArquivo.replace(" ", "_");
-        return nomeArquivo;
-    }
-
     public static String removerCaracteresEspeciais(String texto) {
-        // Remove acentos e outros caracteres especiais
         texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
         texto = texto.replaceAll("[^\\p{ASCII}]", "");
         return texto;
     }
 
-    public static String extrairNomeArquivo(String linkArquivo) {
-        if(linkArquivo == null) return null;
+    public static String retornaMsgEmail(String nome, String token) {
 
-        String[] linkPartido = linkArquivo.split("/");
-        String nomeArquivo = linkPartido[linkPartido.length - 1];
-        return nomeArquivo;
+        String mensagem = """
+                <style>
+                      * {
+                        padding: 0;
+                        margin: 0;
+                        font-family: Arial, Helvetica, sans-serif;
+                      }
+                      .main {
+                        margin: 5em;
+                        padding: 2em;
+                        border: 2px solid #b300c7;
+                        border-radius: 15px;
+                        box-shadow: 10px 10px 20px #00000035;
+                        max-width: 460px;
+                                
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                      }
+                                
+                      .main h2 {
+                        color: #8200b1;
+                      }
+                                
+                      .main a {
+                        text-decoration: none;
+                        font-weight: bold;
+                        color: #b300c7;
+                        transition: 0.2s;
+                      }
+                                
+                      .main a:hover {
+                        color: #44004b;
+                      }
+                    </style>
+                    <div class="main">
+                      <h2>Olá @@nomeUsuario@@, tudo bom?</h2>
+                      <p>Aqui está o link para que você possa trocar a sua senha:</p>
+                      <p>
+                        <a href="http://localhost:4200/recuperar-senha/@@tokenTransparente@@" target="_blank"
+                          >Clique aqui</a
+                        >
+                        <span>para alterar a sua senha atual.</span>
+                      </p>
+                      <p>Lembrando que esse link tem a validade de 2 horas. Não perca tempo!!!</p>                      
+                    </div>
+                """;
+
+        mensagem = mensagem.replace("@@nomeUsuario@@", nome);
+        mensagem = mensagem.replace("@@tokenTransparente@@", token);
+
+        return mensagem;
     }
-
-    public static String gerarNomeArquivoTimestamp(String nomeOriginal) {
-        String nomeArquivo = StringUtils.cleanPath(nomeOriginal);
-        String nomeBase = nomeArquivo.substring(0, nomeArquivo.lastIndexOf('.'));
-        String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf('.'));
-        return nomeBase + "_" + System.currentTimeMillis() + extensao;
-    }
-    public static <T> void validarRecord(T record) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        Set<ConstraintViolation<T>> violations = validator.validate(record);
-
-        if (!violations.isEmpty()) {
-            StringBuilder mensagem = new StringBuilder();
-            for (ConstraintViolation<T> violation : violations) {
-//                mensagem.append(String.format("""
-//                        Violations de validação:
-//                         - Propriedade: %s
-//                         - Valor inválido: %s
-//                         - Erro: %s"
-//                        """,
-//                        violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage()));
-//                mensagem.append(" Atributo: ").append(violation.getPropertyPath());
-//                mensagem.append(" - Valor: ").append(violation.getInvalidValue());
-//                mensagem.append(" - Message: ").append(violation.getMessage());
-                mensagem.append(violation.getMessage());
-                mensagem.append("/");
-            }
-            throw new ValidacaoException(mensagem.toString());
-        }
-    }
-
-
 }

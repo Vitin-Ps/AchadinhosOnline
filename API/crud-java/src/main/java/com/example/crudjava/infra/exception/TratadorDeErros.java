@@ -25,7 +25,7 @@ public class TratadorDeErros {
 
     }@ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity tratarErroDeLoginNaoCadastrado() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não Existe!");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou Senha Incorretos");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -46,7 +46,7 @@ public class TratadorDeErros {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha Incorreta!");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou Senha Incorretos");
     }
 
     @ExceptionHandler(AuthenticationException.class)

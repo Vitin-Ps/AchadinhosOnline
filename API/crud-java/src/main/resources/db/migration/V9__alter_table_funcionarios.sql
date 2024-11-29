@@ -1,1 +1,0 @@
-ALTER TABLE produtos ADD imagem VARCHAR(200) NULL;

@@ -28,11 +28,13 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login/recuperar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/token/token-senha").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "login/cad/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "funcionarios").hasAnyRole("ADMIN", "FUNCIONARIO")
                         .requestMatchers("/vendas").hasRole("ADMIN") // Bloqueia o acesso à "/home" apenas para ADMIN
-                        .requestMatchers(HttpMethod.GET, "/arquivos/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "*/swagger-ui.html", "swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -41,7 +43,6 @@ public class SecurityConfigurations {
 
     @Bean
     public AuthenticationManager manager(AuthenticationConfiguration configuration) throws Exception {
-        System.out.println("entrou");
         return configuration.getAuthenticationManager();
     }
 

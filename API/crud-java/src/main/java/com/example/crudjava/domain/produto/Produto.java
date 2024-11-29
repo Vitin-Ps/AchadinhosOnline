@@ -22,21 +22,18 @@ public class Produto {
     private Long id;
     private String nome;
     private BigDecimal valor;
-    private String imagem;
     private Boolean ativo;
 
-    public Produto(@Valid DadosCadastroProduto dados, String imagem) {
+    public Produto(@Valid DadosCadastroProduto dados) {
         this.nome = dados.nome();
         this.valor = dados.valor();
-        this.imagem = imagem;
         this.ativo = true;
     }
 
-    public void atualizarInfo(DadosAtualizaProduto dados, String imagem) {
+    public void atualizarInfo(DadosAtualizaProduto dados) {
         if(!StringUtils.isBlank(dados.nome())) this.nome = dados.nome();
 
         if(dados.valor() != null) this.valor = dados.valor();
-        if(!StringUtils.isBlank(imagem)) this.imagem = imagem;
     }
 
     public void excluirLogico() {
