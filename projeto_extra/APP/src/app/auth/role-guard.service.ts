@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
-import { AuthService } from './auth.service';
 import { jwtDecode } from 'jwt-decode';
 import { MensagensService } from '../services/mensagens.service';
 import { TokenService } from '../services/token.service';
@@ -18,7 +17,6 @@ interface MeuJwtPayload {
 @Injectable()
 export class RoleGuardService implements CanActivate {
   constructor(
-    public auth: AuthService,
     public router: Router,
     private messagensService: MensagensService,
     private tokenService: TokenService
@@ -30,21 +28,24 @@ export class RoleGuardService implements CanActivate {
     // Verifica se está no navegador antes de acessar o sessionStorage
     const token = this.tokenService.getToken();
 
-    if (token !== null) {
-      const tokenPayload: MeuJwtPayload = jwtDecode(token);
+    if (token) {
+      const tokenPayload: MeuJwtPayload | null = this.tokenService.infoToken(token);
 
-      if (!this.auth.isAuthenticated()) {
+      if (!this.tokenService.validadeToken(token)) {
         this.tokenService.removeToken();
         this.router.navigate(['login']);
-      } else if (!expectedRoles.includes(tokenPayload.role) && tokenPayload.role !== 'ADMIN') {
+      } else if (
+        tokenPayload &&
+        !expectedRoles.includes(tokenPayload.role) &&
+        tokenPayload.role !== 'ADMIN'
+      ) {
         this.messagensService.alert('Esse usuário não tem autorização para acessar essa página!');
         this.router.navigate(['/']);
         return false;
       }
 
       return true;
-    } else {
-      this.router.navigate(['login']);
+    } else {   
       return false;
     }
   }

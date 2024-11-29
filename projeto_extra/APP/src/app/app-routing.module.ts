@@ -11,7 +11,6 @@ import { FuncDadosComponent } from './components/pages/func-dados/func-dados.com
 import { ProdDadosComponent } from './components/pages/prod-dados/prod-dados.component';
 import { VendasDadosComponent } from './components/pages/vendas-dados/vendas-dados.component';
 import { EditVendaComponent } from './components/pages/edit-venda/edit-venda.component';
-import { TesteComponent } from './testes/teste/teste.component';
 import { EditProdComponent } from './components/pages/edit-prod/edit-prod.component';
 import { EditFuncComponent } from './components/pages/edit-func/edit-func.component';
 import { LoginComponent } from './components/pages/login/login.component';
@@ -98,11 +97,6 @@ const routes: Routes = [
     data: { expectedRole: ['ADMIN'] },
   },
   { path: 'login', component: LoginComponent },
-  {
-    path: 'testes',
-    component: TesteComponent,
-    canActivate: [AuthGuard],
-  },
   {
     path: 'recuperar-senha/:tokenTransparent',
     component: RecuperarSenhaComponent,

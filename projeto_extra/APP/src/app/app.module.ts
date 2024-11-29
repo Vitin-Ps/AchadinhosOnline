@@ -28,14 +28,9 @@ import { ConversaoMoedaReal } from './pipes/ConversaoMoedaReal.pipe';
 import { EditVendaComponent } from './components/pages/edit-venda/edit-venda.component';
 import { EditProdComponent } from './components/pages/edit-prod/edit-prod.component';
 import { CardProdComponent } from './components/cards/card-prod/card-prod.component';
-import { ManipulacaoDivComponent } from './testes/components/manipulacao-div/manipulacao-div.component';
-import { TesteComponent } from './testes/teste/teste.component';
-import { ManipularDivsDinamicasComponent } from './testes/components/manipular-divs-dinamicas/manipular-divs-dinamicas.component';
-import { RadioComponent } from './testes/components/radio/radio.component';
 import { EditFuncComponent } from './components/pages/edit-func/edit-func.component';
-import { CicloVidaComponent } from './testes/components/ciclo-vida/ciclo-vida.component';
 import { LoginComponent } from './components/pages/login/login.component';
-import { Interceptor } from './interceptor/Interserptor';
+import { Interceptor } from './interceptor/Interceptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CardItemCarrinhoComponent } from './components/cards/card-item-carrinho/card-item-carrinho.component';
@@ -69,12 +64,8 @@ const serviceAutentica = [Interceptor];
     EditVendaComponent,
     EditProdComponent,
     CardProdComponent,
-    ManipulacaoDivComponent,
-    TesteComponent,
-    ManipularDivsDinamicasComponent,
-    RadioComponent,
-    EditFuncComponent,
-    CicloVidaComponent,
+  
+   EditFuncComponent,
     LoginComponent,
     LoadingComponent,
     CardItemCarrinhoComponent,
