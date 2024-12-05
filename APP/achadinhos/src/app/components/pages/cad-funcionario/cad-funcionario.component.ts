@@ -19,29 +19,14 @@ export class CadFuncionarioComponent {
   ) {}
 
   async cadastrarFuncionario(funcionario: Funcionario) {
-    
     this.funcService.registraFuncionario(funcionario).subscribe(
-      (response) => {
+      response => {
         console.log('Resposta do servidor:', response);
-        this.mensagemService.alert(
-          `Funcionário ${funcionario.nome} cadastrado com Sucesso!`
-        );
+        this.mensagemService.alert(`Funcionário ${funcionario.nome} cadastrado com Sucesso!`);
         this.router.navigate(['/']);
       },
-      (error) => {
-        // Se ocorrer algum erro durante a requisição
-        console.error('Erro na requisição:', error);
-        if (error.status === 0) {
-          // Status 0 geralmente indica falha na conexão
-          this.mensagemService.alert(
-            'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
-          );
-        } else {
-          // Outros códigos de status
-          this.mensagemService.alert(
-            'Erro desconhecido ao cadastrar funcionário.'
-          );
-        }
+      error => {
+        this.mensagemService.tratadorDeErro(error, error.error);
       }
     );
   }

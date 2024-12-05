@@ -32,7 +32,7 @@ export class MensagensService {
   }
 
   tratadorDeErro(error: any, errorData: { campo: string; mensagem: string }[] | string) {
-    if (error.error) {
+    if (error.error) {     
       this.alert(error.error);
     }
 
