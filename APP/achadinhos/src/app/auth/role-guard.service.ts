@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { MensagensService } from '../services/mensagens.service';
 import { TokenService } from '../services/token.service';
+import { isPlatformBrowser } from '@angular/common';
 
 interface MeuJwtPayload {
   sub: string;
@@ -19,13 +19,13 @@ export class RoleGuardService implements CanActivate {
   constructor(
     public router: Router,
     private messagensService: MensagensService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const expectedRoles: string[] = route.data['expectedRole'] || [];
 
-    // Verifica se está no navegador antes de acessar o sessionStorage
     const token = this.tokenService.getToken();
 
     if (token) {
@@ -46,7 +46,11 @@ export class RoleGuardService implements CanActivate {
 
       return true;
     }
-    window.location.href = '/login';
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.href = '/login';
+    } else {
+      this.router.navigate(['login']);
+    }
 
     return false;
   }

@@ -1,5 +1,5 @@
 .card-item {
-  @apply bg-degrade_purple_l py-5 px-0;
+  @apply bg-degrade_purple_l py-5 px-0 h-[300px] w-[200px];
 }
 
 .card-item .fundo-branco {

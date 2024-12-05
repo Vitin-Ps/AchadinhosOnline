@@ -233,11 +233,11 @@ input[type='submit']:hover {
 /*------- cards --------*/
 
 .card-item {
-  @apply bg-degrade_purple_b px-5 duration-200 rounded-md cursor-pointer;
+  @apply bg-degrade_purple_b px-5 duration-200 rounded-md cursor-pointer h-[200px];
 }
 
 .card-item .fundo-branco {
-  @apply bg-white m-auto p-5 flex items-center duration-200;
+  @apply bg-white m-auto p-5 flex items-center justify-center duration-200 h-full;
 }
 
 .card-item .fundo-branco img {

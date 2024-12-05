@@ -169,6 +169,7 @@ export class ProdDadosComponent implements OnInit {
 
           itemProdutoAll && (itemProdutoAll.quantidade = res.quantidade);
           itemProduto && (itemProduto.quantidade = res.quantidade);
+          this.quantidadeEstoque = 0;
         });
     }
   }
