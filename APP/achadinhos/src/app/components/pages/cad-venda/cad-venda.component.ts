@@ -86,15 +86,7 @@ export class CadVendaComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error => {
-          if (error.error) {
-            this.mensagemService.alert(error.error);
-          } else if (error.status === 0) {
-            this.mensagemService.alert(
-              'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
-            );
-          } else {
-            this.mensagemService.alert('Erro desconhecido ao cadastrar funcionário.');
-          }
+          this.mensagemService.tratadorDeErro(error, error.error);
         }
       );
     });

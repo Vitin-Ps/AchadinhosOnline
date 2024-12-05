@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class ReciboService {
     public List<DadosListagemRecibo> deleteItemRecibo(Long id) {
         Recibo itemRecibo = reciboRepository.getReferenceById(id);
         BigDecimal valorDoItem = itemRecibo.getProduto().getValor().multiply(BigDecimal.valueOf(itemRecibo.getQuantidade()));
-        BigDecimal valorDaComissao = valorDoItem.multiply(itemRecibo.getVenda().getComissaoTotal().divide(itemRecibo.getVenda().getValorTotal()));
+        BigDecimal porcentagemDaComissao = itemRecibo.getVenda().getComissaoTotal().divide(itemRecibo.getVenda().getValorTotal(), 2, RoundingMode.HALF_UP);
+        BigDecimal valorDaComissao = valorDoItem.multiply(porcentagemDaComissao);
 
         Estoque estoque = estoqueRepository.getReferenceByProdutoId(itemRecibo.getProduto().getId());
 

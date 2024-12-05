@@ -2,6 +2,7 @@ package com.example.crudjava.infra.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -44,6 +45,18 @@ public class TratadorDeErros {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        if (ex.getRootCause() != null && ex.getRootCause().getMessage().contains("Duplicate entry")) {
+            String mensagemDetalhada = extrairMensagemDuplicidade(ex.getRootCause().getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagemDetalhada);
+        }
+
+        String mensagemErro = "Erro de integridade dos dados: " + extrairMensagemDetalhada(ex);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagemErro);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou Senha Incorretos");
@@ -68,5 +81,23 @@ public class TratadorDeErros {
         public DadosErroValidacao(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
         }
+    }
+
+    private String extrairMensagemDetalhada(DataIntegrityViolationException ex) {
+        Throwable rootCause = ex.getRootCause();
+        if (rootCause != null) {
+            return rootCause.getMessage();
+        }
+        return ex.getMessage();
+    }
+
+    private String extrairMensagemDuplicidade(String mensagemOriginal) {
+        if (mensagemOriginal.contains("Duplicate entry")) {
+            String[] partes = mensagemOriginal.split("'");
+            if (partes.length >= 4) {
+                return "O valor '" + partes[1] + "' já está cadastrado para o campo '" + partes[3] + "'.";
+            }
+        }
+        return "Erro de duplicidade detectado.";
     }
 }

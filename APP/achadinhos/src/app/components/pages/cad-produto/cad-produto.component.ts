@@ -12,19 +12,19 @@ import { Produto } from '../../../interfaces/Produto';
 export class CadProdutoComponent {
   btnText: string = 'Cadastrar';
   
-  constructor(private produtoService: ProdutoService, private router: Router, private messageService: MensagensService) {}
+  constructor(private produtoService: ProdutoService, private router: Router, private menssagemService: MensagensService) {}
   
   registraProduto(produto: Produto) {
     this.produtoService.cadastraProduto(produto).subscribe(
       (res) => {
         produto = res;
-        this.messageService.alert(
+        this.menssagemService.alert(
           `Produto ${produto.nome} cadastrado com sucesso!`
         );
         this.router.navigate(['/']);
       },
       (error) => {
-        console.log('Erro: ', error);
+        this.menssagemService.tratadorDeErro(error, error.error);
       }
     );
   }

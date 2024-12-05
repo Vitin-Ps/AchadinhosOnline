@@ -93,15 +93,7 @@ export class EditVendaComponent implements OnInit {
             this.router.navigate(['/home/vendas']);
           },
           error => {
-            if (error.error) {
-              this.mensagemService.alert(error.error);
-            } else if (error.status === 0) {
-              this.mensagemService.alert(
-                'Erro: Não foi possível conectar à API. Verifique se a API está ligada.'
-              );
-            } else {
-              this.mensagemService.alert('Erro desconhecido ao cadastrar funcionário.');
-            }
+            this.mensagemService.tratadorDeErro(error, error.error);
           }
         );
       });
@@ -185,7 +177,7 @@ export class EditVendaComponent implements OnInit {
   excluirItemRecibo(idItemRecibo: number) {
     this.vendaService.deleteItemRecibo(idItemRecibo).subscribe(res => {
       this.recibo = res;
-      res.length > 0 && (this.venda = res[0].venda);
+      res.length > 0 ? (this.venda = res[0].venda) : (this.venda = null);
     });
   }
 }

@@ -10,11 +10,15 @@ export class EsqueceuSenhaComponent {
   email: string = '';
   msgEmail: string | null = null;
 
+  showLoading: boolean = false;
+
   constructor(private rawTokenService: RawTokenService) {}
 
   enviarEmail() {
+    this.showLoading = true;
     this.rawTokenService.enviarEmailRecuperarSenha(this.email).subscribe(res => {
       this.msgEmail = res.message;
+      this.showLoading = false;
     });
   }
 

@@ -39,7 +39,7 @@ public class RawTokenController {
         if (usuario != null) {
             String token = tokenTransparenteService.gerarToken(usuario);
             String mensagem = FuncionalidadesService.retornaMsgEmail(usuario.getNome(), token);
-            emailService.enviarEmail(new DadosEnviarEmail(dados.login(), "Achadinnhos: Link para recuperar senha", mensagem));
+            emailService.enviarEmail(new DadosEnviarEmail(dados.login(), "Achadinhos: Link para recuperar senha", mensagem));
         }
 
 
