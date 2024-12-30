@@ -1,4 +1,20 @@
-npx react-native@latest init achadinhos_online --template react-native-template-typescript
+npm cache clean --force
+yarn cache clean
+
+
+npx @react-native-community/cli init achadinhos_online --template react-native-template-typescript@6.12.10
+
+abrir pasta android no android studio
+
+inicie o emulador
+
+adb devices
+se estiver não autorizado utilize os comandos:
+feche o emulador
+adb kill-server
+adb start-server
+
+inicie de novo e cheque a situacao
 
 npm run start
 npm start -- --reset-cache
